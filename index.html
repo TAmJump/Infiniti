@@ -1,0 +1,3071 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Infinite REPAIR SERUM — 創業計画書</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;600&family=Noto+Sans+JP:wght@300;400;500;700&family=DM+Serif+Display&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:       #ffffff;
+    --bg-soft:  #f7f5f2;
+    --bg-card:  #fafaf9;
+    --black:    #111111;
+    --text:     #2c2c2c;
+    --text-mid: #5a5a5a;
+    --text-soft:#909090;
+    --red:      #b91c1c;
+    --red-pale: #fef2f2;
+    --red-line: #fca5a5;
+    --border:   #e5e3df;
+    --border-dark: #ccc9c4;
+    --font-serif: 'DM Serif Display', 'Noto Serif JP', serif;
+    --font-sans:  'Noto Sans JP', sans-serif;
+    --font-mono:  'DM Mono', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 1.75;
+  }
+
+  header {
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    padding: 0 36px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .logo { display: flex; align-items: center; gap: 14px; }
+  .logo-text { font-family: var(--font-serif); font-size: 20px; color: var(--black); letter-spacing: 0.05em; }
+  .logo-sub { font-family: var(--font-mono); font-size: 10px; color: var(--text-soft); letter-spacing: 0.12em; text-transform: uppercase; }
+  .header-badge { font-family: var(--font-mono); font-size: 10px; color: var(--red); border: 1px solid var(--red-line); background: var(--red-pale); padding: 4px 12px; letter-spacing: 0.1em; }
+
+  nav {
+    background: var(--bg-soft);
+    border-bottom: 1px solid var(--border);
+    padding: 0 36px;
+    display: flex;
+    overflow-x: auto;
+    position: sticky;
+    top: 64px;   /* header height */
+    z-index: 90;
+  }
+  nav::-webkit-scrollbar { height: 0; }
+
+  .tab-btn {
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--text-soft);
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    padding: 13px 18px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active { color: var(--black); border-bottom-color: var(--red); font-weight: 700; }
+
+  main { max-width: 1080px; margin: 0 auto; padding: 52px 36px 100px; }
+
+  .section { display: none; }
+  .section.active { display: block; animation: fadeIn 0.2s ease; }
+  @keyframes fadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
+
+  .page-title { font-family: var(--font-serif); font-size: 26px; font-weight: 400; color: var(--black); margin-bottom: 6px; line-height: 1.3; }
+  .page-sub { font-size: 13px; color: var(--text-soft); margin-bottom: 40px; }
+
+  h2 { font-family: var(--font-serif); font-size: 18px; font-weight: 400; color: var(--black); margin: 44px 0 14px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+
+  h3 { font-size: 11px; font-weight: 700; color: var(--text-soft); letter-spacing: 0.15em; text-transform: uppercase; margin: 24px 0 10px; }
+
+  p { color: var(--text-mid); margin-bottom: 12px; line-height: 1.85; }
+
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; margin-bottom: 28px; }
+
+  .card { background: var(--bg-card); border: 1px solid var(--border); padding: 22px 22px 18px; }
+  .card-label { font-family: var(--font-mono); font-size: 10px; color: var(--red); letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 8px; }
+  .card-title { font-size: 14px; font-weight: 700; color: var(--black); margin-bottom: 10px; }
+  .card ul { list-style: none; padding: 0; }
+  .card ul li { font-size: 13px; color: var(--text-mid); padding: 5px 0; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; gap: 8px; line-height: 1.5; }
+  .card ul li:last-child { border-bottom: none; }
+  .card ul li::before { content: '—'; color: var(--red); font-size: 10px; flex-shrink:0; margin-top:3px; }
+
+  .tbl-wrap { overflow-x: auto; margin: 12px 0 28px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { background: var(--bg-soft); color: var(--text-mid); font-weight: 600; font-size: 11px; letter-spacing: 0.06em; text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--border-dark); }
+  td { padding: 10px 14px; border-bottom: 1px solid var(--border); color: var(--text-mid); vertical-align: top; }
+  tr:hover td { background: #faf9f7; }
+
+  .tag { display: inline-block; font-family: var(--font-mono); font-size: 10px; padding: 2px 8px; letter-spacing: 0.06em; }
+  .tag-red   { background: var(--red-pale); color: var(--red); border: 1px solid var(--red-line); }
+  .tag-gray  { background: var(--bg-soft); color: var(--text-soft); border: 1px solid var(--border); }
+  .tag-green { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
+
+  .notice { background: var(--red-pale); border-left: 3px solid var(--red); padding: 14px 18px; margin: 16px 0; font-size: 13px; color: var(--text-mid); line-height: 1.8; }
+  .notice strong { color: var(--red); }
+
+  .info-box { background: var(--bg-soft); border: 1px solid var(--border); padding: 18px 22px; margin: 12px 0; font-size: 13px; color: var(--text-mid); line-height: 2; }
+
+  .flow { display: flex; flex-direction: column; gap: 0; margin: 18px 0 28px; }
+  .flow-item { display: flex; align-items: center; gap: 18px; }
+  .flow-box { background: var(--bg-card); border: 1px solid var(--border); padding: 10px 24px; font-size: 13px; color: var(--black); min-width: 220px; text-align: center; }
+  .flow-box.highlight { border-color: var(--red); color: var(--red); background: var(--red-pale); font-weight:600; }
+  .flow-arrow { font-size: 14px; color: var(--border-dark); margin: 3px 0 3px 50px; }
+  .flow-note { font-size: 11px; color: var(--text-soft); font-family: var(--font-mono); }
+
+  .checklist { list-style: none; margin: 0 0 20px; padding: 0; }
+  .checklist li { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text-mid); }
+  .checklist li::before { content: '□'; color: var(--border-dark); font-family: var(--font-mono); flex-shrink:0; margin-top:1px; }
+  .checklist.required li::before { content: '◆'; color: var(--red); }
+
+  .phase-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; margin: 14px 0 28px; }
+  .phase { background: var(--bg-card); border: 1px solid var(--border); padding: 18px; }
+  .phase-num { font-family: var(--font-mono); font-size: 10px; color: var(--red); letter-spacing: 0.12em; margin-bottom: 6px; }
+  .phase-title { font-size: 13px; font-weight: 700; color: var(--black); margin-bottom: 10px; }
+  .phase ul { list-style: none; padding: 0; }
+  .phase ul li { font-size: 12px; color: var(--text-soft); padding: 3px 0; }
+  .phase ul li::before { content: '· '; color: var(--red); }
+
+  .memo { background: var(--bg-soft); border: 1px solid var(--border); padding: 22px 26px; margin-top: 44px; font-size: 12px; color: var(--text-mid); line-height: 2.1; }
+  .memo-title { font-family: var(--font-mono); font-size: 10px; color: var(--red); letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 14px; }
+  .memo ul { list-style: none; }
+  .memo ul li::before { content: '→ '; color: var(--text-soft); }
+
+  .brand-hero { background: var(--bg-soft); border: 1px solid var(--border); padding: 36px 40px; margin-bottom: 28px; display: flex; align-items: center; gap: 44px; }
+  .brand-name { font-family: var(--font-serif); font-size: 30px; color: var(--black); margin-bottom: 4px; }
+  .brand-product { font-family: var(--font-mono); font-size: 12px; color: var(--red); letter-spacing: 0.18em; margin-bottom: 14px; }
+  .brand-tagline { font-size: 14px; color: var(--text-mid); font-style: italic; }
+
+  .ingredient-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 8px; margin: 10px 0 22px; }
+  .ingredient { background: var(--bg-soft); border: 1px solid var(--border); padding: 10px 14px; font-size: 12px; color: var(--text-mid); display: flex; align-items: center; gap: 8px; }
+  .ingredient::before { content: '◆'; color: var(--red); font-size: 8px; flex-shrink:0; }
+
+  .oem-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; margin: 10px 0 22px; }
+  .oem-item { background: var(--bg-card); border: 1px solid var(--border); padding: 14px 16px; }
+  .oem-name { font-size: 13px; color: var(--black); font-weight: 600; margin-bottom: 3px; }
+  .oem-note { font-size: 11px; color: var(--text-soft); font-family: var(--font-mono); }
+
+  .calc-layout { display: grid; grid-template-columns: 340px 1fr; gap: 22px; margin-bottom: 36px; }
+  @media(max-width:780px){ .calc-layout{ grid-template-columns:1fr; } }
+
+  .calc-panel { background: var(--bg-card); border: 1px solid var(--border); padding: 22px; }
+  .calc-panel h3 { margin: 0 0 16px; border: none; }
+
+  .input-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; gap: 10px; }
+  .input-row label { font-size: 12px; color: var(--text-mid); flex: 1; }
+  .input-row input { background: var(--bg); border: 1px solid var(--border-dark); color: var(--black); font-family: var(--font-mono); font-size: 13px; padding: 7px 10px; width: 120px; text-align: right; outline: none; transition: border-color 0.15s; }
+  .input-row input:focus { border-color: var(--red); }
+  .input-unit { font-family: var(--font-mono); font-size: 11px; color: var(--text-soft); width: 22px; }
+
+  .divider { height: 1px; background: var(--border); margin: 14px 0; }
+
+  .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 18px; }
+  .result-card { background: var(--bg-card); border: 1px solid var(--border); padding: 14px 16px; }
+  .result-card.highlight { border-color: var(--red-line); background: var(--red-pale); }
+  .result-label { font-size: 11px; color: var(--text-soft); margin-bottom: 4px; font-family: var(--font-mono); }
+  .result-value { font-family: var(--font-mono); font-size: 18px; font-weight: 500; color: var(--black); }
+  .result-value.red { color: var(--red); }
+  .result-value.green { color: #15803d; }
+  .result-value.small { font-size: 13px; }
+
+  .pl-table { width: 100%; border-collapse: collapse; font-size: 12px; font-family: var(--font-mono); }
+  .pl-table th { background: var(--bg-soft); color: var(--text-soft); font-size: 10px; letter-spacing: 0.08em; padding: 8px 12px; text-align: right; border-bottom: 1px solid var(--border-dark); }
+  .pl-table th:first-child { text-align: left; }
+  .pl-table td { padding: 8px 12px; border-bottom: 1px solid var(--border); color: var(--text-mid); text-align: right; }
+  .pl-table td:first-child { text-align: left; color: var(--text-soft); }
+  .pl-table tr.total td { color: var(--black); font-weight: 600; border-top: 1px solid var(--border-dark); background: var(--bg-soft); }
+  .pl-table tr.profit td:last-child { color: #15803d; }
+  .pl-table tr.loss td:last-child { color: var(--red); }
+
+  .role-highlight { color: var(--black); font-weight: 600; }
+  .role-you { color: var(--red); }
+
+  @media(max-width:640px){
+    header { padding: 0 16px; }
+    nav { padding: 0 8px; }
+    main { padding: 28px 16px 80px; }
+    .brand-hero { flex-direction: column; gap: 20px; padding: 22px; }
+    .result-grid { grid-template-columns: 1fr; }
+  }
+
+  /* FIXED FOOTER */
+  .site-footer {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+    box-shadow: 0 -2px 12px rgba(0,0,0,0.04);
+    padding: 0 36px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 200;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-soft);
+  }
+
+  body { padding-bottom: 40px; }
+  main { padding-bottom: 80px; }
+
+  /* ── CONTRACT STYLES ── */
+  .pw-screen, .contract-screen, .done-screen { display: none; }
+  .pw-screen.active, .contract-screen.active, .done-screen.active { display: block; }
+
+  .pw-box {
+    max-width: 420px;
+    margin: 60px auto;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    padding: 40px;
+    text-align: center;
+  }
+  .pw-box .pw-title { font-family: var(--font-serif); font-size: 22px; color: var(--black); margin-bottom: 10px; }
+  .pw-box p { font-size: 13px; color: var(--text-mid); margin-bottom: 28px; line-height: 1.8; }
+  .pw-box input[type="password"] {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border-dark);
+    color: var(--black);
+    font-family: var(--font-mono);
+    font-size: 16px;
+    padding: 12px 14px;
+    text-align: center;
+    letter-spacing: 0.2em;
+    outline: none;
+    margin-bottom: 16px;
+    transition: border-color 0.15s;
+  }
+  .pw-box input[type="password"]:focus { border-color: var(--red); }
+  .pw-error { color: var(--red); font-size: 12px; margin-top: 8px; min-height: 18px; }
+
+  .btn-primary {
+    width: 100%;
+    background: var(--black);
+    color: var(--bg);
+    border: none;
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    padding: 13px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .btn-primary:hover { background: var(--red); }
+
+  .contract-intro {
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    padding: 28px 32px;
+    margin-bottom: 36px;
+    font-size: 13px;
+    color: var(--text-mid);
+    line-height: 1.9;
+  }
+  .contract-intro ol { margin: 12px 0 0 18px; }
+  .contract-intro li { padding: 3px 0; }
+
+  .contract-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .contract-card-header {
+    background: var(--bg-soft);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 22px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .contract-num {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--red);
+    border: 1px solid var(--red-line);
+    background: var(--red-pale);
+    padding: 3px 8px;
+    letter-spacing: 0.1em;
+  }
+  .contract-card-title { font-family: var(--font-serif); font-size: 16px; color: var(--black); }
+  .contract-body { padding: 22px 26px; font-size: 13px; color: var(--text-mid); line-height: 1.9; }
+  .contract-body p { margin-bottom: 10px; }
+  .contract-body strong { color: var(--black); }
+
+  .clause { margin: 12px 0; }
+  .clause-title { font-weight: 700; color: var(--black); font-size: 13px; margin-bottom: 4px; }
+  .clause-body { color: var(--text-mid); font-size: 13px; padding-left: 16px; }
+
+  .contract-term {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 0;
+    margin: 14px 0;
+  }
+  .ct-label {
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    padding: 9px 14px;
+    font-size: 12px;
+    color: var(--text-soft);
+    font-weight: 600;
+    border-right: none;
+  }
+  .ct-value {
+    border: 1px solid var(--border);
+    padding: 9px 14px;
+    font-size: 13px;
+    color: var(--black);
+    font-family: var(--font-mono);
+  }
+  .ct-label + .ct-label { border-top: none; }
+  .ct-value + .ct-value { border-top: none; }
+
+  /* E-SIGN */
+  .esign-box {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    padding: 32px;
+    margin-top: 32px;
+  }
+  .esign-title { font-family: var(--font-serif); font-size: 20px; color: var(--black); margin-bottom: 8px; }
+  .esign-note { font-size: 13px; color: var(--text-mid); margin-bottom: 24px; line-height: 1.8; }
+
+  .esign-field { margin-bottom: 16px; }
+  .esign-field label { display: block; font-size: 12px; font-weight: 600; color: var(--text-mid); margin-bottom: 6px; letter-spacing: 0.05em; }
+  .esign-field input {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border-dark);
+    color: var(--black);
+    font-family: var(--font-sans);
+    font-size: 14px;
+    padding: 10px 12px;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .esign-field input:focus { border-color: var(--red); }
+
+  .sig-wrap {
+    border: 1px solid var(--border-dark);
+    background: var(--bg);
+    margin: 8px 0 4px;
+    position: relative;
+  }
+  #sig-canvas { display: block; width: 100%; height: 140px; cursor: crosshair; touch-action: none; }
+  .sig-clear { font-size: 11px; color: var(--text-soft); cursor: pointer; text-decoration: underline; font-family: var(--font-mono); }
+  .sig-clear:hover { color: var(--red); }
+  .sig-hint { font-size: 11px; color: var(--text-soft); font-family: var(--font-mono); margin-bottom: 20px; }
+
+  .esign-submit {
+    width: 100%;
+    background: var(--black);
+    color: var(--bg);
+    border: none;
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    padding: 15px;
+    cursor: pointer;
+    transition: background 0.15s;
+    margin-top: 8px;
+  }
+  .esign-submit:hover { background: var(--red); }
+  .esign-error { color: var(--red); font-size: 12px; margin-top: 8px; min-height: 16px; }
+
+  .done-box {
+    max-width: 480px;
+    margin: 60px auto;
+    text-align: center;
+    padding: 40px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+  }
+  .done-icon { font-size: 40px; margin-bottom: 20px; }
+  .done-title { font-family: var(--font-serif); font-size: 24px; color: var(--black); margin-bottom: 12px; }
+  .done-sub { font-size: 13px; color: var(--text-mid); line-height: 1.9; }
+  .done-meta { margin-top: 24px; background: var(--bg-soft); border: 1px solid var(--border); padding: 16px; font-size: 12px; color: var(--text-soft); font-family: var(--font-mono); text-align: left; line-height: 2; }
+
+  .gs-note { background: #fffbeb; border: 1px solid #fde68a; padding: 12px 16px; font-size: 12px; color: #92400e; font-family: var(--font-mono); margin-top: 20px; line-height: 1.7; }
+
+  /* BIZPLAN */
+  .bp-doc {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    max-width: 780px;
+    margin: 0 auto 32px;
+    padding: 52px 56px;
+    font-size: 13.5px;
+    line-height: 2;
+    color: var(--text);
+    position: relative;
+  }
+  .bp-watermark {
+    position: absolute;
+    top: 20px; right: 24px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--border-dark);
+    letter-spacing: 0.12em;
+  }
+  .bp-doc h1 {
+    font-family: var(--font-serif);
+    font-size: 22px;
+    color: var(--black);
+    border-bottom: 2px solid var(--black);
+    padding-bottom: 12px;
+    margin-bottom: 32px;
+    letter-spacing: 0.05em;
+  }
+  .bp-section { margin-bottom: 32px; }
+  .bp-section-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-soft);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 6px;
+    margin-bottom: 12px;
+  }
+  .bp-section p { color: var(--text-mid); margin-bottom: 8px; }
+  .bp-kv { display: grid; grid-template-columns: 160px 1fr; gap: 0; margin: 8px 0; }
+  .bp-kv-label { font-size: 12px; color: var(--text-soft); font-weight: 600; padding: 7px 0; border-bottom: 1px solid var(--border); }
+  .bp-kv-value { font-size: 13px; color: var(--black); padding: 7px 0 7px 16px; border-bottom: 1px solid var(--border); }
+  .bp-highlight-row {
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    padding: 14px 18px;
+    margin: 10px 0;
+    font-size: 13px;
+    color: var(--text-mid);
+    line-height: 1.9;
+  }
+  .bp-num-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 12px 0; }
+  .bp-num-box { background: var(--bg-soft); border: 1px solid var(--border); padding: 14px 16px; text-align: center; }
+  .bp-num-label { font-family: var(--font-mono); font-size: 10px; color: var(--text-soft); letter-spacing: 0.1em; margin-bottom: 4px; }
+  .bp-num-value { font-family: var(--font-mono); font-size: 18px; color: var(--black); font-weight: 500; }
+  .bp-num-value.accent { color: var(--red); }
+  .bp-loan-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 12px 0; }
+  .bp-loan-box { border: 1px solid var(--border); padding: 16px; }
+  .bp-loan-box.primary { border-color: var(--red-line); background: var(--red-pale); }
+  .bp-loan-num { font-family: var(--font-mono); font-size: 10px; color: var(--red); letter-spacing: 0.12em; margin-bottom: 6px; }
+  .bp-loan-name { font-size: 13px; font-weight: 700; color: var(--black); margin-bottom: 4px; }
+  .bp-loan-amount { font-family: var(--font-mono); font-size: 20px; color: var(--red); font-weight: 500; }
+  .bp-loan-detail { font-size: 11px; color: var(--text-soft); margin-top: 8px; line-height: 1.7; }
+  .bp-total-bar {
+    background: var(--black);
+    color: var(--bg);
+    padding: 14px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 6px;
+    font-family: var(--font-mono);
+  }
+  .bp-total-bar .label { font-size: 11px; letter-spacing: 0.1em; opacity: 0.7; }
+  .bp-total-bar .value { font-size: 20px; }
+  .bp-print-btn {
+    display: block;
+    margin: 0 auto 24px;
+    background: var(--bg-soft);
+    border: 1px solid var(--border-dark);
+    color: var(--text-mid);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    padding: 10px 28px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .bp-print-btn:hover { background: var(--bg-card); border-color: var(--text-soft); }
+  .bp-schedule-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin: 10px 0; }
+  .bp-step { background: var(--bg-soft); border: 1px solid var(--border); padding: 10px 8px; text-align: center; }
+  .bp-step-num { font-family: var(--font-mono); font-size: 10px; color: var(--red); margin-bottom: 4px; }
+  .bp-step-label { font-size: 11px; color: var(--text-mid); line-height: 1.4; }
+
+  /* bizplan additions */
+  .bp-toolbar {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 20px; flex-wrap: wrap;
+  }
+  .bp-btn {
+    background: var(--bg-soft); border: 1px solid var(--border-dark);
+    color: var(--text-mid); font-family: var(--font-mono); font-size: 11px;
+    letter-spacing: 0.08em; padding: 9px 20px; cursor: pointer;
+    transition: background 0.15s;
+  }
+  .bp-btn:hover { background: var(--bg-card); border-color: var(--text-soft); }
+  .bp-btn.primary { background: var(--black); color: var(--bg); border-color: var(--black); }
+  .bp-btn.primary:hover { background: var(--red); border-color: var(--red); }
+  .bp-mode-label {
+    font-family: var(--font-mono); font-size: 10px;
+    color: var(--text-soft); letter-spacing: 0.12em;
+    margin-left: auto;
+  }
+  .bp-story-box {
+    background: #fffdf5; border: 1px solid #f0e8c0;
+    padding: 24px 28px; margin: 10px 0;
+    font-size: 13.5px; color: var(--text-mid); line-height: 2.1;
+    position: relative;
+  }
+  .bp-story-copy {
+    position: absolute; top: 12px; right: 14px;
+    background: none; border: 1px solid #d4c97a;
+    color: #8a7a20; font-family: var(--font-mono);
+    font-size: 10px; letter-spacing: 0.1em; padding: 4px 12px;
+    cursor: pointer; transition: background 0.15s;
+  }
+  .bp-story-copy:hover { background: #fdf9e3; }
+  .bp-story-copy.copied { color: #15803d; border-color: #86efac; background: #f0fdf4; }
+  .bp-check-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 10px 0; }
+  .bp-check-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    background: var(--bg-soft); border: 1px solid var(--border);
+    padding: 12px 14px; font-size: 12px; color: var(--text-mid);
+  }
+  .bp-check-icon { color: #15803d; font-size: 14px; flex-shrink: 0; }
+  .bp-doc-header {
+    display: grid; grid-template-columns: 1fr auto;
+    align-items: end; margin-bottom: 28px;
+    padding-bottom: 16px; border-bottom: 2px solid var(--black);
+  }
+  .bp-doc-title { font-family: var(--font-serif); font-size: 24px; color: var(--black); }
+  .bp-doc-meta { font-family: var(--font-mono); font-size: 10px; color: var(--text-soft); text-align: right; line-height: 2; }
+  .bp-date-input {
+    border: none; border-bottom: 1px solid var(--border-dark);
+    font-family: var(--font-mono); font-size: 10px; color: var(--text-soft);
+    background: transparent; outline: none; width: 120px; text-align: right;
+  }
+
+  @media print {
+    header, nav, .site-footer, .bp-toolbar, .bp-watermark, .bp-story-copy { display: none !important; }
+    .section { display: none !important; }
+    #sec-bizplan { display: block !important; }
+    body { padding-bottom: 0; }
+    .bp-doc { border: none; padding: 20px 0; box-shadow: none; }
+    .bp-story-box { border: 1px solid #ccc; }
+    .bp-check-grid { page-break-inside: avoid; }
+    @page { margin: 20mm; }
+  }
+
+  #tab-contract { color: var(--text-soft); }
+  #tab-contract:hover { color: var(--text); }
+  #tab-contract.active { color: var(--black); border-bottom-color: var(--border-dark); }
+
+  /* ═══ GANTT CHART ═══ */
+  /* outer frame */
+  .gantt-frame {
+    display: flex;
+    border: 1px solid var(--border);
+    margin-bottom: 32px;
+    background: var(--bg);
+  }
+
+
+  /* left fixed panel */
+  .gantt-left {
+    flex-shrink: 0;
+    width: 300px;
+    border-right: 2px solid var(--border-dark);
+    overflow: hidden;
+  }
+  .gantt-left-header {
+    height: 32px;
+    background: var(--black);
+    border-bottom: 1px solid #333;
+    display: flex; align-items: center;
+    padding: 0 12px;
+    font-family: var(--font-mono); font-size: 10px; font-weight: 600;
+    color: #ffffff; letter-spacing: 0.12em;
+  }
+  .gantt-row-label {
+    display: flex; align-items: center;
+    height: 34px;
+    padding: 0 8px 0 12px;
+    border-bottom: 1px solid var(--border);
+    font-size: 11px; color: var(--text);
+    gap: 6px; overflow: hidden;
+  }
+  .gantt-row-label.phase-row {
+    height: 26px; background: var(--bg-soft);
+    font-family: var(--font-mono); font-size: 9px;
+    font-weight: 700; letter-spacing: 0.12em;
+    color: var(--red); text-transform: uppercase;
+    cursor: pointer; user-select: none;
+  }
+  .gantt-row-label.phase-row:hover { background: #f0eee9; }
+  .gantt-bar-row.phase-row { cursor: pointer; }
+  .gantt-row-label span.lbl {
+    flex: 1; white-space: nowrap;
+    overflow: hidden; text-overflow: ellipsis;
+  }
+  .task-done-btn {
+    flex-shrink: 0; padding: 2px 8px;
+    border: 1px solid var(--border-dark);
+    background: var(--bg); color: var(--text-soft);
+    font-size: 9px; font-family: var(--font-mono);
+    cursor: pointer; letter-spacing: 0.04em;
+    transition: all 0.15s; white-space: nowrap;
+  }
+  .task-done-btn:hover { background: #f0fdf4; border-color: #86efac; color: #15803d; }
+  .task-done-btn.is-done { background: #f0fdf4; border-color: #86efac; color: #15803d; }
+
+  /* right scrollable timeline */
+  .gantt-right {
+    flex: 1; overflow: hidden; position: relative;
+  }
+  .gantt-timeline-scroll {
+    overflow-x: scroll; overflow-y: hidden;
+    scrollbar-width: none; /* hide native */
+  }
+  .gantt-timeline-scroll::-webkit-scrollbar { display: none; }
+
+  /* month header row */
+  .gantt-month-row {
+    display: flex; height: 32px;
+    background: var(--black);
+    position: sticky; top: 0; z-index: 2;
+  }
+  .gantt-month-cell {
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-mono); font-size: 9px;
+    color: rgba(255,255,255,0.8); font-weight: 600;
+    border-right: 1px solid #333; letter-spacing: 0.08em;
+  }
+  /* bar row */
+  .gantt-bar-row {
+    display: flex; height: 34px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+  .gantt-bar-row.phase-row { height: 26px; background: var(--bg-soft); }
+  .gantt-day-cell {
+    flex-shrink: 0; height: 100%;
+    border-right: 1px solid transparent;
+  }
+  .gantt-day-cell.month-start { border-right-color: var(--border); }
+  .gantt-day-cell.today-cell { background: rgba(245,158,11,0.08); }
+  .gantt-bar-segment {
+    position: absolute; top: 6px; bottom: 6px;
+    border-radius: 2px; transition: opacity 0.2s;
+  }
+  .gantt-bar-row.phase-row .gantt-bar-segment { top: 4px; bottom: 4px; }
+  .seg-todo     { background: #d6d3cd; }
+  .seg-active   { background: #fca5a5; }
+  .seg-done     { background: #86efac; }
+  .seg-finance  { background: #93c5fd; }
+  .gantt-event-pin {
+    position: absolute; top: 4px; bottom: 4px; width: 3px;
+    background: var(--red); border-radius: 1px; z-index: 3;
+  }
+  .gantt-event-label {
+    position: absolute; top: -18px;
+    font-size: 9px; font-family: var(--font-mono);
+    color: var(--red); white-space: nowrap;
+    transform: translateX(-50%);
+  }
+
+  /* custom vertical scrollbar on right */
+  .gantt-vscroll {
+    width: 16px; flex-shrink: 0;
+    background: var(--bg-soft);
+    border-left: 1px solid var(--border);
+    display: flex; flex-direction: column;
+    align-items: center;
+    padding: 2px 0;
+    user-select: none; position: relative;
+  }
+  .gantt-vscroll-track {
+    flex: 1; width: 6px;
+    background: var(--border);
+    border-radius: 3px;
+    position: relative; margin: 4px 0;
+  }
+  .gantt-vscroll-thumb {
+    position: absolute; left: 0; right: 0;
+    background: var(--border-dark);
+    border-radius: 3px; min-height: 20px;
+    cursor: grab; transition: background 0.15s;
+  }
+  .gantt-vscroll-thumb:hover,
+  .gantt-vscroll-thumb.dragging { background: var(--text-soft); }
+  .gantt-vscroll-btn {
+    width: 14px; height: 14px; background: none; border: none;
+    color: var(--text-soft); font-size: 10px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; padding: 0;
+  }
+  .gantt-vscroll-btn:hover { color: var(--black); }
+
+  /* task list */
+  .task-phase-block { margin-bottom: 20px; }
+  .task-phase-label {
+    font-family: var(--font-mono); font-size: 10px; color: var(--red);
+    letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 8px;
+  }
+  .task-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 9px 14px; border: 1px solid var(--border);
+    margin-bottom: 4px; background: var(--bg-card);
+    font-size: 12px; color: var(--text-mid);
+  }
+  .task-item.done { opacity: 0.6; text-decoration: line-through; background: #f0fdf4; border-color: #bbf7d0; }
+  .task-date-badge {
+    margin-left: auto; flex-shrink: 0;
+    font-family: var(--font-mono); font-size: 10px;
+    color: var(--text-soft); white-space: nowrap;
+  }
+
+  /* Finance Gantt chart */
+  .fin-gantt-frame {
+    border: 1px solid var(--border);
+    margin-bottom: 28px;
+    overflow: hidden;
+  }
+  .fin-gantt-left {
+    float: left; width: 180px;
+    border-right: 2px solid var(--border-dark);
+  }
+  .fin-gantt-right { overflow-x: auto; }
+  .fin-header-cell {
+    height: 28px; background: var(--black);
+    font-family: var(--font-mono); font-size: 9px;
+    color: rgba(255,255,255,0.7); display: flex;
+    align-items: center; padding: 0 12px;
+    letter-spacing: 0.1em; font-weight: 600;
+  }
+  .fin-row {
+    height: 36px; display: flex; align-items: center;
+    border-bottom: 1px solid var(--border);
+    font-size: 11px;
+  }
+  .fin-row-label {
+    width: 180px; flex-shrink: 0;
+    padding: 0 12px; font-size: 11px;
+    color: var(--text-mid); font-weight: 600;
+    background: var(--bg-soft);
+    border-right: 2px solid var(--border-dark);
+    white-space: nowrap; overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .fin-bar-area {
+    flex: 1; display: flex;
+    position: relative; height: 100%;
+  }
+  .fin-month-col {
+    flex: 1; height: 100%;
+    border-right: 1px solid var(--border);
+    position: relative; min-width: 52px;
+  }
+  .fin-month-col.today-month { background: #fffbeb; }
+  .fin-bar {
+    position: absolute; left: 2px; right: 2px;
+    border-radius: 2px; transition: all 0.3s;
+  }
+  .fin-bar.revenue  { bottom: 3px; background: #86efac; }
+  .fin-bar.expense  { top: 3px; background: #fca5a5; }
+  .fin-bar.loan     { bottom: 3px; background: #93c5fd; }
+  .fin-event-dot {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--red);
+  }
+  .fin-cash-val {
+    position: absolute; bottom: 1px; right: 2px;
+    font-size: 8px; font-family: var(--font-mono);
+    color: var(--text-soft); white-space: nowrap;
+  }
+  .fin-month-header {
+    display: flex; background: var(--black);
+  }
+  .fin-month-th {
+    flex: 1; min-width: 52px;
+    height: 28px; display: flex;
+    align-items: center; justify-content: center;
+    font-family: var(--font-mono); font-size: 9px;
+    color: rgba(255,255,255,0.8); font-weight: 600;
+    border-right: 1px solid #333; letter-spacing: 0.06em;
+  }
+
+</style>
+</head>
+<body>
+
+<div id="name-signed-banner" style="display:none;background:#f0fdf4;border-bottom:1px solid #bbf7d0;padding:8px 36px;font-size:12px;font-family:var(--font-mono);color:#15803d;align-items:center;gap:12px;z-index:99;">
+  <span>✓ 代表取締役：<strong class="banner-name"></strong> — 電子契約済み。全書類に氏名を反映しました。</span>
+  <button onclick="document.getElementById('name-signed-banner').style.display='none'" style="margin-left:auto;background:none;border:none;color:#15803d;cursor:pointer;font-size:14px;">×</button>
+</div>
+<header>
+  <div class="logo">
+    <svg width="38" height="23" viewBox="0 0 60 36" fill="none">
+      <path d="M18 18C18 10.268 12.732 5 5 5C5 5 0 5 0 18C0 31 5 31 5 31C12.732 31 18 25.732 18 18Z" stroke="#111" stroke-width="2.5"/>
+      <path d="M42 18C42 10.268 47.268 5 55 5C55 5 60 5 60 18C60 31 55 31 55 31C47.268 31 42 25.732 42 18Z" stroke="#111" stroke-width="2.5"/>
+      <path d="M18 18C18 25.732 23.268 31 31 31C38.732 31 42 25.732 42 18C42 10.268 38.732 5 31 5C23.268 5 18 10.268 18 18Z" stroke="#111" stroke-width="2.5"/>
+      <circle cx="31" cy="18" r="3.5" fill="#b91c1c"/>
+    </svg>
+    <div>
+      <div class="logo-text">Infinite</div>
+      <div class="logo-sub">REPAIR SERUM — 創業計画書</div>
+    </div>
+  </div>
+  <div class="header-badge">CONFIDENTIAL</div>
+</header>
+
+<nav>
+  <button class="tab-btn active" onclick="showTab('overview',this)">事業概要</button>
+  <button class="tab-btn" onclick="showTab('brand',this)">商品・ブランド</button>
+  <button class="tab-btn" onclick="showTab('structure',this)">会社体制</button>
+  <button class="tab-btn" onclick="showTab('docs',this)">融資書類</button>
+  <button class="tab-btn" onclick="showTab('plan',this)">事業計画書</button>
+  <button class="tab-btn" onclick="showTab('calc',this)">収支シミュレーター</button>
+  <button class="tab-btn" onclick="showTab('president',this)">代表取締役向け説明書</button>
+  <button class="tab-btn" onclick="showTab('schedule',this)">実行スケジュール</button>
+  <button class="tab-btn" onclick="showTab('bizplan',this)">創業計画書</button>
+  <button class="tab-btn" onclick="showTab('contract',this)" id="tab-contract"><svg width="11" height="13" viewBox="0 0 24 28" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;margin-right:5px;margin-top:-1px"><rect x="2" y="12" width="20" height="15" rx="2.5" stroke="currentColor" stroke-width="2.2"/><path d="M7 12V8.5a5 5 0 0 1 10 0V12" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="19.5" r="2" fill="currentColor"/></svg>創業契約</button>
+</nav>
+
+<main>
+
+<!-- 1. 事業概要 -->
+<div id="sec-overview" class="section active">
+  <div class="page-title">新会社によるヘアトリートメント保護剤ブランド立上げ計画</div>
+  <div class="page-sub">創業融資を前提とした事業設計 — Infinite REPAIR SERUM</div>
+
+  <p>本計画は、ヘアダメージの保護・補修感・手触り改善・指通り向上などを主訴求とするヘアケア商材を、新会社にて企画・販売するための立上げ計画である。事業の初期段階では、処方開発・製造・品質管理・表示実務についてはOEM先および必要な許認可主体との連携を前提とし、新会社はブランド企画・販売導線構築・顧客開拓・販促・資金調達・サイト運営を中心に行う。代表者は新会社の代表取締役が務め、立上げ支援者は会社設立・融資準備・Web構築・資料整備を担当する。</p>
+
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-label">PRODUCT</div>
+      <div class="card-title">何を売るか</div>
+      <ul>
+        <li>洗い流さないヘアダメージ保護セラム</li>
+        <li>ケラチン × シルク × CMC処方</li>
+        <li>ダメージ保護・手触り改善・つや感</li>
+        <li>サロン専売またはD2C起点</li>
+        <li>初期は1商品集中（SKU最小化）</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-label">CHANNEL</div>
+      <div class="card-title">どう売るか</div>
+      <ul>
+        <li>自社ECサイト（主力チャネル）</li>
+        <li>Instagram / LINE公式導線</li>
+        <li>サロン・ディーラー営業</li>
+        <li>紹介販売・リピート設計</li>
+        <li>将来的にBtoB OEM展開も視野</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-label">STRATEGY</div>
+      <div class="card-title">最初の勝ち筋</div>
+      <ul>
+        <li>初期は1商品集中（在庫リスク最小化）</li>
+        <li>高単価・低SKU・高リピート構造</li>
+        <li>粗利80%以上を維持する価格設計</li>
+        <li>融資資金は在庫と販促に重点配分</li>
+        <li>固定費を最小に抑えた少人数運営</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>事業構造</h2>
+  <div class="flow">
+    <div class="flow-item"><div class="flow-box highlight">新会社（ブランド保有）</div><span class="flow-note">← ブランド企画・販売・マーケティング</span></div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-item"><div class="flow-box">OEM製造委託</div><span class="flow-note">← 処方開発・製造・品質管理・表示確認</span></div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-item"><div class="flow-box">自社EC販売（60%）</div><span class="flow-note">← 高粗利、顧客直接接続</span></div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-item"><div class="flow-box">サロン卸（25%）</div><span class="flow-note">← ブランド信頼性構築</span></div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-item"><div class="flow-box">海外販売（15%）</div><span class="flow-note">← Phase2以降：韓国→米国→インド</span></div>
+  </div>
+
+  <h2>価格・収益構造</h2>
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-label">PRICING</div>
+      <div class="card-title">販売価格設定</div>
+      <ul>
+        <li>EC販売価格：¥5,800〜¥7,800</li>
+        <li>サロン販売価格：¥6,800〜¥9,800</li>
+        <li>原価目標：¥900〜¥1,400</li>
+        <li>目標粗利率：80%以上</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-label">UNIT ECONOMICS</div>
+      <div class="card-title">1本あたり収益</div>
+      <ul>
+        <li>販売単価：¥6,800（想定）</li>
+        <li>OEM原価：¥1,200</li>
+        <li>粗利：¥5,600</li>
+        <li>粗利率：82.4%</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-label">MONTHLY TARGET</div>
+      <div class="card-title">月次売上見込</div>
+      <ul>
+        <li>月販売数：400本</li>
+        <li>月売上：272万円</li>
+        <li>年売上：3,264万円</li>
+        <li>損益分岐：創業6〜10ヶ月目</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- 2. 商品・ブランド -->
+<div id="sec-brand" class="section">
+  <div class="page-title">商品・ブランド設計</div>
+  <div class="page-sub">Infinite REPAIR SERUM — 製品コンセプトと薬機・OEM設計</div>
+
+  <div class="brand-hero">
+    <svg width="110" height="66" viewBox="0 0 140 84" fill="none">
+      <path d="M42 42C42 24.327 29.673 12 12 12C12 12 0 12 0 42C0 72 12 72 12 72C29.673 72 42 59.673 42 42Z" stroke="#111" stroke-width="4"/>
+      <path d="M98 42C98 24.327 110.327 12 128 12C128 12 140 12 140 42C140 72 128 72 128 72C110.327 72 98 59.673 98 42Z" stroke="#111" stroke-width="4"/>
+      <path d="M42 42C42 59.673 54.327 72 72 72C89.673 72 98 59.673 98 42C98 24.327 89.673 12 72 12C54.327 12 42 24.327 42 42Z" stroke="#111" stroke-width="4"/>
+      <circle cx="72" cy="42" r="7" fill="#b91c1c"/>
+    </svg>
+    <div>
+      <div class="brand-name">Infinite</div>
+      <div class="brand-product">REPAIR SERUM — インフィニット リペアセラム</div>
+      <div class="brand-tagline">髪は、再生する。ダメージは、補修できる。</div>
+      <div style="margin-top:10px;font-size:12px;color:var(--text-soft);font-family:var(--font-mono);">ケラチン × シルク × CMC ／ サロン品質を毎日のヘアケアへ。</div>
+    </div>
+  </div>
+
+  <h2>商品コンセプト</h2>
+  <p>熱・カラー・ブリーチ・紫外線・摩擦などによるヘアダメージに着目し、日常使いしやすい質感と継続使用による満足感を両立したヘアケア商品を展開する。初期は単品主力型とし、在庫管理と販促効率を高める。</p>
+
+  <div class="tbl-wrap">
+    <table>
+      <tr><th>項目</th><th>内容</th></tr>
+      <tr><td>製品種別</td><td>洗い流さないヘアダメージ保護セラム（ヘアオイル/セラムタイプ）</td></tr>
+      <tr><td>商品名</td><td>Infinite REPAIR SERUM / インフィニット リペアセラム</td></tr>
+      <tr><td>内容量</td><td>100mL（想定）</td></tr>
+      <tr><td>商品区分</td><td>化粧品（洗い流さないヘアトリートメント）</td></tr>
+      <tr><td>EC販売価格</td><td>¥5,800〜¥7,800</td></tr>
+      <tr><td>サロン価格</td><td>¥6,800〜¥9,800</td></tr>
+      <tr><td>OEM原価目標</td><td>¥900〜¥1,400</td></tr>
+    </table>
+  </div>
+
+  <h2>ターゲット顧客</h2>
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-label">PRIMARY</div>
+      <div class="card-title">メインターゲット</div>
+      <ul>
+        <li>25〜55歳女性</li>
+        <li>カラー・ブリーチ経験者</li>
+        <li>ダメージ毛ユーザー</li>
+        <li>サロン品質を求める層</li>
+        <li>市販品に満足しない層</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-label">SECONDARY</div>
+      <div class="card-title">セカンダリー</div>
+      <ul>
+        <li>男性 30〜50歳</li>
+        <li>頭皮ケア・薄毛対策</li>
+        <li>美容意識が高い男性層</li>
+        <li>サロン通いの習慣がある層</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-label">POSITION</div>
+      <div class="card-title">商品ポジション</div>
+      <ul>
+        <li>高価格帯すぎず、安売りもしない</li>
+        <li>補修感の体験価値を重視</li>
+        <li>毎日使えるリピート設計</li>
+        <li>見た目より中身訴求</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>OEM候補（複数確保）</h2>
+  <div class="oem-list">
+    <div class="oem-item"><div class="oem-name">コスメテックローランド</div><div class="oem-note">第一候補 / 実績あり</div></div>
+    <div class="oem-item"><div class="oem-name">日本コルマー</div><div class="oem-note">大手 / 薬機対応強い</div></div>
+    <div class="oem-item"><div class="oem-name">東洋ビューティ</div><div class="oem-note">ヘアケア実績多数</div></div>
+    <div class="oem-item"><div class="oem-name">コスモビューティ</div><div class="oem-note">D2Cブランド対応可</div></div>
+  </div>
+
+  <h2>薬機・化粧品規制 確認事項</h2>
+  <div class="tbl-wrap">
+    <table>
+      <tr><th>確認項目</th><th>内容・確認ポイント</th></tr>
+      <tr><td>商品区分</td><td>化粧品か、医薬部外品か（区分により手続きが異なる）</td></tr>
+      <tr><td>許認可主体</td><td>誰が製造販売業者になるか</td></tr>
+      <tr><td>OEM先の範囲</td><td>処方・製造・充填・表示確認の担当範囲を明確化</td></tr>
+      <tr><td>効能表現</td><td>「うるおいを与える」「つやを保つ」「枝毛・切れ毛を防ぐ」等の化粧品範囲内に限定</td></tr>
+      <tr><td>クレーム対応</td><td>一次受付と最終責任者を明確化</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- 3. 会社体制 -->
+<div id="sec-structure" class="section">
+  <div class="page-title">会社体制と実行責任の整理</div>
+  <div class="page-sub">役割分担の明確化 — 融資審査・OEM折衝・取引先説明に耐える体制設計</div>
+
+  <p>本事業では、新会社の代表者が経営責任者として事業運営を担う。立上げ支援者は、設立準備・融資支援・Web制作・初期資料整備・販売導線の設計を担当する。代表者と支援者の役割分担を事前に明確化し、金融機関・OEM先・外部委託先に対して説明可能な体制を構築する。</p>
+
+  <h2>役割分担表</h2>
+  <div class="tbl-wrap">
+    <table>
+      <tr><th>項目</th><th>代表取締役</th><th>立上げ支援者</th></tr>
+      <tr><td>代表権</td><td class="role-highlight">持つ</td><td>持たない</td></tr>
+      <tr><td>金融機関面談</td><td class="role-highlight">主担当</td><td>補助</td></tr>
+      <tr><td>事業責任</td><td class="role-highlight">主担当</td><td>支援</td></tr>
+      <tr><td>会社設立準備</td><td>確認・意思決定</td><td class="role-you">実務主導</td></tr>
+      <tr><td>サイト制作</td><td>確認</td><td class="role-you">主担当</td></tr>
+      <tr><td>ブランド企画</td><td class="role-highlight">最終決定</td><td class="role-you">企画支援</td></tr>
+      <tr><td>OEM折衝</td><td class="role-highlight">主担当＋同席</td><td class="role-you">実務資料作成</td></tr>
+      <tr><td>資金使途管理</td><td class="role-highlight">主担当</td><td class="role-you">予実管理補助</td></tr>
+    </table>
+  </div>
+
+  <h2>設立時に決めるべき事項</h2>
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-label">LEGAL</div>
+      <div class="card-title">法人設計</div>
+      <ul><li>商号（会社名）</li><li>本店所在地</li><li>事業目的（定款）</li><li>資本金額</li><li>役員・株主構成</li><li>決算期</li></ul>
+    </div>
+    <div class="card">
+      <div class="card-label">FINANCIAL</div>
+      <div class="card-title">資金・報酬</div>
+      <ul><li>代表者の報酬額</li><li>支援者への業務委託の有無</li><li>銀行口座開設予定</li><li>自己資金の整理</li></ul>
+    </div>
+    <div class="card">
+      <div class="card-label">CONTRACT</div>
+      <div class="card-title">契約・許認可</div>
+      <ul><li>許認可取得主体の整理</li><li>OEM契約主体の整理</li><li>商標出願主体の整理</li></ul>
+    </div>
+  </div>
+
+  <h2>事業目的（定款記載案）</h2>
+  <div class="info-box">
+    一．化粧品の企画、販売、卸売、輸出入<br>
+    一．美容関連製品の企画、開発、販売<br>
+    一．インターネットを利用した通信販売業<br>
+    一．広告宣伝、販売促進に関する企画、制作、運営<br>
+    一．前各号に附帯関連する一切の事業
+  </div>
+</div>
+
+<!-- 4. 融資書類 -->
+<div id="sec-docs" class="section">
+  <div class="page-title">融資申込までに準備する書類</div>
+  <div class="page-sub">日本政策金融公庫「新規開業・スタートアップ支援資金」申込想定</div>
+
+  <h2>◆ 必須書類</h2>
+  <ul class="checklist required">
+    <li>創業計画書（日本公庫所定用紙）</li>
+    <li>代表者本人確認書類</li>
+    <li>会社設立関係書類一式</li>
+    <li>資本金の払込確認資料</li>
+    <li>自己資金の通帳履歴（直近6ヶ月以上）</li>
+    <li>補足企画書（本書類）</li>
+    <li>OEM見積書（候補先2社以上）</li>
+    <li><strong>使用意思確認書</strong>（サロン等、取引意思のある先から取得済みのもの）</li>
+    <li><strong>販売協力合意書</strong>（ディーラー等、販売協力先から取得済みのもの）</li>
+    <li>販売予定価格表・原価試算表</li>
+    <li>月次収支計画（12〜24ヶ月）・返済計画</li>
+    <li>代表者の履歴書・職務経歴</li>
+    <li>市場調査・競合比較表</li>
+    <li>仕入/製造/販売の流れ図</li>
+    <li>サンプル試作品のサンプル・写真</li>
+    <li>ロゴ・パッケージ</li>
+    <li>商標調査</li>
+    <li>サイト（SNS含む）</li>
+    <li>利用規約・特商法・プライバシーポリシー</li>
+    <li>OEM比較一覧（複数社）</li>
+  </ul>
+
+  <h2>初期投資計画（現実的な設計）</h2>
+
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-label">PATTERN A — 最小スタート</div>
+      <div class="card-title">総投資 約350〜400万円</div>
+      <ul>
+        <li>OEM試作・処方：50万</li>
+        <li>初回製造（300本）：36万</li>
+        <li>容器・ボトル：50万</li>
+        <li>パッケージ・デザイン：30万</li>
+        <li>EC・サイト：自作（0円）</li>
+        <li>Instagram広告：100万</li>
+        <li>運転資金・その他：80万</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-label">PATTERN B — 推奨スタート</div>
+      <div class="card-title">総投資 約800万円</div>
+      <ul>
+        <li>商品製造（OEM含む）：200万</li>
+        <li>広告宣伝費（初期）：200万</li>
+        <li>EC制作・デザイン：100万</li>
+        <li>運転資金：300万</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-label">最も危険なパターン</div>
+      <div class="card-title" style="color:var(--red)">❌ 在庫過多・広告なし</div>
+      <ul>
+        <li>製造しすぎて広告費なし</li>
+        <li>売れない在庫が一番危険</li>
+        <li>初期MOQは300〜500本に絞る</li>
+        <li>在庫より広告費を優先配分</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>融資設計：3レイヤー戦略</h2>
+
+  <div class="tbl-wrap">
+    <table>
+      <tr><th>順番</th><th>融資先</th><th>タイミング</th><th style="text-align:right">借入目安</th><th>特徴</th></tr>
+      <tr><td><span class="tag tag-red">① 必須</span></td><td><strong>日本政策金融公庫</strong></td><td>創業時・最初</td><td style="text-align:right"><strong>600〜800万</strong></td><td>創業融資に強い／無担保／実績不要</td></tr>
+      <tr><td><span class="tag tag-gray">② 次</span></td><td>信用金庫 or 地銀</td><td>公庫融資の後</td><td style="text-align:right">300〜700万</td><td>公庫融資実績が信用になる</td></tr>
+      <tr><td><span class="tag tag-gray">③ 並行</span></td><td>制度融資（東京都等）</td><td>公庫と並行可</td><td style="text-align:right">300〜1,000万</td><td>信用保証協会付き／自治体制度</td></tr>
+      <tr><td colspan="3" style="font-weight:700;color:var(--black)">3本合計（最大）</td><td style="text-align:right;font-weight:700;color:var(--red)">〜1,700万円</td><td>ただし順番と時期が重要</td></tr>
+    </table>
+  </div>
+
+  <h2>正しい融資の順番</h2>
+  <div class="flow">
+    <div class="flow-item"><div class="flow-box highlight">STEP 1｜日本政策金融公庫 700万</div><span class="flow-note">← まずここ。創業融資の最優先窓口</span></div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-item"><div class="flow-box">STEP 2｜売上実績をつくる（6ヶ月〜）</div><span class="flow-note">← 返済実績が次の融資の信用になる</span></div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-item"><div class="flow-box">STEP 3｜信金 or 制度融資 500万〜</div><span class="flow-note">← 公庫融資＋売上実績があれば通りやすい</span></div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-item"><div class="flow-box">STEP 4｜銀行融資 1,000万〜</div><span class="flow-note">← 2年目以降・実績が積み上がってから</span></div>
+  </div>
+
+  <h2>審査に通りやすい資金内訳（推奨）</h2>
+  <div class="tbl-wrap">
+    <table>
+      <tr><th>用途</th><th>金額</th><th>備考</th></tr>
+      <tr><td>商品製造（OEM含む）</td><td style="text-align:right;font-weight:600;">200万円</td><td>初回300〜500本、原価1,200円×500本＝60万＋開発費</td></tr>
+      <tr><td>広告宣伝費</td><td style="text-align:right;font-weight:600;">200万円</td><td>Instagram・SNS・初期集客。在庫より広告を優先</td></tr>
+      <tr><td>EC・サイト制作</td><td style="text-align:right;font-weight:600;">100万円</td><td>自作なら0円。委託でも100万以内に抑える</td></tr>
+      <tr><td>運転資金</td><td style="text-align:right;font-weight:600;">300万円</td><td>役員報酬・送料・雑費・3〜6ヶ月分</td></tr>
+      <tr><td colspan="1" style="font-weight:700;">合計</td><td style="text-align:right;font-weight:700;color:var(--red);">800万円</td><td>自己資金100万 ＋ 融資700万</td></tr>
+    </table>
+  </div>
+
+</div>
+
+<!-- 5. 事業計画書 -->
+<div id="sec-plan" class="section">
+  <div class="page-title">事業企画書（融資説明兼・事業計画書）</div>
+  <div class="page-sub">日本政策金融公庫提出用補足資料</div>
+
+  <h2>融資用コンセプト文</h2>
+  <div class="info-box">本事業は、OEM製造・EC販売・SNSマーケティングを組み合わせたD2C化粧品ブランドである。初期設備投資を抑え、高粗利構造（目標粗利率80%以上）でキャッシュフローを確保する事業モデルである。1商品集中型で在庫リスクを最小化し、リピート購入による安定収益を創業初年度から目指す。<br><br><strong>【融資金融機関向け説明の核心】</strong>初回製造を300〜500本に絞ることで在庫リスクを最小化。粗利率80%以上の高収益構造により、月販200本以上で返済原資を確保できる。広告費を変動費として管理し、売上規模に応じた機動的な投資配分を行う。</div>
+
+  <h2>金融機関が評価するD2C化粧品の説明ロジック</h2>
+  <div class="flow">
+    <div class="flow-item"><div class="flow-box highlight">OEM製造（高品質・低ロット）</div><span class="flow-note">← 初回300〜500本。在庫リスク最小化</span></div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-item"><div class="flow-box">高粗利商品（粗利率80%以上）</div><span class="flow-note">← 単価6,800円 − 原価1,200円 = 粗利5,600円</span></div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-item"><div class="flow-box">EC直販（在庫→現金化が速い）</div><span class="flow-note">← 卸を挟まない高粗利構造</span></div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-item"><div class="flow-box">SNS集客→リピート購入</div><span class="flow-note">← 広告費は売上の10〜15%以内に管理</span></div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-item"><div class="flow-box">返済原資の確保</div><span class="flow-note">← 月販200本で月利益80万超。返済余力あり</span></div>
+  </div>
+
+  <h2>経営体制</h2>
+  <div class="tbl-wrap">
+    <table>
+      <tr><th>役職</th><th>担当</th><th>主な責任</th></tr>
+      <tr><td>代表取締役</td><td class="rep-name-cell"><span class="rep-name" style="color:var(--red);font-weight:600;">（契約後に自動反映）</span></td><td>経営判断・金融機関面談・OEM折衝・事業全般</td></tr>
+      <tr><td>創業支援・業務委託</td><td>立上げ支援者</td><td>会社設立・融資準備・EC構築・ブランド設計・資料整備</td></tr>
+    </table>
+  </div>
+
+  <h2>強み</h2>
+  <ul class="checklist">
+    <li>立上げ支援者が会社設立・融資・サイト制作まで実行可能（ワンストップ体制）</li>
+    <li>デジタル販促を内製できるため広告運用コストを効率化できる</li>
+    <li>少人数で固定費を抑えた運営が可能</li>
+    <li>初期商品数を絞るため在庫リスクを最小化できる</li>
+    <li>高粗利構造のため、販売数が増えるほどキャッシュフローが改善する</li>
+  </ul>
+
+  <h2>リスクと対策</h2>
+  <div class="tbl-wrap">
+    <table>
+      <tr><th>リスク</th><th>対策</th></tr>
+      <tr><td>OEM先決定遅延</td><td>複数候補を並行比較、早期打診を実施</td></tr>
+      <tr><td>薬機・表示対応の不備</td><td>許認可主体と表示責任を設立前に整理</td></tr>
+      <tr><td>広告費先行による資金減少</td><td>初期は紹介導線・SNS・サロン営業重視</td></tr>
+      <tr><td>売上未達</td><td>SKU追加でなく訴求改善を優先、月次KPI管理</td></tr>
+      <tr><td>代表者稼働不足</td><td>役割分担書と週次管理を作成</td></tr>
+      <tr><td>在庫資金の拘束</td><td>OEM支払いサイトを90日に交渉→在庫資金を圧縮。初回は300〜500本に限定</td></tr>
+      <tr><td>融資が1本しか通らない</td><td>公庫→制度融資→信金の順で3レイヤー設計。実績を積んでから2本目へ</td></tr>
+    </table>
+  </div>
+
+  <h2>段階的展開計画</h2>
+  <div class="tbl-wrap">
+    <table>
+      <tr><th>Phase</th><th>時期</th><th>主な取り組み</th><th>売上目標</th></tr>
+      <tr><td>Phase 1 <span class="tag tag-red">国内D2C</span></td><td>〜12ヶ月</td><td>自社EC・Instagram・LINE・サロン営業</td><td>月200〜400本</td></tr>
+      <tr><td>Phase 2 <span class="tag tag-gray">国内拡大</span></td><td>12〜24ヶ月</td><td>リピーター強化・卸展開・定期購入モデル</td><td>月400〜800本</td></tr>
+      <tr><td>Phase 3 <span class="tag tag-gray">韓国EC</span></td><td>24〜36ヶ月</td><td>韓国EC出店（美容輸出が比較的容易な市場）</td><td>国内＋韓国</td></tr>
+      <tr><td>Phase 4 <span class="tag tag-gray">米国・多展開</span></td><td>36ヶ月〜</td><td>米国EC・代理店展開・ブランド多角化</td><td>海外比率20%超</td></tr>
+    </table>
+  </div>
+</div>
+
+
+<!-- 9. 創業計画書（完成版） -->
+<div id="sec-bizplan" class="section">
+  <div class="page-title">創業計画書</div>
+  <div class="page-sub">日本政策金融公庫・金融機関にそのまま提出できる構成で作成</div>
+
+  <div class="bp-toolbar">
+    <button class="bp-btn primary" onclick="window.print()">⬡ 印刷 / PDF保存</button>
+    <button class="bp-btn" onclick="copyStory()">📋 説明ストーリーをコピー</button>
+    <span class="bp-mode-label" id="copy-feedback"></span>
+  </div>
+
+  <div class="bp-doc">
+    <div class="bp-doc-header">
+      <div class="bp-doc-title">創業計画書</div>
+      <div class="bp-doc-meta">
+        作成日：<input class="bp-date-input" id="bp-date" type="text" placeholder="　　　年　月　日"><br>
+        会社名：<input class="bp-date-input" id="bp-company" type="text" placeholder="（設立後に記入）"><br>
+        代表者：<input class="bp-date-input" id="bp-rep" type="text" placeholder="（氏名）" style="color:var(--black);">
+      </div>
+    </div>
+
+    <!-- 1 -->
+    <div class="bp-section">
+      <div class="bp-section-title">1. 創業の動機</div>
+      <p>本事業は、ヘアダメージケア製品を中心とした化粧品ブランドを立ち上げ、ECを中心としたD2Cモデルで販売を行うことを目的として創業する。</p>
+      <p>近年、カラー・ブリーチ・パーマなどによるヘアダメージの悩みを持つ消費者が増加しており、サロン品質のヘアケア製品を自宅で使用したいというニーズが拡大している。</p>
+      <p>一方で、従来の化粧品ブランドは卸・小売を中心とした流通構造であり、ブランド側の利益率が低く、広告・販売戦略の自由度も限られている。</p>
+      <p>本事業では、国内OEMメーカーへ製造を委託し、自社はブランド設計・販売・マーケティングに集中するD2Cモデルを採用することで、高い利益率と迅速なブランド展開を実現する。販売は自社ECサイトを中心とし、SNS（Instagram、TikTok）による認知拡大とリピート購入による安定収益モデルを構築する。</p>
+    </div>
+
+    <!-- 2 -->
+    <div class="bp-section">
+      <div class="bp-section-title">2. 事業内容</div>
+      <p>本事業は以下の事業を行う。</p>
+      <div class="bp-highlight-row">化粧品の企画・販売　／　インターネットを利用した通信販売　／　美容関連商品の企画・販売　／　海外向けEC販売</div>
+      <p>主力商品はヘアダメージ補修を目的としたヘアトリートメント製品であり、洗い流さないタイプのヘアセラムを中心に展開する。商品は国内OEMメーカーに製造を委託し、品質管理・薬機法対応・安全性試験などはOEM企業の体制を活用する。自社はブランド企画、EC販売、マーケティングを中心に事業を行う。化粧品製造販売業の許可についてはOEMメーカーが保持しているため、自社は企画販売業務に集中することが可能である。</p>
+    </div>
+
+    <!-- 3 -->
+    <div class="bp-section">
+      <div class="bp-section-title">3. 商品概要</div>
+      <div class="bp-kv">
+        <div class="bp-kv-label">商品名</div><div class="bp-kv-value"><strong>Infinite Repair Serum（インフィニット リペアセラム）</strong></div>
+        <div class="bp-kv-label">コンセプト</div><div class="bp-kv-value">髪のダメージを補修し、潤いとツヤを与えるヘアケア美容液</div>
+        <div class="bp-kv-label">主成分</div><div class="bp-kv-value">ケラチン／加水分解シルク／ヒアルロン酸／CMC類似脂質／植物オイル</div>
+        <div class="bp-kv-label">主な効果</div><div class="bp-kv-value">髪に潤いを与える／ツヤを保つ／枝毛・切れ毛を防ぐ　※化粧品の効能表現は薬機法の範囲内で行う</div>
+        <div class="bp-kv-label">製造方法</div><div class="bp-kv-value">国内OEMメーカーへ委託製造</div>
+      </div>
+    </div>
+
+    <!-- 4 -->
+    <div class="bp-section">
+      <div class="bp-section-title">4. 販売方法</div>
+      <div class="bp-highlight-row">
+        <strong>主力：</strong>自社ECサイト（D2C直販）&emsp;
+        <strong>補完：</strong>Amazon &emsp;
+        <strong>拡大：</strong>サロン販売・SNS経由販売
+      </div>
+      <p>初期はEC販売を中心に展開し、SNSマーケティングを活用してブランド認知を拡大する。D2Cモデルでは中間流通を介さないため、ブランド側の利益率が高く、商品価格とマーケティングを柔軟に設計できる。将来的にはサロン販売および小売店舗への展開も検討する。</p>
+    </div>
+
+    <!-- 5・6 -->
+    <div class="bp-section">
+      <div class="bp-section-title">5. 価格設定と収益モデル</div>
+      <div class="bp-num-grid">
+        <div class="bp-num-box">
+          <div class="bp-num-label">販売価格</div>
+          <div class="bp-num-value accent">¥6,800</div>
+        </div>
+        <div class="bp-num-box">
+          <div class="bp-num-label">OEM原価</div>
+          <div class="bp-num-value">¥1,200</div>
+        </div>
+        <div class="bp-num-box">
+          <div class="bp-num-label">粗利率</div>
+          <div class="bp-num-value accent">82%</div>
+        </div>
+      </div>
+      <p>D2Cモデルでは中間流通がないため、高い粗利率が確保できる。粗利5,600円／本の高収益構造により、月販200本超で返済原資を確保できる。</p>
+    </div>
+
+    <!-- 売上計画 -->
+    <div class="bp-section">
+      <div class="bp-section-title">6. 売上計画</div>
+      <div class="bp-num-grid">
+        <div class="bp-num-box">
+          <div class="bp-num-label">月間販売数</div>
+          <div class="bp-num-value">400本</div>
+        </div>
+        <div class="bp-num-box">
+          <div class="bp-num-label">月間売上</div>
+          <div class="bp-num-value accent">272万円</div>
+        </div>
+        <div class="bp-num-box">
+          <div class="bp-num-label">年間売上（想定）</div>
+          <div class="bp-num-value">3,264万円</div>
+        </div>
+      </div>
+      <p>初年度は広告投資を中心に顧客獲得を行い、リピート購入により安定収益化を図る。損益分岐点は創業後8〜12ヶ月を想定している。</p>
+    </div>
+
+    <!-- 7 -->
+    <div class="bp-section">
+      <div class="bp-section-title">7. 仕入・製造</div>
+      <p>製造は国内OEMメーカーへ委託する。</p>
+      <div class="bp-highlight-row">OEM候補：コスメテックローランド　／　日本コルマー　／　東洋ビューティ　／　コスモビューティ</div>
+      <p>OEMメーカーは薬機法に基づく品質管理体制を持ち、処方設計・安全性試験・安定性試験を実施する。</p>
+    </div>
+
+    <!-- 銀行への説明ストーリー -->
+    <div class="bp-section">
+      <div class="bp-section-title">銀行への説明ストーリー（そのまま読み上げ可）</div>
+      <div class="bp-story-box" id="story-text">
+        <button class="bp-story-copy" onclick="copyStory()" id="story-copy-btn">コピー</button>
+        本事業はOEM製造によるヘアケア商品のD2C販売事業です。<br><br>
+        製造は国内OEM企業へ委託し、自社はブランド・販売に特化します。<br><br>
+        販売は自社ECとSNSを中心に展開し、高粗利の構造により早期黒字化を目指します。<br><br>
+        初期は広告投資を中心に顧客獲得を行い、定期購入とリピートにより安定収益を形成します。<br><br>
+        粗利率82%の商品を月400本販売すると月売上272万円となり、返済原資は十分に確保できます。<br>
+        損益分岐は創業後8〜12ヶ月を想定しています。
+      </div>
+    </div>
+
+    <!-- 8・9・10 -->
+    <div class="bp-section">
+      <div class="bp-section-title">8. 資金計画</div>
+      <div class="bp-loan-grid">
+        <div class="bp-loan-box primary">
+          <div class="bp-loan-num">① 必須・最優先</div>
+          <div class="bp-loan-name">日本政策金融公庫</div>
+          <div class="bp-loan-amount">700万円</div>
+          <div class="bp-loan-detail">返済期間：7年<br>用途：製造200万・広告200万・EC100万・パッケージ50万・運転150万</div>
+        </div>
+        <div class="bp-loan-box">
+          <div class="bp-loan-num">② 公庫融資後</div>
+          <div class="bp-loan-name">自治体制度融資</div>
+          <div class="bp-loan-amount">600万円</div>
+          <div class="bp-loan-detail">信用保証協会付き<br>用途：広告200万・在庫補充200万・運転200万</div>
+        </div>
+        <div class="bp-loan-box">
+          <div class="bp-loan-num">③ 実績積み後</div>
+          <div class="bp-loan-name">信用金庫</div>
+          <div class="bp-loan-amount">400万円</div>
+          <div class="bp-loan-detail">公庫融資が信用になる<br>用途：広告追加200万・運転200万</div>
+        </div>
+      </div>
+      <div style="margin-top:14px;border:1px solid var(--border);overflow:hidden;">
+        <div style="display:grid;grid-template-columns:1fr auto;align-items:center;padding:11px 16px;border-bottom:1px solid var(--border);background:var(--bg-soft);">
+          <span style="font-size:12px;color:var(--text-mid);">自己資金（資本金）</span>
+          <span style="font-family:var(--font-mono);font-size:14px;font-weight:600;color:var(--black);">100万円</span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr auto;align-items:center;padding:11px 16px;border-bottom:1px solid var(--border);">
+          <span style="font-size:12px;color:var(--text-mid);">融資合計（最大）</span>
+          <span style="font-family:var(--font-mono);font-size:14px;font-weight:600;color:var(--red);">1,700万円</span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr auto;align-items:center;padding:11px 16px;background:var(--bg-soft);">
+          <span style="font-size:12px;font-weight:700;color:var(--black);">総資金（自己資金含む）</span>
+          <span style="font-family:var(--font-mono);font-size:16px;font-weight:700;color:var(--black);">1,800万円</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 返済 -->
+    <div class="bp-section">
+      <div class="bp-section-title">9. 返済計画（公庫700万円）</div>
+      <div class="bp-kv">
+        <div class="bp-kv-label">借入額</div><div class="bp-kv-value">700万円</div>
+        <div class="bp-kv-label">返済期間</div><div class="bp-kv-value">7年（84ヶ月）</div>
+        <div class="bp-kv-label">月返済額（概算）</div><div class="bp-kv-value"><strong>約10万円</strong></div>
+        <div class="bp-kv-label">返済原資</div><div class="bp-kv-value">EC売上利益（月粗利：月販200本で112万円超）</div>
+      </div>
+    </div>
+
+    <!-- スケジュール -->
+    <div class="bp-section">
+      <div class="bp-section-title">10. 実務スケジュール</div>
+      <div class="bp-schedule-grid">
+        <div class="bp-step"><div class="bp-step-num">1ヶ月目</div><div class="bp-step-label">会社設立</div></div>
+        <div class="bp-step"><div class="bp-step-num">2ヶ月目</div><div class="bp-step-label">公庫申請</div></div>
+        <div class="bp-step"><div class="bp-step-num">3ヶ月目</div><div class="bp-step-label">公庫融資実行</div></div>
+        <div class="bp-step"><div class="bp-step-num">4ヶ月目</div><div class="bp-step-label">制度融資申請</div></div>
+        <div class="bp-step"><div class="bp-step-num">6ヶ月目</div><div class="bp-step-label">信金アプローチ</div></div>
+        <div class="bp-step"><div class="bp-step-num">12ヶ月目〜</div><div class="bp-step-label">銀行追加融資</div></div>
+      </div>
+    </div>
+
+    <!-- 11 -->
+    <div class="bp-section">
+      <div class="bp-section-title">11. 将来展望</div>
+      <p>今後は以下の展開を予定している。</p>
+      <div class="bp-highlight-row">
+        商品ライン拡充　／　サロン販売拡大　／　海外EC販売（韓国→米国→インド）　／　定期購入モデル導入
+      </div>
+      <p>ブランド価値を高め、安定的なリピート収益を確立することで事業の持続的成長を目指す。1年目売上3,000万達成後、2年目に銀行追加融資2,000万を目指す。</p>
+    </div>
+
+    <!-- 審査ポイント -->
+    <div class="bp-section">
+      <div class="bp-section-title">審査通過チェックリスト（内部確認用）</div>
+      <div class="bp-check-grid">
+        <div class="bp-check-item"><span class="bp-check-icon">✓</span><div><strong>誰が運営するか</strong><br>代表者が経営責任者として直接関与。経歴・動機を口頭で説明できる状態を準備</div></div>
+        <div class="bp-check-item"><span class="bp-check-icon">✓</span><div><strong>どう売るか</strong><br>自社EC直販（D2C）＋SNS集客。中間流通なしで高粗利を維持</div></div>
+        <div class="bp-check-item"><span class="bp-check-icon">✓</span><div><strong>価格・利益率</strong><br>粗利率82%。月販200本で月粗利112万円、返済余力は十分</div></div>
+        <div class="bp-check-item"><span class="bp-check-icon">✓</span><div><strong>黒字化時期</strong><br>創業後8〜12ヶ月。広告費は変動費管理で売上に連動させる</div></div>
+        <div class="bp-check-item"><span class="bp-check-icon">✓</span><div><strong>返済原資</strong><br>月返済10万に対し、月販200本超で100万超の返済原資を確保</div></div>
+        <div class="bp-check-item"><span class="bp-check-icon">✓</span><div><strong>この設計のメリット</strong><br>融資通りやすい・初期広告費確保・在庫余裕・1SKUで回る</div></div>
+      </div>
+    </div>
+
+    <!-- 成功パターン -->
+    <div class="bp-section">
+      <div class="bp-section-title">成功ロードマップ</div>
+      <div class="bp-kv">
+        <div class="bp-kv-label">1年目</div><div class="bp-kv-value">公庫700万で事業スタート。売上3,000万達成を目標。返済実績を積む</div>
+        <div class="bp-kv-label">2年目</div><div class="bp-kv-value">売上実績を元に銀行追加融資2,000万。制度融資600万も並行取得</div>
+        <div class="bp-kv-label">3年目</div><div class="bp-kv-value">信金400万追加。ブランド拡大・海外展開・商品ライン拡充へ</div>
+        <div class="bp-kv-label">重要な原則</div><div class="bp-kv-value"><strong>「融資は取れる時に取る」</strong>が正解。事業に1,800万全部は不要でも、調達できる時に調達しておくことが成長の選択肢を広げる</div>
+      </div>
+    </div>
+
+  </div><!-- /bp-doc -->
+</div>
+<!-- /創業計画書 -->
+
+<!-- 6. 収支シミュレーター -->
+<div id="sec-calc" class="section">
+  <div class="page-title">事業収支シミュレーター</div>
+  <div class="page-sub">数値を変更すると損益・返済余力が自動で再計算されます</div>
+
+  <div class="calc-layout">
+    <div class="calc-panel">
+      <h3>基本設定</h3>
+      <div class="input-row"><label>販売単価</label><input type="number" id="price" value="6800"><span class="input-unit">円</span></div>
+      <div class="input-row"><label>OEM原価（1本）</label><input type="number" id="cost" value="1200"><span class="input-unit">円</span></div>
+      <div class="input-row"><label>月間販売数</label><input type="number" id="units" value="400"><span class="input-unit">本</span></div>
+      <div class="divider"></div>
+      <h3>月次固定費</h3>
+      <div class="input-row"><label>広告宣伝費</label><input type="number" id="adv" value="200000"><span class="input-unit">円</span></div>
+      <div class="input-row"><label>役員報酬</label><input type="number" id="salary" value="250000"><span class="input-unit">円</span></div>
+      <div class="input-row"><label>外注・送料等</label><input type="number" id="misc" value="100000"><span class="input-unit">円</span></div>
+      <div class="input-row"><label>システム・雑費</label><input type="number" id="sys" value="50000"><span class="input-unit">円</span></div>
+      <div class="divider"></div>
+      <h3>融資・自己資金</h3>
+      <div class="input-row"><label>自己資金（資本金）</label><input type="number" id="selfFund" value="1000000"><span class="input-unit">円</span></div>
+      <div class="input-row"><label>借入総額</label><input type="number" id="loan" value="7000000"><span class="input-unit">円</span></div>
+      <div class="input-row"><label>返済期間</label><input type="number" id="term" value="84"><span class="input-unit">月</span></div>
+      <div class="input-row"><label>年利</label><input type="number" id="rate" value="2.0" step="0.1"><span class="input-unit">%</span></div>
+    </div>
+
+    <div>
+      <div class="result-grid">
+        <div class="result-card highlight"><div class="result-label">月間売上</div><div class="result-value red" id="r-revenue">—</div></div>
+        <div class="result-card"><div class="result-label">粗利（月）</div><div class="result-value" id="r-gross">—</div></div>
+        <div class="result-card"><div class="result-label">粗利率</div><div class="result-value" id="r-grate">—</div></div>
+        <div class="result-card"><div class="result-label">月間返済額</div><div class="result-value small" id="r-repay">—</div></div>
+        <div class="result-card"><div class="result-label">月間固定費合計</div><div class="result-value small" id="r-fixed">—</div></div>
+        <div class="result-card highlight"><div class="result-label">月間営業利益</div><div class="result-value" id="r-profit">—</div></div>
+        <div class="result-card"><div class="result-label">返済後手残り</div><div class="result-value small" id="r-net">—</div></div>
+        <div class="result-card"><div class="result-label">年間売上（想定）</div><div class="result-value small" id="r-annual">—</div></div>
+        <div class="result-card"><div class="result-label">自己資金</div><div class="result-value small" id="r-selffund">—</div></div>
+      </div>
+
+      <h3>月別シミュレーション（12ヶ月・段階的成長）</h3>
+      <div class="tbl-wrap">
+        <table class="pl-table">
+          <thead><tr><th style="text-align:left">月</th><th>販売数</th><th>売上</th><th>粗利</th><th>固定費</th><th>返済額</th><th>営業利益</th></tr></thead>
+          <tbody id="monthly-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 7. 代表取締役向け説明書 -->
+<div id="sec-president" class="section">
+  <div class="page-title">代表取締役になる方への説明書</div>
+  <div class="page-sub">最初に読んでもらうための説明書です</div>
+
+  <h2>1. 必ず理解すること</h2>
+  <ul class="checklist required">
+    <li>何を売る会社か（Infinite REPAIR SERUM — ヘアダメージ保護セラム）</li>
+    <li>どこに売るか（自社EC・サロン・将来的に海外）</li>
+    <li>いくらで売るか（EC：¥5,800〜¥7,800）</li>
+    <li>何にいくら資金が必要か（現実的な資金規模：600〜800万円）</li>
+    <li>返済をどう回すか（月次売上→粗利→返済の流れ）</li>
+    <li>自分が代表取締役として何を決めるか（最終承認者であること）</li>
+  </ul>
+
+  <h2>2. 融資面談で話せるようにすること</h2>
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-label">WHY YOU</div>
+      <div class="card-title">自分について</div>
+      <ul>
+        <li>なぜこの事業をやるのか</li>
+        <li>なぜ今なのか</li>
+        <li>なぜこの商品なのか</li>
+        <li>自分の経験がどう活きるのか</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-label">WHY IT WORKS</div>
+      <div class="card-title">事業について</div>
+      <ul>
+        <li>売上の見込みは何に基づくのか</li>
+        <li>誰が買うのか（ターゲット）</li>
+        <li>競合との差別化は何か</li>
+        <li>赤字になったらどう立て直すのか</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>3. 自分で判断すること</h2>
+  <ul class="checklist">
+    <li>会社名（商号）</li>
+    <li>商品の最終方向性（処方・パッケージ・価格）</li>
+    <li>OEM候補の最終選定</li>
+    <li>役員報酬の設定額</li>
+    <li>借入希望額と返済可能額の確認</li>
+  </ul>
+
+  <h2>4. 勝手に決めてはいけないこと</h2>
+  <ul class="checklist required">
+    <li>薬機表現（「育毛」「再生」「治療」等の医薬品的効能表現）</li>
+    <li>容器・箱の表示内容（製造販売業者名・成分・内容量等）</li>
+    <li>許認可主体が曖昧な状態での販売開始</li>
+    <li>SNS・広告での誇大表現（景品表示法の対象）</li>
+  </ul>
+
+  <h2>5. 代表取締役の初月タスク</h2>
+  <ul class="checklist">
+    <li>会社概要（社名・所在地・事業目的）の確定</li>
+    <li>自分の経歴整理（履歴書・職務経歴メモ）</li>
+    <li>自己資金の整理（通帳コピー・残高確認）</li>
+    <li>事業動機の言語化（なぜ今この事業か）</li>
+    <li>OEM候補選定への参加・確認</li>
+    <li>取引先候補（サロン等）の洗い出し</li>
+    <li>創業計画書の内容確認・面談練習</li>
+  </ul>
+</div>
+
+<!-- 8. 実行スケジュール -->
+<div id="sec-schedule" class="section">
+  <div class="page-title">実行スケジュール — ガントチャート</div>
+  <div class="page-sub">開始日を設定すると1年分を自動生成。完了ボタンで進捗管理・後続スケジュールに自動反映。</div>
+
+  <!-- コントロールバー -->
+  <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:24px;padding:16px 20px;background:var(--bg-soft);border:1px solid var(--border);">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <label style="font-size:12px;font-weight:600;color:var(--text-mid);">事業開始日</label>
+      <input type="date" id="gantt-start" style="border:1px solid var(--border-dark);padding:7px 10px;font-family:var(--font-mono);font-size:12px;outline:none;background:var(--bg);">
+    </div>
+    <button onclick="buildGantt()" style="background:var(--black);color:var(--bg);border:none;font-size:12px;font-family:var(--font-sans);font-weight:700;padding:9px 20px;cursor:pointer;letter-spacing:0.06em;">ガントチャート生成</button>
+    <button onclick="resetGantt()" style="background:var(--bg);color:var(--text-soft);border:1px solid var(--border-dark);font-size:11px;font-family:var(--font-sans);padding:9px 16px;cursor:pointer;">リセット</button>
+    <div style="margin-left:auto;display:flex;gap:16px;align-items:center;font-size:11px;font-family:var(--font-mono);">
+      <span style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;background:#e5e3df;border-radius:2px;display:inline-block;"></span>未着手</span>
+      <span style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;background:#fca5a5;border-radius:2px;display:inline-block;"></span>進行中</span>
+      <span style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;background:#86efac;border-radius:2px;display:inline-block;"></span>完了</span>
+    </div>
+  </div>
+
+  <!-- ガントチャート本体 -->
+  <div id="gantt-placeholder" style="text-align:center;padding:60px;color:var(--text-soft);font-size:13px;border:1px dashed var(--border-dark);margin-bottom:24px;">
+    開始日を設定して「ガントチャート生成」を押してください
+  </div>
+
+  <div id="gantt-wrap" style="display:none;margin-bottom:32px;">
+    <!-- 左ラベル＋右タイムライン＋右端縦スクロールバー -->
+    <div class="gantt-frame">
+      <!-- 左固定パネル -->
+      <div class="gantt-left" id="gantt-left-panel">
+        <div class="gantt-left-header">作業内容 / フェーズ</div>
+        <div id="gantt-left-rows"></div>
+      </div>
+      <!-- 右タイムライン（横スクロール非表示） -->
+      <div class="gantt-right">
+        <div class="gantt-timeline-scroll" id="gantt-timeline-scroll">
+          <div id="gantt-month-row" class="gantt-month-row"></div>
+          <div id="gantt-bar-rows"></div>
+        </div>
+      </div>
+      <!-- 右端縦スライダー（← これが横スクロールを制御） -->
+      <div class="gantt-vscroll" id="gantt-vscroll">
+        <button class="gantt-vscroll-btn" id="gantt-scroll-up" title="左へ">▲</button>
+        <div class="gantt-vscroll-track" id="gantt-vscroll-track">
+          <div class="gantt-vscroll-thumb" id="gantt-vscroll-thumb"></div>
+        </div>
+        <button class="gantt-vscroll-btn" id="gantt-scroll-down" title="右へ">▼</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- タスク詳細パネル -->
+  <div id="gantt-tasks" style="display:none;">
+    <h2>タスク一覧 &amp; 進捗管理</h2>
+    <div id="task-list-wrap"></div>
+  </div>
+
+  <!-- 収支ガントチャート -->
+  <div id="gantt-finance-summary" style="display:none;margin-top:32px;">
+    <h2>収支ガントチャート — フェーズ連動</h2>
+    <p style="font-size:12px;color:var(--text-soft);margin-bottom:14px;font-family:var(--font-mono);">完了済みフェーズは緑。融資実行・売上開始などのイベントをガントと同期表示。</p>
+    <div id="finance-summary-wrap"></div>
+  </div>
+
+  <h2>月次管理KPI</h2>
+  <div class="tbl-wrap">
+    <table>
+      <tr><th>KPI</th><th>目標（月次）</th><th>確認方法</th></tr>
+      <tr><td>月間販売数</td><td>400本（段階的に拡大）</td><td>EC・サロン集計</td></tr>
+      <tr><td>粗利率</td><td>80%以上維持</td><td>原価・売上対比</td></tr>
+      <tr><td>広告費比率</td><td>売上の10〜15%以内</td><td>広告費÷売上</td></tr>
+      <tr><td>リピート率</td><td>30%以上（3ヶ月後）</td><td>CRM・定期購入数</td></tr>
+      <tr><td>返済比率</td><td>営業CF比50%以内</td><td>月次損益</td></tr>
+      <tr><td>SNSフォロワー</td><td>月+200人以上</td><td>Instagram管理画面</td></tr>
+    </table>
+  </div>
+</div>
+
+</main>
+
+<script>
+  function showTab(id, btn) {
+    // Hide all standard sections
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    // Contract section uses display:block/none not class
+    const contractSec = document.getElementById('sec-contract');
+    if (id === 'contract') {
+      if (contractSec) contractSec.style.display = 'block';
+      setTimeout(() => {
+        const pw = document.getElementById('pw-screen');
+        if (pw && pw.style.display !== 'none') { /* already on pw */ }
+        initCanvas();
+      }, 80);
+    } else {
+      if (contractSec) contractSec.style.display = 'none';
+      const sec = document.getElementById('sec-' + id);
+      if (sec) sec.classList.add('active');
+    }
+    if (id === 'calc') calcAll();
+    if (id === 'bizplan') setTimeout(initBizplanHeader, 50);
+  }
+
+  const SIM_IDS = ['price','cost','units','adv','salary','misc','sys','selfFund','loan','term','rate'];
+  SIM_IDS.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('input', () => { calcAll(); saveSimValues(); });
+  });
+
+  function saveSimValues() {
+    const vals = {};
+    SIM_IDS.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) vals[id] = el.value;
+    });
+    try { localStorage.setItem('infinite_sim', JSON.stringify(vals)); } catch(e){}
+  }
+
+  function loadSimValues() {
+    try {
+      const saved = localStorage.getItem('infinite_sim');
+      if (!saved) return;
+      const vals = JSON.parse(saved);
+      SIM_IDS.forEach(id => {
+        const el = document.getElementById(id);
+        if (el && vals[id] !== undefined) el.value = vals[id];
+      });
+    } catch(e){}
+  }
+
+  function fmt(n) {
+    // 千円単位表示
+    const abs = Math.abs(n);
+    if (abs >= 1000) return Math.round(n/1000).toLocaleString('ja-JP') + '千円';
+    return n.toLocaleString('ja-JP') + '円';
+  }
+
+  function fmtSign(n) { return (n < 0 ? '▲' : '+') + fmt(Math.abs(n)); }
+
+  function getVal(id) { return parseFloat(document.getElementById(id).value) || 0; }
+
+  function calcRepayment(loan, term, rate) {
+    if (!rate) return loan / term;
+    const r = rate / 100 / 12;
+    return loan * r * Math.pow(1+r, term) / (Math.pow(1+r, term) - 1);
+  }
+
+  function calcAll() {
+    const price = getVal('price'), cost = getVal('cost'), units = getVal('units');
+    const adv = getVal('adv'), salary = getVal('salary'), misc = getVal('misc'), sys = getVal('sys');
+    const selfFund = getVal('selfFund');
+    const loan = getVal('loan'), term = getVal('term'), rate = getVal('rate');
+
+    const revenue  = price * units;
+    const grossP   = (price - cost) * units;
+    const gRate    = revenue > 0 ? (grossP / revenue * 100).toFixed(1) : 0;
+    const fixed    = adv + salary + misc + sys;
+    const opProfit = grossP - fixed;
+    const repay    = calcRepayment(loan, term, rate);
+    const net      = opProfit - repay;
+
+    const set = (id, val, cls) => {
+      const el = document.getElementById(id); if (!el) return;
+      el.textContent = val;
+      el.className = 'result-value' + (cls ? ' '+cls : '');
+    };
+
+    set('r-revenue', fmt(revenue), 'red');
+    set('r-gross',   fmt(grossP),  grossP >= 0 ? 'green' : 'red');
+    set('r-grate',   gRate + '%',  parseFloat(gRate) >= 70 ? 'green' : 'red');
+    set('r-repay',   fmt(Math.round(repay)));
+    set('r-fixed',   fmt(fixed));
+    set('r-profit',  fmt(opProfit), opProfit >= 0 ? 'green' : 'red');
+    set('r-net',     fmt(Math.round(net)), net >= 0 ? 'green' : 'red');
+    set('r-annual',  fmt(revenue * 12));
+    set('r-selffund', fmt(selfFund));
+
+    const body = document.getElementById('monthly-body');
+    body.innerHTML = '';
+    let cumProfit = 0;
+    [0.35,0.45,0.6,0.75,0.85,0.95,1.0,1.05,1.1,1.15,1.2,1.25].forEach((ramp, i) => {
+      const mu = Math.round(units * ramp);
+      const mr = price * mu;
+      const mg = (price - cost) * mu;
+      const mo = mg - fixed;
+      const mn = mo - repay;
+      cumProfit += mo;
+      const tr = document.createElement('tr');
+      tr.className = mo >= 0 ? 'profit' : 'loss';
+      tr.innerHTML = `<td>${i+1}月目</td><td>${mu.toLocaleString()}</td><td>${fmt(mr)}</td><td>${fmt(Math.round(mg))}</td><td>${fmt(fixed)}</td><td>${fmt(Math.round(repay))}</td><td>${fmtSign(Math.round(mn))}</td>`;
+      body.appendChild(tr);
+    });
+    const tr = document.createElement('tr');
+    tr.className = 'total';
+    tr.innerHTML = `<td colspan="6">年間累積営業利益（概算）</td><td style="color:${cumProfit>=0?'#15803d':'var(--red)'}">${fmtSign(Math.round(cumProfit))}</td>`;
+    body.appendChild(tr);
+  }
+
+  // Expose simulator values globally for finance gantt
+  window.getSimValues = function() {
+    const selfFund = getVal('selfFund');
+    const loan = getVal('loan'), term = getVal('term'), rate = getVal('rate');
+    const price = getVal('price'), cost = getVal('cost'), units = getVal('units');
+    const adv = getVal('adv'), salary = getVal('salary'), misc = getVal('misc'), sys = getVal('sys');
+    const fixed = adv + salary + misc + sys;
+    const monthly_revenue = price * units;
+    const monthly_profit = (price - cost) * units - fixed;
+    const repay = calcRepayment(loan, term, rate);
+    return { selfFund, loan, monthly_revenue, monthly_profit, repay };
+  };
+
+  loadSimValues();
+  calcAll();
+  setTimeout(initBizplanHeader, 100);
+
+  // ── CONTRACT / PASSWORD ──
+  const CONTRACT_PW = 'tamj2026';
+
+  function checkPW() {
+    const val = document.getElementById('pw-input').value;
+    if (val === CONTRACT_PW) {
+      document.getElementById('pw-screen').style.display = 'none';
+      document.getElementById('contract-screen').style.display = 'block';
+      setTimeout(() => { initCanvas(); recipeInitPanel(); }, 80);
+    } else {
+      document.getElementById('pw-error').textContent = 'パスワードが違います。';
+      document.getElementById('pw-input').value = '';
+      document.getElementById('pw-input').focus();
+    }
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+      const pw = document.getElementById('pw-screen');
+      if (pw && pw.classList.contains('active')) checkPW();
+    }
+  });
+
+  let sigCanvas, sigCtx, drawing = false, hasSig = false;
+
+  function initCanvas() {
+    sigCanvas = document.getElementById('sig-canvas');
+    if (!sigCanvas) return;
+    const dpr = window.devicePixelRatio || 1;
+    const w = sigCanvas.offsetWidth, h = 140;
+    sigCanvas.width  = w * dpr;
+    sigCanvas.height = h * dpr;
+    sigCanvas.style.height = h + 'px';
+    sigCtx = sigCanvas.getContext('2d');
+    sigCtx.scale(dpr, dpr);
+    sigCtx.strokeStyle = '#111';
+    sigCtx.lineWidth = 2;
+    sigCtx.lineCap = 'round';
+    sigCtx.lineJoin = 'round';
+
+    const pos = (e) => {
+      const r = sigCanvas.getBoundingClientRect();
+      const s = e.touches ? e.touches[0] : e;
+      return { x: s.clientX - r.left, y: s.clientY - r.top };
+    };
+    sigCanvas.addEventListener('mousedown',  e => { drawing=true; hasSig=true; const p=pos(e); sigCtx.beginPath(); sigCtx.moveTo(p.x,p.y); });
+    sigCanvas.addEventListener('mousemove',  e => { if(!drawing)return; const p=pos(e); sigCtx.lineTo(p.x,p.y); sigCtx.stroke(); });
+    sigCanvas.addEventListener('mouseup',    () => drawing=false);
+    sigCanvas.addEventListener('mouseleave', () => drawing=false);
+    sigCanvas.addEventListener('touchstart', e => { e.preventDefault(); drawing=true; hasSig=true; const p=pos(e); sigCtx.beginPath(); sigCtx.moveTo(p.x,p.y); }, {passive:false});
+    sigCanvas.addEventListener('touchmove',  e => { e.preventDefault(); if(!drawing)return; const p=pos(e); sigCtx.lineTo(p.x,p.y); sigCtx.stroke(); }, {passive:false});
+    sigCanvas.addEventListener('touchend',   () => drawing=false);
+  }
+
+  function clearSig() {
+    if (!sigCtx) return;
+    sigCtx.clearRect(0, 0, sigCanvas.width, sigCanvas.height);
+    hasSig = false;
+  }
+
+  function submitContract() {
+    const name  = document.getElementById('esign-name').value.trim();
+    const addr  = document.getElementById('esign-addr').value.trim();
+    const email = document.getElementById('esign-email').value.trim();
+    const err   = document.getElementById('esign-error');
+    if (!name)  { err.textContent = '氏名を入力してください。'; return; }
+    if (!addr)  { err.textContent = '住所を入力してください。'; return; }
+    if (!email) { err.textContent = 'メールアドレスを入力してください。'; return; }
+    if (!hasSig){ err.textContent = '署名欄に電子署名を行ってください。'; return; }
+    err.textContent = '';
+    const now = new Date();
+    const ts = now.toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' });
+    const GS_URL = ''; // Google Apps Script Web App URL をここに設定
+    if (GS_URL) {
+      fetch(GS_URL, { method:'POST', body: JSON.stringify({ timestamp:ts, name, addr, email, contracts:'3契約' }) }).catch(()=>{});
+    }
+    // ── 名前を全書類に反映 ──
+    propagateName(name);
+    try { localStorage.setItem('infinite_rep_name', name); } catch(e){}
+    document.getElementById('contract-screen').style.display = 'none';
+    document.getElementById('done-screen').style.display = 'block';
+    document.getElementById('done-ts').textContent    = ts;
+    document.getElementById('done-name').textContent  = name;
+    document.getElementById('done-email').textContent = email;
+  }
+
+  function propagateName(name) {
+    // すべての [代表取締役名] プレースホルダーを置換
+    document.querySelectorAll('.rep-name').forEach(el => {
+      el.textContent = name;
+    });
+    // 創業計画書の代表者入力欄
+    const repInput = document.getElementById('bp-rep');
+    if (repInput && !repInput.value) repInput.value = name;
+    // 事業計画書テーブルの〇〇セル
+    document.querySelectorAll('.rep-name-cell').forEach(el => {
+      el.textContent = name;
+    });
+    // 契約完了ページのバナー
+    const banner = document.getElementById('name-signed-banner');
+    if (banner) { banner.style.display = 'flex'; banner.querySelector('.banner-name').textContent = name; }
+  }
+
+  // ページ読み込み時に保存済みの名前を反映
+  (function() {
+    try {
+      const saved = localStorage.getItem('infinite_rep_name');
+      if (saved) { setTimeout(() => propagateName(saved), 200); }
+    } catch(e){}
+  })();
+
+
+
+  // ── RECIPE EDITOR ──
+  const DEFAULT_INGREDIENTS = [
+    { name: '羊毛ケラチン', amount: '', unit: 'g', role: '毛髪補修・タンパク補充', note: '' },
+    { name: 'フェザーケラチン', amount: '', unit: 'g', role: 'タンパク補充・強度向上', note: '' },
+    { name: '加水分解シルク', amount: '', unit: 'g', role: 'なめらか感・光沢', note: '' },
+    { name: 'アルガンオイル', amount: '', unit: 'mL', role: 'ツヤ・保護・酸化防止', note: '' },
+    { name: 'ヒアルロン酸Na', amount: '', unit: 'g', role: '保湿・水分保持', note: '' },
+    { name: 'CMC類似脂質', amount: '', unit: 'g', role: 'キューティクル補修', note: '' },
+  ];
+
+  const UNIT_OPTIONS = ['g', 'mL', '%', 'mg', 'ppm', 'drops', 'appropriate', '適量'];
+
+  let recipeData = { ingredients: [], steps: [] };
+
+  function loadRecipe() {
+    try {
+      const saved = localStorage.getItem('infinite_recipe');
+      if (saved) {
+        recipeData = JSON.parse(saved);
+      } else {
+        recipeData = { ingredients: JSON.parse(JSON.stringify(DEFAULT_INGREDIENTS)), steps: [] };
+      }
+    } catch(e) {
+      recipeData = { ingredients: JSON.parse(JSON.stringify(DEFAULT_INGREDIENTS)), steps: [] };
+    }
+    renderRecipe();
+  }
+
+  function renderRecipe() {
+    renderRows();
+    renderSteps();
+  }
+
+  function renderRows() {
+    const tbody = document.getElementById('recipe-rows');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+    recipeData.ingredients.forEach((ing, i) => {
+      const tr = document.createElement('tr');
+      tr.style.cssText = 'border-bottom:1px solid var(--border);';
+
+      const unitOpts = UNIT_OPTIONS.map(u => `<option value="${u}" ${u===ing.unit?'selected':''}>${u}</option>`).join('');
+
+      tr.innerHTML = `
+        <td style="padding:6px 8px;"><input value="${escHtml(ing.name)}" oninput="updateIng(${i},'name',this.value)" placeholder="成分名" style="width:100%;border:1px solid var(--border);padding:6px 8px;font-size:13px;font-family:var(--font-sans);outline:none;background:var(--bg);" onfocus="this.style.borderColor='var(--red)'" onblur="this.style.borderColor='var(--border)'"></td>
+        <td style="padding:6px 8px;"><input type="number" value="${escHtml(ing.amount)}" oninput="updateIng(${i},'amount',this.value)" placeholder="0" style="width:100%;border:1px solid var(--border);padding:6px 8px;font-size:13px;font-family:var(--font-mono);text-align:right;outline:none;background:var(--bg);" onfocus="this.style.borderColor='var(--red)'" onblur="this.style.borderColor='var(--border)'"></td>
+        <td style="padding:6px 8px;"><select onchange="updateIng(${i},'unit',this.value)" style="width:100%;border:1px solid var(--border);padding:6px 4px;font-size:12px;font-family:var(--font-mono);background:var(--bg);outline:none;">${unitOpts}</select></td>
+        <td style="padding:6px 8px;"><input value="${escHtml(ing.role)}" oninput="updateIng(${i},'role',this.value)" placeholder="役割・効能" style="width:100%;border:1px solid var(--border);padding:6px 8px;font-size:12px;font-family:var(--font-sans);outline:none;background:var(--bg);" onfocus="this.style.borderColor='var(--red)'" onblur="this.style.borderColor='var(--border)'"></td>
+        <td style="padding:6px 8px;"><input value="${escHtml(ing.note)}" oninput="updateIng(${i},'note',this.value)" placeholder="備考・注意" style="width:100%;border:1px solid var(--border);padding:6px 8px;font-size:12px;font-family:var(--font-sans);outline:none;background:var(--bg);" onfocus="this.style.borderColor='var(--red)'" onblur="this.style.borderColor='var(--border)'"></td>
+        <td style="padding:6px 8px;text-align:center;"><button onclick="removeRow(${i})" style="background:none;border:none;color:var(--text-soft);cursor:pointer;font-size:16px;line-height:1;" title="削除">×</button></td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  function renderSteps() {
+    const list = document.getElementById('steps-list');
+    if (!list) return;
+    list.innerHTML = '';
+    recipeData.steps.forEach((step, i) => {
+      const div = document.createElement('div');
+      div.style.cssText = 'display:flex;align-items:flex-start;gap:10px;margin-bottom:8px;';
+      div.innerHTML = `
+        <div style="flex-shrink:0;width:22px;height:22px;background:var(--black);color:var(--bg);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-family:var(--font-mono);margin-top:7px;">${i+1}</div>
+        <textarea oninput="updateStep(${i},this.value)" rows="2" placeholder="工程の説明（例：60℃に加温した水相に油相を少しずつ加え撹拌する）" style="flex:1;border:1px solid var(--border);padding:7px 10px;font-size:13px;font-family:var(--font-sans);outline:none;resize:vertical;background:var(--bg);line-height:1.6;" onfocus="this.style.borderColor='var(--red)'" onblur="this.style.borderColor='var(--border)'">${escHtml(step)}</textarea>
+        <button onclick="removeStep(${i})" style="background:none;border:none;color:var(--text-soft);cursor:pointer;font-size:16px;margin-top:6px;" title="削除">×</button>
+      `;
+      list.appendChild(div);
+    });
+  }
+
+  function escHtml(str) {
+    return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function updateIng(i, key, val) { recipeData.ingredients[i][key] = val; }
+  function updateStep(i, val) { recipeData.steps[i] = val; }
+
+  function addRecipeRow() {
+    recipeData.ingredients.push({ name: '', amount: '', unit: 'g', role: '', note: '' });
+    renderRows();
+  }
+
+  function removeRow(i) {
+    recipeData.ingredients.splice(i, 1);
+    renderRows();
+  }
+
+  function addStep() {
+    recipeData.steps.push('');
+    renderSteps();
+  }
+
+  function removeStep(i) {
+    recipeData.steps.splice(i, 1);
+    renderSteps();
+  }
+
+  function saveRecipe() {
+    try {
+      localStorage.setItem('infinite_recipe', JSON.stringify(recipeData));
+      const msg = document.getElementById('recipe-save-msg');
+      if (msg) { msg.textContent = '✓ 保存しました'; setTimeout(()=>msg.textContent='', 2500); }
+    } catch(e) {
+      alert('保存に失敗しました: ' + e.message);
+    }
+  }
+
+  function exportRecipe() {
+    let txt = '【主要成分・処方レシピ】\n\n';
+    txt += '成分一覧\n' + '─'.repeat(40) + '\n';
+    recipeData.ingredients.forEach((ing, i) => {
+      txt += `${i+1}. ${ing.name || '(未入力)'}`;
+      if (ing.amount) txt += `  ${ing.amount}${ing.unit}`;
+      if (ing.role)   txt += `  ／  ${ing.role}`;
+      if (ing.note)   txt += `  ※${ing.note}`;
+      txt += '\n';
+    });
+    if (recipeData.steps.length) {
+      txt += '\n製造工程\n' + '─'.repeat(40) + '\n';
+      recipeData.steps.forEach((s, i) => { txt += `${i+1}. ${s}\n`; });
+    }
+    const blob = new Blob([txt], { type: 'text/plain;charset=utf-8' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'infinite_recipe.txt';
+    a.click();
+  }
+
+  // Load recipe when contract tab opens
+  const _origShowTabV2 = window.showTab;
+  window.showTab = function(id, btn) {
+    _origShowTabV2(id, btn);
+    if (id === 'contract') {
+      setTimeout(() => {
+        loadRecipe();
+        initCanvas();
+      }, 80);
+    }
+  };
+
+  // ── BIZPLAN COPY STORY ──
+  function copyStory() {
+    const storyEl = document.getElementById('story-text');
+    if (!storyEl) return;
+    const text = storyEl.innerText.replace('コピー', '').trim();
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = document.getElementById('story-copy-btn');
+      const fb = document.getElementById('copy-feedback');
+      if (btn) { btn.textContent = '✓ コピーしました'; btn.classList.add('copied'); setTimeout(()=>{ btn.textContent='コピー'; btn.classList.remove('copied'); }, 2500); }
+      if (fb) { fb.textContent = '✓ クリップボードにコピーしました'; setTimeout(()=>fb.textContent='', 2500); }
+    }).catch(() => {
+      // fallback
+      const ta = document.createElement('textarea');
+      ta.value = text; document.body.appendChild(ta); ta.select();
+      document.execCommand('copy'); document.body.removeChild(ta);
+      const fb = document.getElementById('copy-feedback');
+      if (fb) { fb.textContent = '✓ コピーしました'; setTimeout(()=>fb.textContent='', 2500); }
+    });
+  }
+
+  // ═══════════════════════════════════════════
+  // GANTT CHART ENGINE v2 — 縦スライダー版
+  // ═══════════════════════════════════════════
+  const GANTT_TASKS = [
+    { phase:'PHASE 1 — 構想確定', color:'#f1f5f9', durationDays:30, tasks:[
+      { id:'t01', label:'会社名・商号の決定',       days:7 },
+      { id:'t02', label:'代表取締役・役割分担確定', days:7 },
+      { id:'t03', label:'事業目的・定款草案',       days:7 },
+      { id:'t04', label:'商品コンセプト確定',       days:7 },
+      { id:'t05', label:'自己資金整理・通帳整理',   days:14 },
+    ]},
+    { phase:'PHASE 2 — 会社設立・融資準備', color:'#fef9ec', durationDays:30, tasks:[
+      { id:'t06', label:'定款作成・認証',         days:7 },
+      { id:'t07', label:'設立登記申請',           days:7 },
+      { id:'t08', label:'法人口座開設',           days:10 },
+      { id:'t09', label:'創業計画書作成',         days:14 },
+      { id:'t10', label:'補足企画書・見積書取得', days:14 },
+    ]},
+    { phase:'PHASE 3 — OEM・商品設計', color:'#fff7f7', durationDays:30, tasks:[
+      { id:'t11', label:'OEM候補複数に打診',   days:7 },
+      { id:'t12', label:'試作依頼・処方確認', days:21 },
+      { id:'t13', label:'原価・MOQ確認',       days:7 },
+      { id:'t14', label:'表示・薬機確認',       days:14 },
+      { id:'t15', label:'商標調査・出願準備', days:14 },
+    ]},
+    { phase:'PHASE 4 — 販売基盤準備', color:'#f0f9ff', durationDays:30, tasks:[
+      { id:'t16', label:'EC・サイト制作',           days:21 },
+      { id:'t17', label:'特商法・PP整備',           days:7 },
+      { id:'t18', label:'LP・商品ページ作成',       days:14 },
+      { id:'t19', label:'LINE公式・Instagram設定', days:7 },
+      { id:'t20', label:'商品撮影・デザイン',       days:14 },
+    ]},
+    { phase:'PHASE 5 — 融資申込・面談', color:'#faf5ff', durationDays:30, tasks:[
+      { id:'t21', label:'日本公庫へ申込',   days:3,  finance:{ label:'公庫申込', type:'event' } },
+      { id:'t22', label:'面談準備・練習',   days:14 },
+      { id:'t23', label:'面談実施',         days:3,  finance:{ label:'公庫面談', type:'event' } },
+      { id:'t24', label:'修正対応・追加資料', days:7 },
+      { id:'t25', label:'融資決定・入金確認', days:7, finance:{ label:'融資実行 +700万', type:'income', amount:7000000 } },
+    ]},
+    { phase:'PHASE 6 — 発注・販売開始', color:'#f0fdf4', durationDays:30, tasks:[
+      { id:'t26', label:'初回製造発注',         days:7,  finance:{ label:'OEM発注 ▲200万', type:'cost', amount:-2000000 } },
+      { id:'t27', label:'検品・入荷確認',       days:14 },
+      { id:'t28', label:'販売開始（EC・サロン）', days:3, finance:{ label:'▶ 売上開始', type:'sales_start' } },
+      { id:'t29', label:'SNS・広告投下',       days:7,  finance:{ label:'広告費 ▲200万', type:'cost', amount:-2000000 } },
+      { id:'t30', label:'月次KPI管理開始',     days:3 },
+    ]},
+    { phase:'PHASE 7 — 売上拡大（〜9ヶ月）', color:'#f0fdf4', durationDays:90, tasks:[
+      { id:'t31', label:'リピート顧客育成',           days:90 },
+      { id:'t32', label:'制度融資申請',               days:14, finance:{ label:'制度融資申込', type:'event' } },
+      { id:'t33', label:'サロン営業開始',             days:30 },
+      { id:'t34', label:'SNSフォロワー1,000人達成', days:60 },
+    ]},
+    { phase:'PHASE 8 — 安定期（〜12ヶ月）', color:'#ecfdf5', durationDays:90, tasks:[
+      { id:'t35', label:'制度融資実行',           days:7,  finance:{ label:'制度融資 +600万', type:'income', amount:6000000 } },
+      { id:'t36', label:'信金アプローチ',         days:30, finance:{ label:'信金打診', type:'event' } },
+      { id:'t37', label:'月販400本・損益分岐達成', days:7, finance:{ label:'損益分岐', type:'event' } },
+      { id:'t38', label:'年商3,000万達成目標',   days:30, finance:{ label:'年商3000万', type:'event' } },
+    ]},
+  ];
+
+  let ganttState = {};
+  let ganttStartDate = null;
+  const DAY_PX = 4; // pixels per day
+
+  function ganttDateAdd(date, days) {
+    const d = new Date(date); d.setDate(d.getDate() + days); return d;
+  }
+  function ganttFmt(date) {
+    return date.toLocaleDateString('ja-JP', { month:'2-digit', day:'2-digit' });
+  }
+  function dayDiff(a, b) { return Math.round((b - a) / 86400000); }
+
+  function buildGantt() {
+    const input = document.getElementById('gantt-start').value;
+    if (!input) { alert('開始日を設定してください'); return; }
+    ganttStartDate = new Date(input + 'T00:00:00');
+    try { localStorage.setItem('infinite_gantt_start', input); } catch(e){}
+    renderGantt();
+  }
+
+  function resetGantt() {
+    ganttState = {};
+    try { localStorage.removeItem('infinite_gantt_state'); } catch(e){}
+    if (ganttStartDate) renderGantt();
+  }
+
+  function saveGanttState() {
+    try { localStorage.setItem('infinite_gantt_state', JSON.stringify(ganttState)); } catch(e){}
+  }
+
+  function loadGanttState() {
+    try {
+      const s = localStorage.getItem('infinite_gantt_state');
+      if (s) ganttState = JSON.parse(s);
+      const d = localStorage.getItem('infinite_gantt_start');
+      if (d) { ganttStartDate = new Date(d + 'T00:00:00'); document.getElementById('gantt-start').value = d; }
+    } catch(e){}
+  }
+
+  function computeTaskDates() {
+    let phaseStart = new Date(ganttStartDate);
+    const result = [];
+    GANTT_TASKS.forEach(phase => {
+      let taskCursor = new Date(phaseStart);
+      const phaseTasks = [];
+      phase.tasks.forEach(task => {
+        const st = ganttState[task.id] || {};
+        const shift = st.shift || 0;
+        const start = ganttDateAdd(taskCursor, shift);
+        const end   = ganttDateAdd(start, task.days);
+        phaseTasks.push({ ...task, start, end, done: !!st.done });
+        taskCursor = ganttDateAdd(taskCursor, task.days);
+      });
+      result.push({ ...phase, phaseStart: new Date(phaseStart), tasks: phaseTasks });
+      phaseStart = ganttDateAdd(phaseStart, phase.durationDays);
+    });
+    return result;
+  }
+
+  function renderGantt() {
+    const computed = computeTaskDates();
+    const today = new Date();
+    const totalDays = 366;
+    const totalPx = totalDays * DAY_PX;
+
+    // ─── Build month header ───
+    const monthRow = document.getElementById('gantt-month-row');
+    monthRow.innerHTML = '';
+    monthRow.style.width = totalPx + 'px';
+    let mCursor = new Date(ganttStartDate); mCursor.setDate(1);
+    while (dayDiff(ganttStartDate, mCursor) < totalDays) {
+      const mNext = new Date(mCursor); mNext.setMonth(mNext.getMonth()+1);
+      const mDays = Math.min(dayDiff(ganttStartDate, mNext), totalDays) - Math.max(0, dayDiff(ganttStartDate, mCursor));
+      const cell = document.createElement('div');
+      cell.className = 'gantt-month-cell';
+      cell.style.width = (mDays * DAY_PX) + 'px';
+      cell.textContent = (mCursor.getMonth()+1) + '月';
+      const yr = mCursor.getFullYear();
+      if (mCursor.getMonth() === 0) cell.textContent = yr + '/' + cell.textContent;
+      monthRow.appendChild(cell);
+      mCursor = mNext;
+    }
+
+    // ─── Build rows ───
+    const leftRows  = document.getElementById('gantt-left-rows');
+    const barRows   = document.getElementById('gantt-bar-rows');
+    leftRows.innerHTML = '';
+    barRows.innerHTML  = '';
+
+    computed.forEach((phase, pi) => {
+      // Phase label row (clickable to collapse)
+      const phaseKey = 'gantt_phase_open_' + pi;
+      let phaseOpen = ganttState[phaseKey] !== false; // default open
+
+      const lPhase = document.createElement('div');
+      lPhase.className = 'gantt-row-label phase-row';
+      const phaseArrow = document.createElement('span');
+      phaseArrow.style.cssText = 'font-size:8px;margin-right:5px;display:inline-block;transition:transform 0.2s;';
+      phaseArrow.textContent = '▼';
+      if (!phaseOpen) phaseArrow.style.transform = 'rotate(-90deg)';
+      const phaseTxt = document.createElement('span');
+      phaseTxt.className = 'lbl';
+      phaseTxt.textContent = `Phase ${pi+1} — ${phase.phase.replace(/PHASE \d+ — /,'')}`;
+      lPhase.appendChild(phaseArrow); lPhase.appendChild(phaseTxt);
+      leftRows.appendChild(lPhase);
+
+      const bPhase = document.createElement('div');
+      bPhase.className = 'gantt-bar-row phase-row';
+      bPhase.style.width = totalPx + 'px';
+      // today line
+      const todayOff = dayDiff(ganttStartDate, today);
+      if (todayOff >= 0 && todayOff < totalDays) {
+        const todayLine = document.createElement('div');
+        todayLine.style.cssText = `position:absolute;left:${todayOff*DAY_PX}px;top:0;bottom:0;width:1px;background:rgba(245,158,11,0.5);z-index:4;`;
+        bPhase.appendChild(todayLine);
+      }
+      // Add phase summary bar spanning the full phase duration
+      const phaseStartOff = Math.max(0, dayDiff(ganttStartDate, phase.phaseStart));
+      const phaseEndOff   = Math.min(totalDays, phaseStartOff + phase.durationDays);
+      if (phaseEndOff > phaseStartOff) {
+        const phaseSummaryBar = document.createElement('div');
+        phaseSummaryBar.style.cssText = `position:absolute;left:${phaseStartOff*DAY_PX}px;width:${(phaseEndOff-phaseStartOff)*DAY_PX}px;top:4px;bottom:4px;background:rgba(185,28,28,0.12);border:1px solid rgba(185,28,28,0.3);border-radius:2px;pointer-events:none;`;
+        bPhase.appendChild(phaseSummaryBar);
+      }
+      barRows.appendChild(bPhase);
+
+      // Collect task rows for this phase (for toggle)
+      const phaseTaskLeftRows = [];
+      const phaseTaskBarRows = [];
+
+      // Toggle collapse
+      function togglePhase(open) {
+        phaseOpen = open;
+        ganttState[phaseKey] = open;
+        saveGanttState();
+        phaseArrow.style.transform = open ? 'rotate(0deg)' : 'rotate(-90deg)';
+        phaseTaskLeftRows.forEach(el => el.style.display = open ? '' : 'none');
+        phaseTaskBarRows.forEach(el => el.style.display = open ? '' : 'none');
+      }
+      lPhase.addEventListener('click', () => togglePhase(!phaseOpen));
+      bPhase.addEventListener('click', () => togglePhase(!phaseOpen));
+
+      phase.tasks.forEach(task => {
+        // Left label
+        const lRow = document.createElement('div');
+        lRow.className = 'gantt-row-label' + (task.done ? ' done-row' : '');
+        if (task.done) lRow.style.cssText = 'opacity:0.55;background:#f0fdf4;';
+        if (!phaseOpen) lRow.style.display = 'none';
+        const doneBtn = document.createElement('button');
+        doneBtn.className = 'task-done-btn' + (task.done ? ' is-done' : '');
+        doneBtn.textContent = task.done ? '✓' : '完了';
+        doneBtn.onclick = (e) => { e.stopPropagation(); toggleTaskDone(task.id, !task.done); };
+        const lbl = document.createElement('span');
+        lbl.className = 'lbl';
+        lbl.textContent = task.label;
+        if (task.done) lbl.style.textDecoration = 'line-through';
+        const dateBadge = document.createElement('span');
+        dateBadge.style.cssText = 'font-size:9px;font-family:var(--font-mono);color:var(--text-soft);flex-shrink:0;margin-left:2px;';
+        dateBadge.textContent = ganttFmt(task.start);
+        lRow.appendChild(doneBtn);
+        lRow.appendChild(lbl);
+        lRow.appendChild(dateBadge);
+        leftRows.appendChild(lRow);
+        phaseTaskLeftRows.push(lRow);
+
+        // Bar row
+        const bRow = document.createElement('div');
+        bRow.className = 'gantt-bar-row';
+        bRow.style.width = totalPx + 'px';
+        bRow.style.background = task.done ? '#f0fdf4' : '';
+        if (!phaseOpen) bRow.style.display = 'none';
+        phaseTaskBarRows.push(bRow);
+
+        // Today line
+        if (todayOff >= 0 && todayOff < totalDays) {
+          const tl = document.createElement('div');
+          tl.style.cssText = `position:absolute;left:${todayOff*DAY_PX}px;top:0;bottom:0;width:1px;background:rgba(245,158,11,0.4);z-index:4;`;
+          bRow.appendChild(tl);
+        }
+
+        // Alternate month bg
+        let mc2 = new Date(ganttStartDate); mc2.setDate(1);
+        let mIdx = 0;
+        while (dayDiff(ganttStartDate, mc2) < totalDays) {
+          const mc2Next = new Date(mc2); mc2Next.setMonth(mc2Next.getMonth()+1);
+          if (mIdx % 2 === 1) {
+            const off = Math.max(0, dayDiff(ganttStartDate, mc2));
+            const end = Math.min(totalDays, dayDiff(ganttStartDate, mc2Next));
+            const bg = document.createElement('div');
+            bg.style.cssText = `position:absolute;left:${off*DAY_PX}px;width:${(end-off)*DAY_PX}px;top:0;bottom:0;background:rgba(0,0,0,0.02);`;
+            bRow.appendChild(bg);
+          }
+          mc2 = mc2Next; mIdx++;
+        }
+
+        // The bar
+        const startOff = Math.max(0, dayDiff(ganttStartDate, task.start));
+        const endOff   = Math.min(totalDays, dayDiff(ganttStartDate, task.end));
+        if (endOff > startOff) {
+          const bar = document.createElement('div');
+          bar.className = 'gantt-bar-segment ' + (task.done ? 'seg-done' : task.finance ? 'seg-finance' : 'seg-active');
+          bar.style.left  = (startOff * DAY_PX) + 'px';
+          bar.style.width = ((endOff - startOff) * DAY_PX) + 'px';
+          if (task.finance && task.finance.type === 'event') bar.className = 'gantt-bar-segment seg-active';
+          bRow.appendChild(bar);
+
+          // event pins removed
+        }
+        phaseTaskBarRows.push(bRow);
+        barRows.appendChild(bRow);
+      });
+    });
+
+    // Show gantt
+    document.getElementById('gantt-placeholder').style.display = 'none';
+    document.getElementById('gantt-wrap').style.display = 'block';
+    document.getElementById('gantt-tasks').style.display = 'block';
+    document.getElementById('gantt-finance-summary').style.display = 'block';
+
+    // Init custom vertical scrollbar
+    initVScroll();
+    renderTaskList(computed);
+    renderFinanceGantt(computed);
+  }
+
+  // ─── Vertical Scrollbar → controls horizontal scroll ───
+  function initVScroll() {
+    const scroll = document.getElementById('gantt-timeline-scroll');
+    const track  = document.getElementById('gantt-vscroll-track');
+    const thumb  = document.getElementById('gantt-vscroll-thumb');
+    const upBtn  = document.getElementById('gantt-scroll-up');
+    const dnBtn  = document.getElementById('gantt-scroll-down');
+    if (!scroll || !track || !thumb) return;
+
+    function updateThumb() {
+      const maxScroll  = scroll.scrollWidth - scroll.clientWidth;
+      const trackH     = track.clientHeight;
+      const ratio      = maxScroll > 0 ? scroll.scrollLeft / maxScroll : 0;
+      const thumbH     = Math.max(24, (scroll.clientWidth / scroll.scrollWidth) * trackH);
+      const thumbTop   = ratio * (trackH - thumbH);
+      thumb.style.height = thumbH + 'px';
+      thumb.style.top    = thumbTop + 'px';
+    }
+
+    scroll.addEventListener('scroll', () => {
+      updateThumb();
+      // sync left label panel vertical scroll
+      const leftRows = document.getElementById('gantt-left-rows');
+      if (leftRows) leftRows.scrollTop = scroll.scrollTop;
+    });
+    window.addEventListener('resize', updateThumb);
+    setTimeout(updateThumb, 100);
+
+    // Drag thumb
+    let dragStartY = 0, dragStartScroll = 0, isDragging = false;
+    thumb.addEventListener('mousedown', e => {
+      isDragging = true;
+      dragStartY = e.clientY;
+      dragStartScroll = scroll.scrollLeft;
+      thumb.classList.add('dragging');
+      e.preventDefault();
+    });
+    document.addEventListener('mousemove', e => {
+      if (!isDragging) return;
+      const trackH    = track.clientHeight;
+      const thumbH    = thumb.offsetHeight;
+      const maxScroll = scroll.scrollWidth - scroll.clientWidth;
+      const dy        = e.clientY - dragStartY;
+      const ratio     = dy / (trackH - thumbH);
+      scroll.scrollLeft = dragStartScroll + ratio * maxScroll;
+    });
+    document.addEventListener('mouseup', () => {
+      isDragging = false; thumb.classList.remove('dragging');
+    });
+
+    // Track click
+    track.addEventListener('click', e => {
+      if (e.target === thumb) return;
+      const rect    = track.getBoundingClientRect();
+      const ratio   = (e.clientY - rect.top) / rect.height;
+      const maxS    = scroll.scrollWidth - scroll.clientWidth;
+      scroll.scrollLeft = ratio * maxS;
+    });
+
+    // Buttons: up = scroll left, down = scroll right
+    upBtn.addEventListener('click', () => { scroll.scrollLeft -= 120; });
+    dnBtn.addEventListener('click', () => { scroll.scrollLeft += 120; });
+
+    // Mouse wheel on vscroll → horizontal scroll
+    document.getElementById('gantt-vscroll').addEventListener('wheel', e => {
+      e.preventDefault();
+      scroll.scrollLeft += e.deltaY * 2;
+    }, { passive: false });
+  }
+
+  function toggleTaskDone(taskId, done) {
+    if (!ganttState[taskId]) ganttState[taskId] = { done: false, shift: 0 };
+    ganttState[taskId].done = done;
+    saveGanttState();
+    renderGantt();
+  }
+
+  function renderTaskList(computed) {
+    const wrap = document.getElementById('task-list-wrap');
+    if (!wrap) return;
+    wrap.innerHTML = '';
+    computed.forEach((phase, pi) => {
+      const doneCount = phase.tasks.filter(t => t.done).length;
+      const total = phase.tasks.length;
+
+      // Phase header (clickable to expand/collapse)
+      const header = document.createElement('div');
+      header.style.cssText = 'display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--bg-soft);border:1px solid var(--border);cursor:pointer;user-select:none;margin-bottom:2px;';
+      const arrow = document.createElement('span');
+      arrow.style.cssText = 'font-size:10px;color:var(--text-soft);font-family:var(--font-mono);transition:transform 0.2s;flex-shrink:0;';
+      arrow.textContent = '▼';
+      const phaseLbl = document.createElement('span');
+      phaseLbl.style.cssText = 'font-family:var(--font-mono);font-size:10px;font-weight:700;color:var(--red);letter-spacing:0.12em;text-transform:uppercase;flex:1;';
+      phaseLbl.textContent = phase.phase;
+      const progress = document.createElement('span');
+      progress.style.cssText = 'font-family:var(--font-mono);font-size:10px;color:' + (doneCount===total?'#15803d':'var(--text-soft)') + ';flex-shrink:0;';
+      progress.textContent = doneCount + '/' + total + ' 完了';
+      header.appendChild(arrow); header.appendChild(phaseLbl); header.appendChild(progress);
+
+      // Task rows container (starts expanded)
+      const taskContainer = document.createElement('div');
+      taskContainer.style.cssText = 'margin-bottom:14px;';
+
+      let isOpen = true;
+      header.addEventListener('click', () => {
+        isOpen = !isOpen;
+        taskContainer.style.display = isOpen ? 'block' : 'none';
+        arrow.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(-90deg)';
+      });
+
+      phase.tasks.forEach(task => {
+        const row = document.createElement('div');
+        row.className = 'task-item' + (task.done ? ' done' : '');
+        const btn = document.createElement('button');
+        btn.className = 'task-done-btn' + (task.done ? ' is-done' : '');
+        btn.textContent = task.done ? '✓ 完了' : '完了';
+        btn.onclick = (e) => { e.stopPropagation(); toggleTaskDone(task.id, !task.done); };
+        const name = document.createElement('span');
+        name.textContent = task.label;
+        if (task.done) name.style.textDecoration = 'line-through';
+        const badge = document.createElement('span');
+        badge.className = 'task-date-badge';
+        badge.textContent = ganttFmt(task.start) + ' → ' + ganttFmt(task.end);
+        row.appendChild(btn); row.appendChild(name); row.appendChild(badge);
+        taskContainer.appendChild(row);
+      });
+
+      wrap.appendChild(header);
+      wrap.appendChild(taskContainer);
+    });
+  }
+
+  // ─── Finance Gantt: numbers only, 千円単位, simulator連動 ───
+  function renderFinanceGantt(computed) {
+    const wrap = document.getElementById('finance-summary-wrap');
+    if (!wrap) return;
+    wrap.innerHTML = '';
+
+    // ── Get simulator values ──
+    const sim = window.getSimValues ? window.getSimValues() : null;
+    const SELF_FUND      = sim ? sim.selfFund          : 1000000;
+    const LOAN_TOTAL     = sim ? sim.loan               : 7000000;
+    const MONTHLY_REV    = sim ? sim.monthly_revenue    : 2720000;
+    const MONTHLY_PROFIT = sim ? sim.monthly_profit     : 0;
+    const MONTHLY_REPAY  = sim ? sim.repay              : 0;
+    // Monthly fixed cost = revenue - profit (includes repay in net but not in profit calc)
+    const MONTHLY_COST   = MONTHLY_REV - MONTHLY_PROFIT; // fixed + variable COGS
+
+    const today = new Date();
+    const months = [];
+    let mc = new Date(ganttStartDate); mc.setDate(1);
+    for (let i = 0; i < 13; i++) { months.push(new Date(mc)); mc.setMonth(mc.getMonth()+1); }
+
+    // Determine when sales start (Phase6 販売開始 task done, OR just show projected)
+    let salesPhaseStart = null;
+    computed.forEach(ph => ph.tasks.forEach(t => {
+      if (t.finance && t.finance.type === 'sales_start') {
+        salesPhaseStart = t.start;
+      }
+    }));
+
+    // Determine when loan is received (Phase5 融資決定タスク)
+    let loanReceivedMonth = null;
+    computed.forEach(ph => ph.tasks.forEach(t => {
+      if (t.finance && t.finance.type === 'income' && t.finance.amount >= 5000000) {
+        loanReceivedMonth = t.end;
+      }
+    }));
+
+    // Ramp-up over 12 months from sales start
+    const ramp = [0.15,0.3,0.5,0.7,0.85,0.95,1.0,1.05,1.1,1.15,1.2,1.25];
+
+    const monthData = months.map((m, i) => {
+      const mEnd = new Date(m); mEnd.setMonth(mEnd.getMonth()+1);
+
+      // Loan: show in the month it's received
+      let loan = 0;
+      if (loanReceivedMonth && loanReceivedMonth >= m && loanReceivedMonth < mEnd) {
+        loan = LOAN_TOTAL;
+      }
+
+      // Sales: projected from sales start date
+      let sales = 0, cost = 0, profit = 0;
+      if (salesPhaseStart) {
+        const monthsSinceSales = Math.floor((m - salesPhaseStart) / (30.5 * 86400000));
+        if (monthsSinceSales >= 0) {
+          const r = ramp[Math.min(monthsSinceSales, ramp.length - 1)];
+          sales  = Math.round(MONTHLY_REV * r);
+          cost   = Math.round(MONTHLY_COST * r);
+          profit = sales - cost;
+        }
+      }
+
+      // Net cashflow this month
+      const netCF = loan + sales - cost;
+      return { m, loan, sales, cost, profit, netCF, isToday: today >= m && today < mEnd };
+    });
+
+    // Cumulative cash (starts with self-fund)
+    let cumArr = [];
+    let running = SELF_FUND;
+    monthData.forEach(d => { running += d.netCF; cumArr.push(running); });
+
+    // 千円変換
+    const toK = v => Math.round(v / 1000);
+
+    const rows = [
+      { key:'loan',   label:'融資'              },
+      { key:'self',   label:'自己資金（資本金）'  },
+      { key:'sales',  label:'売上'               },
+      { key:'cost',   label:'支出'               },
+      { key:'profit', label:'利益'               },
+      { key:'cash',   label:'累計キャッシュフロー' },
+    ];
+
+    // ── Build table ──
+    const outer = document.createElement('div');
+    outer.style.cssText = 'border:1px solid var(--border);overflow:hidden;';
+
+    const titleRow = document.createElement('div');
+    titleRow.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:7px 14px;background:var(--black);';
+    titleRow.innerHTML =
+      '<span style="font-family:var(--font-mono);font-size:10px;color:#fff;letter-spacing:0.1em;font-weight:600;">収支項目</span>' +
+      '<span style="font-family:var(--font-mono);font-size:10px;color:#fff;letter-spacing:0.06em;">単位：千円</span>';
+    outer.appendChild(titleRow);
+
+    const inner = document.createElement('div');
+    inner.style.cssText = 'display:flex;';
+    outer.appendChild(inner);
+
+    // Left labels
+    const leftDiv = document.createElement('div');
+    leftDiv.style.cssText = 'width:155px;flex-shrink:0;border-right:2px solid var(--border-dark);';
+    leftDiv.appendChild(Object.assign(document.createElement('div'), {
+      style: 'height:24px;background:var(--bg-soft);border-bottom:1px solid var(--border-dark);'
+    }));
+    rows.forEach(row => {
+      const el = document.createElement('div');
+      el.style.cssText = 'height:34px;display:flex;align-items:center;padding:0 12px;border-bottom:1px solid var(--border);background:var(--bg-soft);font-size:11px;color:var(--text-mid);font-weight:600;white-space:nowrap;overflow:hidden;';
+      el.textContent = row.label;
+      leftDiv.appendChild(el);
+    });
+    inner.appendChild(leftDiv);
+
+    // Right scrollable area
+    const rightDiv = document.createElement('div');
+    rightDiv.style.cssText = 'flex:1;overflow-x:auto;';
+
+    // Month header
+    const mhdr = document.createElement('div');
+    mhdr.style.cssText = 'display:flex;height:24px;background:var(--bg-soft);border-bottom:1px solid var(--border-dark);';
+    months.forEach(m => {
+      const th = document.createElement('div');
+      th.style.cssText = 'flex:1;min-width:52px;display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:9px;color:var(--text-soft);font-weight:600;border-right:1px solid var(--border);';
+      th.textContent = (m.getMonth() === 0 ? m.getFullYear() + '/' : '') + (m.getMonth() + 1) + '月';
+      mhdr.appendChild(th);
+    });
+    rightDiv.appendChild(mhdr);
+
+    // Data rows
+    rows.forEach(row => {
+      const strip = document.createElement('div');
+      strip.style.cssText = 'display:flex;height:34px;border-bottom:1px solid var(--border);';
+
+      months.forEach((m, i) => {
+        const d = monthData[i];
+        const col = document.createElement('div');
+        col.style.cssText = `flex:1;min-width:52px;height:100%;border-right:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:10px;color:var(--text);${d.isToday ? 'background:rgba(245,158,11,0.05);' : ''}`;
+
+        let val = null;
+        switch (row.key) {
+          case 'loan':
+            if (d.loan > 0) val = toK(d.loan);
+            break;
+          case 'self':
+            if (i === 0) val = toK(SELF_FUND);
+            break;
+          case 'sales':
+            if (d.sales > 0) val = toK(d.sales);
+            break;
+          case 'cost':
+            if (d.cost > 0) val = toK(d.cost);
+            break;
+          case 'profit':
+            if (d.sales > 0 || d.cost > 0) {
+              val = toK(d.profit);
+              col.style.color = d.profit >= 0 ? '#15803d' : '#b91c1c';
+            }
+            break;
+          case 'cash':
+            val = toK(cumArr[i]);
+            col.style.cssText += `background:${cumArr[i] >= 0 ? 'rgba(134,239,172,0.1)' : 'rgba(252,165,165,0.1)'};`;
+            col.style.color  = cumArr[i] >= 0 ? '#15803d' : '#b91c1c';
+            col.style.fontWeight = '700';
+            break;
+        }
+
+        if (val !== null) col.textContent = val.toLocaleString('ja-JP');
+        strip.appendChild(col);
+      });
+      rightDiv.appendChild(strip);
+    });
+
+    inner.appendChild(rightDiv);
+    wrap.appendChild(outer);
+
+    // Note
+    const note = document.createElement('div');
+    note.style.cssText = 'font-size:10px;font-family:var(--font-mono);color:var(--text-soft);margin-top:6px;';
+    note.textContent = '収支シミュレーターの入力値をもとに自動計算。売上はガントチャートの販売開始タスク日から段階的に反映。';
+    wrap.appendChild(note);
+  }
+
+
+  // Initialize Gantt on tab open
+  const _origShowTabGantt = window.showTab;
+  window.showTab = function(id, btn) {
+    _origShowTabGantt(id, btn);
+    if (id === 'schedule') {
+      loadGanttState();
+      if (ganttStartDate) renderGantt();
+    }
+  };
+
+
+  // ── Bizplan header persistence ──
+  function saveBizplanHeader() {
+    const vals = {};
+    ['bp-date','bp-company','bp-rep'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) vals[id] = el.value;
+    });
+    try { localStorage.setItem('infinite_bizplan_header', JSON.stringify(vals)); } catch(e){}
+  }
+  function loadBizplanHeader() {
+    try {
+      const saved = localStorage.getItem('infinite_bizplan_header');
+      if (!saved) return;
+      const vals = JSON.parse(saved);
+      ['bp-date','bp-company','bp-rep'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el && vals[id] !== undefined) el.value = vals[id];
+      });
+    } catch(e){}
+  }
+  // Wire up bizplan header autosave (called after DOM ready)
+  function initBizplanHeader() {
+    ['bp-date','bp-company','bp-rep'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('input', saveBizplanHeader);
+    });
+    loadBizplanHeader();
+  }
+
+  // ── goToTab helper (used from done screen buttons) ──
+  function goToTab(id) {
+    const btn = document.querySelector(`.tab-btn[onclick*="'${id}'"]`);
+    if (btn) showTab(id, btn);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // ── RECIPE PASSWORD SYSTEM ──
+  const RECIPE_PW_KEY   = 'infinite_recipe_pw_hash';
+  const RECIPE_DATA_KEY = 'infinite_recipe';
+
+  function recipeHash(pw) {
+    let h = 0;
+    for (let i = 0; i < pw.length; i++) {
+      h = (Math.imul(31, h) + pw.charCodeAt(i)) | 0;
+    }
+    return 'rph_' + Math.abs(h).toString(36);
+  }
+
+  // Called when contract tab opens: show correct panel
+  function recipeInitPanel() {
+    const stored = localStorage.getItem(RECIPE_PW_KEY);
+    const setup  = document.getElementById('recipe-setup-panel');
+    const login  = document.getElementById('recipe-login-panel');
+    if (!setup || !login) return;
+    if (stored) {
+      // PW already set → show login
+      setup.style.display = 'none';
+      login.style.display = 'block';
+    } else {
+      // First time → show setup
+      setup.style.display = 'block';
+      login.style.display = 'none';
+    }
+  }
+
+  function recipeSetPW() {
+    const pw1 = document.getElementById('recipe-pw-new').value;
+    const pw2 = document.getElementById('recipe-pw-confirm').value;
+    const msg = document.getElementById('recipe-pw-set-msg');
+    if (!pw1) { msg.style.color='var(--red)'; msg.textContent='パスワードを入力してください。'; return; }
+    if (pw1 !== pw2) { msg.style.color='var(--red)'; msg.textContent='パスワードが一致しません。'; return; }
+    try {
+      localStorage.setItem(RECIPE_PW_KEY, recipeHash(pw1));
+      msg.style.color='#15803d';
+      msg.textContent='✓ 設定完了';
+      document.getElementById('recipe-pw-new').value = '';
+      document.getElementById('recipe-pw-confirm').value = '';
+      recipeShowContent();
+    } catch(e) {
+      msg.style.color='var(--red)'; msg.textContent='保存に失敗: ' + e.message;
+    }
+  }
+
+  function recipeUnlock() {
+    const pw  = document.getElementById('recipe-pw-input').value;
+    const err = document.getElementById('recipe-lock-error');
+    const stored = localStorage.getItem(RECIPE_PW_KEY);
+    if (!stored) { recipeInitPanel(); return; }
+    if (recipeHash(pw) !== stored) {
+      err.textContent = '❌ パスワードが違います。';
+      document.getElementById('recipe-pw-input').value = '';
+      return;
+    }
+    err.textContent = '';
+    recipeShowContent();
+  }
+
+  function recipeShowContent() {
+    document.getElementById('recipe-lock-screen').style.display = 'none';
+    document.getElementById('recipe-content').style.display = 'block';
+    loadRecipe();
+  }
+
+  function recipeLock() {
+    document.getElementById('recipe-lock-screen').style.display = 'block';
+    document.getElementById('recipe-content').style.display = 'none';
+    const inp = document.getElementById('recipe-pw-input');
+    if (inp) inp.value = '';
+    const err = document.getElementById('recipe-lock-error');
+    if (err) err.textContent = '';
+    recipeInitPanel();
+  }
+
+  function recipeResetPW() {
+    if (!confirm('パスワードとレシピデータをすべて削除します。よろしいですか？')) return;
+    try {
+      localStorage.removeItem(RECIPE_PW_KEY);
+      localStorage.removeItem(RECIPE_DATA_KEY);
+    } catch(e){}
+    recipeInitPanel();
+  }
+
+  // Override saveRecipe
+  const _origSaveRecipe = window.saveRecipe || function(){};
+  window.saveRecipe = function() {
+    try {
+      localStorage.setItem(RECIPE_DATA_KEY, JSON.stringify(recipeData));
+      const msg = document.getElementById('recipe-save-msg');
+      if (msg) {
+        msg.style.color = '#15803d';
+        msg.textContent = '✓ 保存しました（PWロック済み）';
+        setTimeout(() => { msg.textContent=''; }, 3000);
+      }
+    } catch(e) { alert('保存に失敗しました: ' + e.message); }
+  };
+
+  // Enter key on PW inputs
+  document.addEventListener('keydown', function(e) {
+    if (e.key !== 'Enter') return;
+    if (document.activeElement === document.getElementById('recipe-pw-input'))    recipeUnlock();
+    if (document.activeElement === document.getElementById('recipe-pw-confirm'))  recipeSetPW();
+  });
+</script>
+
+<!-- ═══ 9. 創業契約 ═══ -->
+<div id="sec-contract" style="display:none;">
+<div style="max-width:1080px;margin:0 auto;padding:52px 36px 100px;">
+
+  <div id="pw-screen" style="display:block">
+    <div style="max-width:420px;margin:60px auto;background:var(--bg-card);border:1px solid var(--border);padding:40px;text-align:center;">
+      <div style="font-family:var(--font-serif);font-size:22px;color:var(--black);margin-bottom:10px;">創業契約ページ</div>
+      <p style="font-size:13px;color:var(--text-mid);margin-bottom:28px;line-height:1.9;">このページは関係者専用ページです。<br>本ページには、<br>・創業準備資金貸付契約<br>・事業支援業務委託契約<br>・事業成功報酬契約<br>が掲載されています。<br><br>契約内容を確認し、電子同意を行うことで契約が成立します。</p>
+      <input type="password" id="pw-input" placeholder="パスワードを入力" style="width:100%;background:var(--bg);border:1px solid var(--border-dark);color:var(--black);font-family:var(--font-mono);font-size:16px;padding:12px 14px;text-align:center;letter-spacing:0.2em;outline:none;margin-bottom:16px;display:block;">
+      <div id="pw-error" style="color:var(--red);font-size:12px;margin-bottom:12px;min-height:18px;"></div>
+      <button onclick="checkPW()" style="width:100%;background:var(--black);color:var(--bg);border:none;font-family:var(--font-sans);font-size:13px;font-weight:700;letter-spacing:0.08em;padding:13px;cursor:pointer;">ページを開く</button>
+    </div>
+  </div>
+
+  <div id="contract-screen" style="display:none">
+    <div class="page-title">創業契約</div>
+    <div class="page-sub">化粧品事業立ち上げ契約</div>
+
+    <div class="contract-intro">
+      本ページは、新会社の設立および事業開始に関する契約内容を確認し、電子同意を行うためのページです。<br>
+      本ページに記載された契約は以下の3契約で構成されます。
+      <ol><li>創業準備資金貸付契約</li><li>事業支援業務委託契約</li><li>事業成功報酬契約</li></ol>
+    </div>
+
+    <h2>主要成分・処方レシピ</h2>
+    <p style="font-size:13px;color:var(--text-mid);margin-bottom:16px;">成分名・配合量・単位・役割を入力してください。作り方・工程メモも記録できます。データはこのブラウザに保存されます。</p>
+
+    <!-- RECIPE EDITOR -->
+    <div id="recipe-editor">
+
+      <!-- PW LOCK SCREEN — 初回設定 or ログイン、自動切替 -->
+      <div id="recipe-lock-screen">
+
+        <!-- 初回：パスワード設定 -->
+        <div id="recipe-setup-panel" style="display:none;background:var(--bg-soft);border:1px solid var(--border);padding:32px;text-align:center;">
+          <div style="margin-bottom:14px;"><svg width="40" height="40" viewBox="0 0 24 28" fill="none" xmlns="http://www.w3.org/2000/svg" style="opacity:1.0"><rect x="2" y="12" width="20" height="15" rx="2.5" stroke="#111111" stroke-width="2"/><path d="M7 12V8.5a5 5 0 0 1 10 0V12" stroke="#111111" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="19.5" r="2" fill="#111111"/></svg></div>
+          <div style="font-family:var(--font-serif);font-size:18px;color:var(--black);margin-bottom:8px;">処方レシピのパスワードを設定</div>
+          <p style="font-size:12px;color:var(--text-mid);margin-bottom:24px;line-height:1.8;">初回のみ。設定後はこのパスワードで閲覧・編集できます。</p>
+          <input type="password" id="recipe-pw-new" placeholder="新しいパスワード" style="width:100%;border:1px solid var(--border-dark);padding:11px 14px;font-family:var(--font-mono);font-size:14px;outline:none;background:var(--bg);margin-bottom:8px;display:block;" onfocus="this.style.borderColor='var(--red)'" onblur="this.style.borderColor='var(--border-dark)'">
+          <input type="password" id="recipe-pw-confirm" placeholder="パスワードを再入力（確認）" style="width:100%;border:1px solid var(--border-dark);padding:11px 14px;font-family:var(--font-mono);font-size:14px;outline:none;background:var(--bg);margin-bottom:12px;display:block;" onfocus="this.style.borderColor='var(--red)'" onblur="this.style.borderColor='var(--border-dark)'">
+          <div id="recipe-pw-set-msg" style="color:var(--red);font-size:12px;font-family:var(--font-mono);margin-bottom:10px;min-height:18px;"></div>
+          <button onclick="recipeSetPW()" style="width:100%;background:var(--black);color:var(--bg);border:none;font-family:var(--font-sans);font-size:13px;font-weight:700;padding:13px;cursor:pointer;letter-spacing:0.06em;">パスワードを設定して開く</button>
+        </div>
+
+        <!-- 2回目以降：ログイン -->
+        <div id="recipe-login-panel" style="display:none;background:var(--bg-soft);border:1px solid var(--border);padding:32px;text-align:center;">
+          <div style="margin-bottom:14px;"><svg width="40" height="40" viewBox="0 0 24 28" fill="none" xmlns="http://www.w3.org/2000/svg" style="opacity:1.0"><rect x="2" y="12" width="20" height="15" rx="2.5" stroke="#111111" stroke-width="2"/><path d="M7 12V8.5a5 5 0 0 1 10 0V12" stroke="#111111" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="19.5" r="2" fill="#111111"/></svg></div>
+          <div style="font-family:var(--font-serif);font-size:18px;color:var(--black);margin-bottom:8px;">処方レシピ — パスワードを入力</div>
+          <p style="font-size:12px;color:var(--text-mid);margin-bottom:24px;">設定済みのパスワードを入力して開いてください。</p>
+          <input type="password" id="recipe-pw-input" placeholder="パスワード" style="width:100%;border:1px solid var(--border-dark);padding:11px 14px;font-family:var(--font-mono);font-size:14px;outline:none;background:var(--bg);margin-bottom:12px;display:block;" onfocus="this.style.borderColor='var(--red)'" onblur="this.style.borderColor='var(--border-dark)'">
+          <div id="recipe-lock-error" style="color:var(--red);font-size:12px;font-family:var(--font-mono);margin-bottom:10px;min-height:18px;"></div>
+          <button onclick="recipeUnlock()" style="width:100%;background:var(--black);color:var(--bg);border:none;font-family:var(--font-sans);font-size:13px;font-weight:700;padding:13px;cursor:pointer;letter-spacing:0.06em;">開く</button>
+          <div style="margin-top:14px;">
+            <button onclick="recipeResetPW()" style="background:none;border:none;color:var(--text-soft);font-size:11px;font-family:var(--font-mono);cursor:pointer;text-decoration:underline;">パスワードをリセット（データも削除）</button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RECIPE CONTENT (hidden until unlocked) -->
+      <div id="recipe-content" style="display:none;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;padding:8px 14px;background:var(--bg-soft);border:1px solid var(--border);">
+          <div style="font-size:11px;font-family:var(--font-mono);color:#15803d;"><svg width="12" height="12" viewBox="0 0 24 28" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;margin-right:4px;margin-top:-1px"><rect x="2" y="12" width="20" height="15" rx="2.5" stroke="#15803d" stroke-width="2.2"/><path d="M7 12V8.5a5 5 0 0 1 10 0" stroke="#15803d" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="19.5" r="2" fill="#15803d"/></svg>処方レシピ — 編集モード</div>
+          <button onclick="recipeLock()" style="background:none;border:1px solid var(--border-dark);color:var(--text-soft);font-size:11px;font-family:var(--font-mono);padding:4px 12px;cursor:pointer;"><svg width="12" height="12" viewBox="0 0 24 28" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;margin-right:4px;margin-top:-1px"><rect x="2" y="12" width="20" height="15" rx="2.5" stroke="currentColor" stroke-width="2.2"/><path d="M7 12V8.5a5 5 0 0 1 10 0V12" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="19.5" r="2" fill="currentColor"/></svg>ロック</button>
+        </div>
+
+        <div style="overflow-x:auto;margin-bottom:12px;">
+          <table style="width:100%;border-collapse:collapse;font-size:13px;" id="recipe-table">
+            <thead>
+              <tr>
+                <th style="background:var(--bg-soft);color:var(--text-mid);font-size:11px;letter-spacing:0.06em;font-weight:600;text-align:left;padding:9px 12px;border-bottom:1px solid var(--border-dark);width:28%;">成分名</th>
+                <th style="background:var(--bg-soft);color:var(--text-mid);font-size:11px;letter-spacing:0.06em;font-weight:600;text-align:left;padding:9px 12px;border-bottom:1px solid var(--border-dark);width:12%;">配合量</th>
+                <th style="background:var(--bg-soft);color:var(--text-mid);font-size:11px;letter-spacing:0.06em;font-weight:600;text-align:left;padding:9px 12px;border-bottom:1px solid var(--border-dark);width:10%;">単位</th>
+                <th style="background:var(--bg-soft);color:var(--text-mid);font-size:11px;letter-spacing:0.06em;font-weight:600;text-align:left;padding:9px 12px;border-bottom:1px solid var(--border-dark);width:22%;">役割・効能</th>
+                <th style="background:var(--bg-soft);color:var(--text-mid);font-size:11px;letter-spacing:0.06em;font-weight:600;text-align:left;padding:9px 12px;border-bottom:1px solid var(--border-dark);width:22%;">備考・注意</th>
+                <th style="background:var(--bg-soft);padding:9px 8px;border-bottom:1px solid var(--border-dark);width:6%;"></th>
+              </tr>
+            </thead>
+            <tbody id="recipe-rows"></tbody>
+          </table>
+        </div>
+        <button onclick="addRecipeRow()" style="background:var(--bg-soft);border:1px dashed var(--border-dark);color:var(--text-soft);font-size:12px;font-family:var(--font-sans);padding:9px 18px;cursor:pointer;width:100%;text-align:center;margin-bottom:20px;">+ 成分を追加</button>
+
+        <div style="background:var(--bg-card);border:1px solid var(--border);padding:20px 22px;margin-bottom:12px;">
+          <div style="font-size:11px;font-weight:700;color:var(--text-soft);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:10px;">作り方・製造工程</div>
+          <div id="steps-list" style="margin-bottom:10px;"></div>
+          <button onclick="addStep()" style="background:var(--bg-soft);border:1px dashed var(--border-dark);color:var(--text-soft);font-size:12px;font-family:var(--font-sans);padding:8px 16px;cursor:pointer;width:100%;text-align:center;">+ 工程を追加</button>
+        </div>
+
+        <div style="display:flex;gap:10px;margin-top:4px;">
+          <button onclick="saveRecipe()" style="flex:1;background:var(--black);color:var(--bg);border:none;font-size:13px;font-weight:700;font-family:var(--font-sans);padding:12px;cursor:pointer;letter-spacing:0.06em;">保存する（PWロックで保存）</button>
+          <button onclick="exportRecipe()" style="flex:1;background:var(--bg-soft);color:var(--text-mid);border:1px solid var(--border-dark);font-size:13px;font-family:var(--font-sans);padding:12px;cursor:pointer;">テキスト出力</button>
+        </div>
+        <div id="recipe-save-msg" style="font-size:11px;color:#15803d;font-family:var(--font-mono);margin-top:8px;min-height:16px;"></div>
+      </div>
+    </div>
+
+    <!-- 契約① -->
+    <div class="contract-card">
+      <div class="contract-card-header">
+        <span class="contract-num">CONTRACT 01</span>
+        <span class="contract-card-title">創業準備資金貸付契約</span>
+      </div>
+      <div class="contract-body">
+        <p>貸主（以下「甲」という）と借主（以下「乙」という）は、乙が会社を設立し事業を開始することを前提として、以下のとおり金銭消費貸借契約を締結する。</p>
+        <div class="clause"><div class="clause-title">第1条（目的）</div><div class="clause-body">本契約は、乙が化粧品事業を行う会社を設立し、当該事業を開始するための創業準備資金として、甲が乙に資金を貸し付けることを目的とする。</div></div>
+        <div class="clause"><div class="clause-title">第2条（貸付金額）</div><div class="clause-body"><strong>1,000,000円</strong></div></div>
+        <div class="clause"><div class="clause-title">第3条（貸付日）</div><div class="clause-body">貸付日は電子契約締結日とする。甲は乙指定口座へ銀行振込により貸付金を支払う。</div></div>
+        <div class="clause"><div class="clause-title">第4条（会社設立義務）</div><div class="clause-body">乙は本契約締結日から3ヶ月以内に、化粧品事業を目的とする株式会社を設立する。</div></div>
+        <div class="clause"><div class="clause-title">第5条（融資申請）</div><div class="clause-body">乙は会社設立後、日本政策金融公庫または金融機関へ創業融資の申請を行う。</div></div>
+        <div class="clause"><div class="clause-title">第6条（返済）</div><div class="clause-body">創業融資が実行された場合、乙は融資実行日から30日以内に貸付金を返済する。</div></div>
+        <div class="clause"><div class="clause-title">第7条（融資未実行の場合）</div><div class="clause-body">融資が実行されない場合、乙は貸付日から12ヶ月以内に返済する。</div></div>
+        <div class="clause"><div class="clause-title">第8条（期限の利益喪失）</div><div class="clause-body">次の場合、甲は即時返済を請求できる。<br>・会社設立を行わない場合　・事業開始を放棄した場合　・契約目的に反する行為を行った場合</div></div>
+        <div class="clause"><div class="clause-title">第9条（利息）</div><div class="clause-body">年利 <strong>2%</strong></div></div>
+        <div class="clause"><div class="clause-title">第10条（管轄）</div><div class="clause-body">東京地方裁判所</div></div>
+      </div>
+    </div>
+
+    <!-- 契約② -->
+    <div class="contract-card">
+      <div class="contract-card-header">
+        <span class="contract-num">CONTRACT 02</span>
+        <span class="contract-card-title">事業支援業務委託契約</span>
+      </div>
+      <div class="contract-body">
+        <p>甲は乙に対し、事業立ち上げ支援業務を委託する。</p>
+        <div class="contract-term">
+          <div class="ct-label">委託業務</div>
+          <div class="ct-value">会社設立支援 / 創業融資申請支援 / 事業企画 / ブランド設計 / ECサイト構築 / 販売導線設計 / マーケティング戦略</div>
+        </div>
+        <div class="contract-term" style="margin-top:-1px">
+          <div class="ct-label" style="border-top:none">報酬</div>
+          <div class="ct-value" style="border-top:none">融資実行金額の5%（成功報酬） ＋ 設計費（別途見積もり）</div>
+        </div>
+        <div class="contract-term" style="margin-top:-1px">
+          <div class="ct-label" style="border-top:none">相殺</div>
+          <div class="ct-value" style="border-top:none">本報酬は貸付契約の返済と相殺できる</div>
+        </div>
+        <div class="contract-term" style="margin-top:-1px">
+          <div class="ct-label" style="border-top:none">契約期間</div>
+          <div class="ct-value" style="border-top:none">契約締結日から2年。期間満了の1ヶ月前までに書面による解約通知がない場合、さらに1年間自動更新し、以後も同様とする。</div>
+        </div>
+        <div class="contract-term" style="margin-top:-1px">
+          <div class="ct-label" style="border-top:none">責任の範囲</div>
+          <div class="ct-value" style="border-top:none">乙は事業支援者であり、会社の債務・経営責任を負わない</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 契約③ -->
+    <div class="contract-card">
+      <div class="contract-card-header">
+        <span class="contract-num">CONTRACT 03</span>
+        <span class="contract-card-title">事業成功報酬契約</span>
+      </div>
+      <div class="contract-body">
+        <p>甲（委託者）は、乙（受託者）が提供する事業支援の対価として、以下のとおり成功報酬を支払うものとする。</p>
+        <div class="contract-term">
+          <div class="ct-label">成功報酬</div>
+          <div class="ct-value">税抜営業利益の <strong>30%</strong></div>
+        </div>
+        <div class="contract-term" style="margin-top:-1px">
+          <div class="ct-label" style="border-top:none">営業利益の定義</div>
+          <div class="ct-value" style="border-top:none">税抜売上高から、売上原価・販売費及び一般管理費を控除した税抜営業利益。法人税等は控除しない。</div>
+        </div>
+        <div class="contract-term" style="margin-top:-1px">
+          <div class="ct-label" style="border-top:none">支払サイト</div>
+          <div class="ct-value" style="border-top:none">月末締め 翌月末払い</div>
+        </div>
+        <div class="contract-term" style="margin-top:-1px">
+          <div class="ct-label" style="border-top:none">支払期間</div>
+          <div class="ct-value" style="border-top:none">事業支援業務委託契約（CONTRACT 02）の有効期間中</div>
+        </div>
+        <div class="contract-term" style="margin-top:-1px">
+          <div class="ct-label" style="border-top:none">営業利益が零の場合</div>
+          <div class="ct-value" style="border-top:none">当該月の成功報酬は発生しない。赤字月の繰越控除は行わない。</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 電子同意 -->
+    <div class="esign-box">
+      <div class="esign-title">電子同意</div>
+      <div class="esign-note">上記3契約の内容を確認しました。同意する場合は以下に署名してください。本同意をもって契約が成立します。</div>
+      <div class="esign-field"><label>氏名</label><input type="text" id="esign-name" placeholder="山田 太郎"></div>
+      <div class="esign-field"><label>住所</label><input type="text" id="esign-addr" placeholder="東京都○○区○○ 1-2-3"></div>
+      <div class="esign-field"><label>メールアドレス</label><input type="email" id="esign-email" placeholder="example@email.com"></div>
+      <div class="esign-field">
+        <label>電子署名（署名欄に手書きで署名してください）</label>
+        <div class="sig-wrap"><canvas id="sig-canvas" style="width:100%;height:140px;cursor:crosshair;display:block;"></canvas></div>
+        <span class="sig-clear" onclick="clearSig()">署名をクリア</span>
+      </div>
+      <div class="sig-hint">※ マウスまたは指でなぞって署名してください</div>
+      <div id="esign-error" class="esign-error"></div>
+      <button class="esign-submit" onclick="submitContract()">同意して契約する</button>
+      <div class="gs-note">⚠️ Google Sheetsへの自動保存を有効にするには、JS内の GS_URL に Google Apps Script Web App の URL を設定してください。</div>
+    </div>
+  </div>
+
+  <div id="done-screen" style="display:none">
+    <div class="done-box">
+      <div class="done-icon">✓</div>
+      <div class="done-title">契約が完了しました。</div>
+      <div class="done-sub">契約書はメールで送信されました。<br>内容をご確認ください。</div>
+      <div class="done-meta">
+        締結日時：<span id="done-ts">—</span><br>
+        署名者：<span id="done-name">—</span><br>
+        メール：<span id="done-email">—</span><br>
+        契約：創業準備資金貸付契約 / 事業支援業務委託契約 / 事業成功報酬契約
+      </div>
+      <div style="margin-top:20px;display:flex;flex-direction:column;gap:8px;">
+        <button onclick="goToTab('overview')" style="width:100%;background:var(--black);color:var(--bg);border:none;font-family:var(--font-sans);font-size:13px;font-weight:700;padding:12px;cursor:pointer;letter-spacing:0.06em;">事業概要へ戻る</button>
+        <button onclick="goToTab('bizplan')" style="width:100%;background:var(--bg-soft);color:var(--text-mid);border:1px solid var(--border-dark);font-family:var(--font-sans);font-size:12px;padding:10px;cursor:pointer;">創業計画書を確認する</button>
+        <button onclick="goToTab('schedule')" style="width:100%;background:var(--bg-soft);color:var(--text-mid);border:1px solid var(--border-dark);font-family:var(--font-sans);font-size:12px;padding:10px;cursor:pointer;">実行スケジュールへ</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div><!-- /inner wrapper -->
+<!-- /CONTRACT -->
+
+<footer class="site-footer">
+  <span>© TAmJ Corp — 創業計画書 / Confidential</span>
+  <span style="font-size:10px;color:var(--border-dark)">Infinite REPAIR SERUM</span>
+</footer>
+
+</body>
+</html>
