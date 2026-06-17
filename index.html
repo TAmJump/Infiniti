@@ -4,31 +4,21 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>株式会社Next Innovation</title>
-<meta name="description" content="株式会社Next Innovation｜化粧品・化粧薬品・医薬部外品・医療機器・ビューティーサロン・アニマルケアを横断する、美容と健康の総合事業会社。">
-<link rel="canonical" href="https://nextinnovation.tamjump.com/">
-<meta name="theme-color" content="#f6f3ec">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="株式会社Next Innovation">
-<meta property="og:title" content="株式会社Next Innovation｜Beauty, refined by science.">
-<meta property="og:description" content="化粧品・医薬部外品・医療機器・サロン・アニマルケアを横断する、美容と健康の総合事業会社。">
-<meta property="og:url" content="https://nextinnovation.tamjump.com/">
-<meta property="og:locale" content="ja_JP">
-<meta name="twitter:card" content="summary">
-<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<meta name="description" content="株式会社Next Innovation｜化粧品・医薬部外品・医療機器・ビューティーサロン・アニマルケアを横断する、美容と健康の総合事業会社。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=Noto+Serif+JP:wght@300;400;500;600&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --paper:#ffffff;
-    --bone:#f6f4ef;
-    --card:#ffffff;
+    --paper:#f6f3ec;
+    --bone:#efe8dc;
+    --card:#fbf9f4;
     --ink:#1b1916;
     --ink-soft:#403b34;
     --stone:#73695c;
     --stone-light:#9a9082;
-    --line:#e7e1d5;
-    --line-soft:#efe9dd;
+    --line:#ddd4c5;
+    --line-soft:#e7dfd1;
     --coral:#cf4747;
     --coral-deep:#b13838;
     --serif:'Fraunces',serif;
@@ -55,14 +45,13 @@
     position:fixed;top:0;left:0;right:0;z-index:100;
     display:flex;align-items:center;justify-content:space-between;
     padding:0 clamp(20px,4vw,52px);height:72px;
-    background:rgba(255,255,255,.80);
+    background:rgba(246,243,236,.82);
     backdrop-filter:blur(14px);
     border-bottom:1px solid transparent;
     transition:border-color .3s,background .3s;
   }
-  header.scrolled{border-bottom-color:var(--line);background:rgba(255,255,255,.93)}
-  .brand{display:flex;align-items:center;gap:13px}
-  .brand-logo{height:22px;width:auto;display:block}
+  header.scrolled{border-bottom-color:var(--line);background:rgba(246,243,236,.94)}
+  .brand{display:flex;align-items:baseline;gap:11px}
   .brand-mark{
     font-family:var(--serif);font-weight:500;font-size:21px;
     letter-spacing:-.01em;color:var(--ink);line-height:1;
@@ -93,7 +82,6 @@
     display:flex;flex-direction:column;justify-content:center;
     padding:120px clamp(20px,5vw,80px) 60px;max-width:1320px;margin:0 auto;
   }
-  .hero-logo{height:clamp(46px,7vw,72px);width:auto;display:block;margin-bottom:30px;opacity:0;transform:translateY(14px);animation:rise .9s .05s forwards}
   .hero-eyebrow{
     display:flex;align-items:center;gap:14px;margin-bottom:34px;
     font-size:11px;font-weight:500;letter-spacing:.2em;
@@ -160,15 +148,15 @@
   /* ---------- business ---------- */
   #business{background:var(--bone)}
   #business .inner{max-width:1320px;margin:0 auto}
-  .biz-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+  .biz-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
   .biz-card{
-    background:var(--card);padding:clamp(26px,2.4vw,36px) clamp(22px,2vw,30px);
-    min-height:248px;display:flex;flex-direction:column;
+    background:var(--paper);padding:clamp(28px,3vw,44px) clamp(24px,2.6vw,38px);
+    min-height:280px;display:flex;flex-direction:column;
     transition:background .4s;position:relative;
   }
   .biz-card:hover{background:var(--card)}
   .biz-card .idx{font-family:var(--serif);font-style:italic;font-size:13px;color:var(--coral);font-weight:400;margin-bottom:auto}
-  .biz-card h3{font-family:var(--jp-sans);font-weight:700;font-size:16.5px;letter-spacing:.01em;color:var(--ink);margin:26px 0 5px;line-height:1.4}
+  .biz-card h3{font-family:var(--jp-sans);font-weight:700;font-size:19px;letter-spacing:.02em;color:var(--ink);margin:30px 0 6px}
   .biz-card .en{font-family:var(--serif);font-style:italic;font-weight:400;font-size:13px;color:var(--stone-light);margin-bottom:16px}
   .biz-card p{font-family:var(--jp-serif);font-weight:300;font-size:13.5px;line-height:1.95;color:var(--ink-soft)}
   .biz-card::before{content:"";position:absolute;left:0;top:0;width:2px;height:0;background:var(--coral);transition:height .4s}
@@ -259,65 +247,19 @@
     .hero h1 .line span,.hero-eyebrow,.hero-lead,.hero-foot,.hero-scroll{opacity:1;transform:none}
     .reveal{opacity:1;transform:none}
   }
-
-  /* ---------- products: serum photo overlay ---------- */
-  .pfeat{margin-bottom:clamp(64px,9vw,120px)}
-  .pv{position:relative;overflow:hidden}
-  .pv-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-
-  /* ---------- aroma ear stick feature ---------- */
-  .aroma-feature{border-top:1px solid var(--line);padding-top:clamp(56px,8vw,96px)}
-  .aroma-figure img{width:100%;height:auto;display:block;border:1px solid var(--line);background:var(--bone)}
-  .aroma-body{display:grid;grid-template-columns:1fr 1fr;gap:clamp(36px,6vw,80px);margin-top:clamp(36px,5vw,56px);align-items:start}
-  .aroma-h{font-family:var(--serif);font-weight:300;font-size:clamp(28px,4vw,46px);letter-spacing:-.02em;color:var(--ink);margin-bottom:6px}
-  .aroma-h em{font-style:italic;color:var(--coral);font-weight:400}
-  .aroma-body p{font-family:var(--jp-serif);font-weight:300;color:var(--ink-soft);line-height:2.1;margin-top:18px;max-width:46ch}
-  .scent-label{font-size:11px;font-weight:600;letter-spacing:.22em;color:var(--stone);text-transform:uppercase;margin-bottom:16px}
-  .scent-row{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:30px}
-  .chip{display:inline-flex;align-items:center;gap:8px;font-family:var(--jp-sans);font-size:12.5px;color:var(--ink-soft);
-    border:1px solid var(--line);padding:7px 14px 7px 11px;border-radius:40px;background:var(--card)}
-  .chip i{width:9px;height:9px;border-radius:50%;background:var(--c);display:block}
-
-  /* ---------- representative ---------- */
-  .rep-grid{display:grid;grid-template-columns:.82fr 1.18fr;gap:clamp(40px,7vw,90px);align-items:center}
-  .rep-photo{position:relative;aspect-ratio:4/5;background:linear-gradient(155deg,var(--card),#ece6da);
-    border:1px solid var(--line);display:flex;align-items:center;justify-content:center;overflow:hidden}
-  .rep-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-  .rep-ph{font-family:var(--serif);font-style:italic;font-weight:300;font-size:clamp(20px,2.4vw,30px);
-    color:var(--stone-light);text-align:center;letter-spacing:.04em;line-height:1.3}
-  .rep-h{font-family:var(--jp-serif);font-weight:400;font-size:clamp(24px,3.4vw,40px);line-height:1.5;color:var(--ink);margin-bottom:26px}
-  .rep-h em{font-style:normal;color:var(--coral);font-family:var(--serif);font-weight:400}
-  #rep p{font-family:var(--jp-serif);font-weight:300;color:var(--ink-soft);line-height:2.15;margin-bottom:20px;max-width:60ch}
-  #rep p b{font-weight:500;color:var(--ink)}
-  .cred{display:flex;flex-direction:column;margin-top:14px;border-top:1px solid var(--line)}
-  .cred>div{display:grid;grid-template-columns:120px 1fr;gap:18px;padding:14px 0;border-bottom:1px solid var(--line)}
-  .cred dt{font-size:11px;font-weight:600;letter-spacing:.14em;color:var(--stone);text-transform:uppercase;padding-top:2px}
-  .cred dd{font-family:var(--jp-sans);font-weight:400;font-size:14px;color:var(--ink)}
-
-  .f-logo{height:18px;width:auto;vertical-align:middle;margin-right:9px}
-
-  /* ---------- responsive (added) ---------- */
-  @media(max-width:1100px){.biz-grid{grid-template-columns:repeat(2,1fr)}}
-  @media(max-width:600px){.biz-grid{grid-template-columns:1fr}}
-  @media(max-width:860px){
-    .aroma-body,.rep-grid{grid-template-columns:1fr}
-    .rep-photo{max-width:360px}
-    .cred>div{grid-template-columns:100px 1fr;gap:12px}
-  }
 </style>
 </head>
 <body>
 
 <header id="hdr">
   <a href="#top" class="brand">
-    <img class="brand-logo" src="assets/logo.svg" alt="" width="50" height="22">
     <span class="brand-mark">Next <em>Innovation</em></span>
+    <span class="brand-sub">Inc.</span>
   </a>
   <nav class="main" id="navmenu">
     <a href="#message">Message</a>
     <a href="#business">Business</a>
-    <a href="#product">Products</a>
-    <a href="#rep">Representative</a>
+    <a href="#product">Product</a>
     <a href="#company">Company</a>
     <a href="#contact">Contact</a>
   </nav>
@@ -326,7 +268,6 @@
 
 <!-- HERO -->
 <section class="hero" id="top">
-  <img class="hero-logo" src="assets/logo.svg" alt="Next Innovation" width="180" height="81">
   <div class="hero-eyebrow"><span class="dash"></span>美容と健康の総合事業会社</div>
   <h1>
     <span class="line l1"><span>Beauty, refined</span></span>
@@ -334,7 +275,7 @@
   </h1>
   <p class="hero-lead">化粧品、医薬部外品、医療機器、サロン、アニマルケア。<br>領域を横断して人の「美しさ」と「健やかさ」を支える事業を、ひとつの会社で育てていきます。</p>
   <div class="hero-foot">
-    <div class="hero-stat"><div class="k">08</div><div class="l">事業領域 / Domains</div></div>
+    <div class="hero-stat"><div class="k">06</div><div class="l">事業領域 / Domains</div></div>
     <div class="hero-stat"><div class="k">2026</div><div class="l">設立 / Founded</div></div>
     <div class="hero-stat"><div class="k"><em>∞</em></div><div class="l">Infinite Repair Serum</div></div>
   </div>
@@ -362,71 +303,60 @@
     <div class="biz-grid">
       <div class="biz-card reveal">
         <span class="idx">i</span>
-        <h3>化粧品・エアゾール</h3>
+        <h3>コスメティクス事業</h3>
         <span class="en">Cosmetics</span>
-        <p>一般用化粧品・化粧薬品、化粧用エアゾール製品の企画・製造販売。肌と髪のためのプロダクトを展開します。</p>
+        <p>一般用化粧品・化粧薬品、および化粧用エアゾール製品の企画・製造販売。ヘアケアを起点に、肌と髪のためのプロダクトを展開します。</p>
       </div>
       <div class="biz-card reveal">
         <span class="idx">ii</span>
-        <h3>医薬品・医薬部外品</h3>
+        <h3>ファーマシューティカル事業</h3>
         <span class="en">Pharmaceutical</span>
         <p>医薬品および医薬部外品の製造販売。許認可と品質管理を前提に、効能と安全性を満たす製品づくりに取り組みます。</p>
       </div>
       <div class="biz-card reveal">
         <span class="idx">iii</span>
-        <h3>医療機器</h3>
+        <h3>メディカルデバイス事業</h3>
         <span class="en">Medical Devices</span>
         <p>医療機器類の仕入・販売。医療・美容の現場で必要とされる機器を、信頼できる供給網を通じて届けます。</p>
       </div>
       <div class="biz-card reveal">
         <span class="idx">iv</span>
-        <h3>美容室・理容室</h3>
-        <span class="en">Salon</span>
-        <p>美容室・理容室の経営管理。現場で得た知見を製品開発へ還元し、サービスとプロダクトをつなぎます。</p>
+        <h3>ビューティーサロン事業</h3>
+        <span class="en">Salon Management</span>
+        <p>美容室・理容室の経営管理。プロダクトとサービスをつなぎ、現場から得た知見を製品開発へ還元します。</p>
       </div>
       <div class="biz-card reveal">
         <span class="idx">v</span>
-        <h3>動物用医薬部外品</h3>
+        <h3>アニマルケア事業</h3>
         <span class="en">Animal Care</span>
-        <p>動物用医薬部外品の製造販売。ともに暮らす動物の健やかさにも貢献する製品を手がけます。</p>
+        <p>動物用医薬部外品の製造販売。人だけでなく、ともに暮らす動物の健やかさにも貢献する製品を手がけます。</p>
       </div>
       <div class="biz-card reveal">
         <span class="idx">vi</span>
-        <h3>アロマ・ヘルスケア雑貨</h3>
-        <span class="en">Aroma Care Goods</span>
-        <p>香りを纏う新習慣を提案する〈AROMA EAR STICK〉をはじめ、暮らしに寄り添うヘルスケア雑貨を開発します。</p>
-      </div>
-      <div class="biz-card reveal">
-        <span class="idx">vii</span>
-        <h3>店舗運営・輸出入</h3>
+        <h3>リテール・トレーディング事業</h3>
         <span class="en">Retail &amp; Trading</span>
         <p>関連事業に係る店舗の経営、ならびに製品の輸出入。国内外の流通を通じて事業基盤を広げます。</p>
-      </div>
-      <div class="biz-card reveal">
-        <span class="idx">viii</span>
-        <h3>附帯・関連事業</h3>
-        <span class="en">Related Business</span>
-        <p>上記各事業に附帯・関連する一切の事業。領域を横断し、美容と健康の価値を社会へ広げていきます。</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- PRODUCTS -->
+<!-- PRODUCT -->
 <section class="block" id="product">
-  <div class="sec-head reveal"><span class="sec-num">03</span><span class="sec-label">Products</span><span class="sec-line"></span></div>
-
-  <div class="product-grid pfeat">
-    <div class="product-visual pv reveal">
+  <div class="sec-head reveal"><span class="sec-num">03</span><span class="sec-label">Flagship Product</span><span class="sec-line"></span></div>
+  <div class="product-grid">
+    <div class="product-visual reveal">
       <div class="ring r1"></div><div class="ring r2"></div><div class="ring r3"></div>
-      <div class="word"><div class="inf">Infinite</div><div class="ser">Repair Serum</div></div>
-      <img class="pv-photo" src="assets/treatment.png" alt="Infinite Repair Serum" loading="lazy" onerror="this.remove()">
+      <div class="word">
+        <div class="inf">Infinite</div>
+        <div class="ser">Repair Serum</div>
+      </div>
     </div>
     <div class="product-info reveal">
-      <div class="tag">Hair Care — Main Treatment</div>
+      <div class="tag">Hair Care</div>
       <h2><em>Infinite</em> Repair Serum</h2>
-      <div class="jp-title">洗い流さない ヘアダメージ保護トリートメント</div>
-      <p>毎日のダメージから髪を守り、手触りと指通りを整える、洗い流さないタイプのヘアトリートメント。ケラチン・シルク・CMCに着目した処方で、補修感とつや感の両立を目指す、当社の主力トリートメント剤です。</p>
+      <div class="jp-title">洗い流さない ヘアダメージ保護セラム</div>
+      <p>毎日のダメージから髪を守り、手触りと指通りを整える、洗い流さないタイプのヘアセラム。ケラチン・シルク・CMCに着目した処方で、補修感とつや感の両立を目指したフラッグシップブランドです。</p>
       <dl class="product-specs">
         <div class="row"><dt>Type</dt><dd>洗い流さない ヘアトリートメント</dd></div>
         <div class="row"><dt>Focus</dt><dd>ケラチン × シルク × CMC 処方</dd></div>
@@ -435,63 +365,12 @@
       </dl>
     </div>
   </div>
-
-  <div class="aroma-feature reveal">
-    <div class="aroma-figure"><img src="assets/swab.jpg" alt="AROMA EAR STICK — 5種の香り" loading="lazy"></div>
-    <div class="aroma-body">
-      <div>
-        <div class="tag">Aroma Care Goods — New Category</div>
-        <h2 class="aroma-h"><em>AROMA EAR STICK</em></h2>
-        <div class="jp-title">香りを纏う、2本入り個包装のアロマ綿棒</div>
-        <p>「掃除用品」だった綿棒を、香りで選ぶ小さなリセット習慣へ。開封時にふわっと香る微香設計で、夜・朝・サウナ後・仕事の合間の数秒を、自分だけの整える時間に変えます。</p>
-      </div>
-      <div class="scent-wrap">
-        <div class="scent-label">5 Scents</div>
-        <div class="scent-row">
-          <span class="chip"><i style="--c:#8b7fc7"></i>Lavender Night</span>
-          <span class="chip"><i style="--c:#74c4ba"></i>Mint Reset</span>
-          <span class="chip"><i style="--c:#e6b23a"></i>Bergamot Mood</span>
-          <span class="chip"><i style="--c:#4e7a4a"></i>Hinoki Sauna</span>
-          <span class="chip"><i style="--c:#e08a5a"></i>Kinmokusei Sunset</span>
-        </div>
-        <dl class="product-specs">
-          <div class="row"><dt>内容量</dt><dd>2本入り個包装 × 30PACK（計60本）</dd></div>
-          <div class="row"><dt>設計</dt><dd>液だれしない微香・ウェット綿棒</dd></div>
-          <div class="row"><dt>用途</dt><dd>ナイトケア／サウナ・ホテルアメニティ／ギフト</dd></div>
-        </dl>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- REPRESENTATIVE -->
-<section class="block" id="rep" style="background:var(--bone);max-width:none">
-  <div class="inner">
-    <div class="sec-head reveal"><span class="sec-num">04</span><span class="sec-label">Representative</span><span class="sec-line"></span></div>
-    <div class="rep-grid">
-      <div class="rep-photo reveal">
-        <img src="assets/representative.png" alt="代表取締役 桶本光司" loading="lazy" onerror="this.style.display='none'">
-        <span class="rep-ph">OKEMOTO<br>KOJI</span>
-      </div>
-      <div class="reveal">
-        <div class="tag">代表取締役 / President — 桶本 光司</div>
-        <h2 class="rep-h">美容業界での実績を、<em>礎</em>に。</h2>
-        <p>代表の桶本光司は、ヘアケアメーカー <b>株式会社ハホニコ</b> の社長として、東京支社およびエデュケーションラボラトリーの開設に携わり、美容業界の専門メディアにも取り上げられてきました。</p>
-        <p>サロン向けの教育事業、ヘアケア商材の開発・流通、そして全国の美容室ネットワークとの深い結びつき——その知見と人脈が、Next Innovation の製品づくりと販路設計の確かな基盤となっています。</p>
-        <dl class="cred">
-          <div><dt>前職</dt><dd>株式会社ハホニコ 代表</dd></div>
-          <div><dt>専門領域</dt><dd>サロン教育・ヘアケア商材の開発／流通</dd></div>
-          <div><dt>ネットワーク</dt><dd>全国の美容室・美容業界</dd></div>
-        </dl>
-      </div>
-    </div>
-  </div>
 </section>
 
 <!-- COMPANY -->
 <section class="block" id="company" style="max-width:none">
   <div class="inner">
-    <div class="sec-head reveal"><span class="sec-num">05</span><span class="sec-label">Company Profile</span><span class="sec-line"></span></div>
+    <div class="sec-head reveal"><span class="sec-num">04</span><span class="sec-label">Company Profile</span><span class="sec-line"></span></div>
     <div class="profile-grid">
       <div class="reveal">
         <div class="profile-lead">A company built to <em>last</em>.</div>
@@ -499,15 +378,14 @@
       </div>
       <dl class="profile-table reveal">
         <div class="row"><dt>商号</dt><dd>株式会社Next Innovation</dd></div>
-        <div class="row"><dt>所在地</dt><dd>埼玉県上尾市</dd></div>
-        <div class="row"><dt>設立</dt><dd>2026年5月7日 <span class="sm">（令和8年5月7日）</span></dd></div>
+        <div class="row"><dt>所在地</dt><dd>埼玉県上尾市仲町1-7-8</dd></div>
+        <div class="row"><dt>設立</dt><dd>2026年6月9日 <span class="sm">（令和8年6月9日）</span></dd></div>
         <div class="row"><dt>資本金</dt><dd>200万円</dd></div>
         <div class="row"><dt>代表取締役</dt><dd>桶本 光司</dd></div>
         <div class="row"><dt>事業年度</dt><dd>5月1日 〜 翌年4月30日</dd></div>
         <div class="row"><dt>公告方法</dt><dd>電子公告</dd></div>
         <div class="row"><dt>事業内容</dt><dd><ul>
           <li>化粧品・化粧薬品・化粧用エアゾール製品の製造販売</li>
-          <li>アロマ・ヘルスケア雑貨（AROMA EAR STICK）の企画・製造販売</li>
           <li>医薬品・医薬部外品の製造販売</li>
           <li>医療機器類の仕入販売</li>
           <li>美容室・理容室の経営管理</li>
@@ -531,8 +409,8 @@
 
 <footer>
   <div>
-    <div class="f-brand"><img class="f-logo" src="assets/logo.svg" alt="" width="42" height="19"> Next <em>Innovation</em></div>
-    <div class="f-meta">株式会社Next Innovation<br>埼玉県上尾市</div>
+    <div class="f-brand">Next <em>Innovation</em></div>
+    <div class="f-meta">株式会社Next Innovation<br>埼玉県上尾市仲町1-7-8</div>
   </div>
   <div class="f-copy">© 2026 Next Innovation Inc. All rights reserved.</div>
 </footer>
