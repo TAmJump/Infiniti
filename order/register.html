@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>取引申請｜株式会社Next Innovation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@400;500;600&family=Noto+Serif+JP:wght@300;400;500&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="portal.css">
+</head>
+<body>
+<div class="p-head">
+  <a href="../index.html" class="p-brand">Next <em>Innovation</em><span class="tag">Partner Portal</span></a>
+  <div class="right"><a href="login.html">ログイン →</a></div>
+</div>
+
+<div class="auth-wrap">
+  <div class="auth-card wide">
+    <div class="auth-eyebrow">Apply for Partnership</div>
+    <h1>取引申請</h1>
+    <p class="sub">サロン・販売店さま向けの取引申請フォームです。お申し込み後、当社にて内容を確認し、承認後にログイン情報をご案内します。</p>
+
+    <div id="msg" class="msg hidden"></div>
+
+    <div id="form">
+      <div class="field">
+        <label>店舗・会社名 <span class="req">*</span></label>
+        <input type="text" id="salon" placeholder="◯◯ヘアサロン / 株式会社◯◯">
+      </div>
+      <div class="row2">
+        <div class="field">
+          <label>ご担当者名 <span class="req">*</span></label>
+          <input type="text" id="contact" placeholder="山田 太郎">
+        </div>
+        <div class="field">
+          <label>電話番号 <span class="req">*</span></label>
+          <input type="tel" id="phone" placeholder="048-000-0000">
+        </div>
+      </div>
+      <div class="field">
+        <label>メールアドレス <span class="req">*</span></label>
+        <input type="email" id="email" placeholder="you@salon.jp">
+        <div class="hint">ログインIDとして使用します</div>
+      </div>
+      <div class="row2">
+        <div class="field">
+          <label>郵便番号</label>
+          <input type="text" id="postal" placeholder="362-0000">
+        </div>
+        <div class="field">
+          <label>所在地 <span class="req">*</span></label>
+          <input type="text" id="address" placeholder="埼玉県上尾市…">
+        </div>
+      </div>
+      <div class="row2">
+        <div class="field">
+          <label>パスワード <span class="req">*</span></label>
+          <input type="password" id="pw" autocomplete="new-password" placeholder="8文字以上">
+        </div>
+        <div class="field">
+          <label>パスワード（確認） <span class="req">*</span></label>
+          <input type="password" id="pw2" autocomplete="new-password" placeholder="再入力">
+        </div>
+      </div>
+      <div class="field">
+        <label>備考（任意）</label>
+        <textarea id="note" placeholder="取扱希望商品、ご質問など"></textarea>
+      </div>
+      <button class="btn" id="go">この内容で申請する</button>
+    </div>
+
+    <div id="done" class="hidden" style="text-align:center;padding:20px 0">
+      <div class="msg ok" style="text-align:left">申請を受け付けました。当社にて確認のうえ、承認結果をメールでご連絡します。</div>
+      <a class="btn ghost" href="login.html" style="margin-top:8px">ログイン画面へ</a>
+    </div>
+  </div>
+</div>
+
+<script src="config.js"></script>
+<script>
+const $=s=>document.querySelector(s);
+const msg=$('#msg');
+function show(t,ok){msg.textContent=t;msg.className='msg '+(ok?'ok':'err')}
+async function apply(){
+  const v=id=>$('#'+id).value.trim();
+  const salon=v('salon'),contact=v('contact'),phone=v('phone'),email=v('email'),address=v('address'),pw=$('#pw').value,pw2=$('#pw2').value;
+  if(!salon||!contact||!phone||!email||!address||!pw){show('必須項目をすべて入力してください');return}
+  if(pw.length<8){show('パスワードは8文字以上で設定してください');return}
+  if(pw!==pw2){show('パスワードが一致しません');return}
+  $('#go').disabled=true; msg.classList.add('hidden');
+  try{
+    const r=await fetch(NX_API+'/api/register',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({salon_name:salon,contact_name:contact,phone,email,postal:v('postal'),address,pw,note:v('note')})});
+    const d=await r.json();
+    if(!r.ok){show(d.error||'申請に失敗しました');$('#go').disabled=false;return}
+    $('#form').classList.add('hidden'); $('#done').classList.remove('hidden');
+  }catch(e){show('サーバーに接続できません');$('#go').disabled=false}
+}
+$('#go').addEventListener('click',apply);
+</script>
+</body>
+</html>
