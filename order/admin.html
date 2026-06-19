@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>管理コンソール｜Next Innovation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@400;500;600&family=Noto+Serif+JP:wght@300;400;500&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="portal.css">
+</head>
+<body>
+<div class="p-head">
+  <a href="../index.html" class="p-brand">Next <em>Innovation</em><span class="tag">Admin</span></a>
+  <div class="right"><span class="logout hidden" id="logout">ログアウト</span></div>
+</div>
+
+<!-- ログインゲート -->
+<div class="auth-wrap" id="gate">
+  <div class="auth-card">
+    <div class="auth-eyebrow">Administrator</div>
+    <h1>管理コンソール</h1>
+    <p class="sub">Next Innovation 管理者専用。</p>
+    <div id="amsg" class="msg err hidden"></div>
+    <div class="field"><label>ユーザー名</label><input type="text" id="au" autocomplete="username"></div>
+    <div class="field"><label>パスワード</label><input type="password" id="ap" autocomplete="current-password"></div>
+    <button class="btn" id="alogin">ログイン</button>
+  </div>
+</div>
+
+<!-- コンソール -->
+<div class="app hidden" id="console">
+  <div class="app-head"><h1>管理コンソール</h1></div>
+  <div class="app-sub">取引申請の承認、受注管理、製造会社への発注を行います。</div>
+  <div class="tabs">
+    <button class="tab active" data-p="apps">取引申請 <span id="badge" class="pill pending" style="margin-left:6px;display:none"></span></button>
+    <button class="tab" data-p="orders">受注</button>
+    <button class="tab" data-p="partners">取引先</button>
+    <button class="tab" data-p="products">商品</button>
+    <button class="tab" data-p="prod">製造発注</button>
+  </div>
+
+  <div class="panel active" id="p-apps">
+    <div id="appsLoad" class="center"><div class="spin"></div></div>
+    <table class="tbl hidden" id="appsTbl"><thead><tr><th>申請日</th><th>店舗・会社名</th><th>担当者</th><th>連絡先</th><th>所在地</th><th></th></tr></thead><tbody id="appsBody"></tbody></table>
+    <div class="empty hidden" id="appsEmpty">承認待ちの申請はありません。</div>
+  </div>
+
+  <div class="panel" id="p-orders">
+    <div class="toolbar"><div class="filter" id="ofilter">
+      <button class="on" data-s="">すべて</button><button data-s="received">受注</button><button data-s="production">製造発注済</button><button data-s="shipped">出荷済</button><button data-s="completed">完了</button>
+    </div><div class="sp"></div></div>
+    <div id="ordLoad" class="center"><div class="spin"></div></div>
+    <table class="tbl hidden" id="ordTbl"><thead><tr><th>注文番号</th><th>取引先</th><th>発注日</th><th>点数</th><th>金額</th><th>状況</th><th></th></tr></thead><tbody id="ordBody"></tbody></table>
+    <div class="empty hidden" id="ordEmpty">受注はありません。</div>
+  </div>
+
+  <div class="panel" id="p-partners">
+    <div id="prtLoad" class="center"><div class="spin"></div></div>
+    <table class="tbl hidden" id="prtTbl"><thead><tr><th>コード</th><th>店舗・会社名</th><th>担当者</th><th>連絡先</th><th>状態</th><th></th></tr></thead><tbody id="prtBody"></tbody></table>
+  </div>
+
+  <div class="panel" id="p-products">
+    <div class="toolbar"><div class="sp"></div><button class="btn sm" id="addProd">＋ 商品を追加</button></div>
+    <div id="pdLoad" class="center"><div class="spin"></div></div>
+    <table class="tbl hidden" id="pdTbl"><thead><tr><th>SKU</th><th>商品名</th><th>卸価格(税抜)</th><th>最低発注</th><th>入数</th><th>公開</th><th></th></tr></thead><tbody id="pdBody"></tbody></table>
+  </div>
+
+  <div class="panel" id="p-prod">
+    <div id="poLoad" class="center"><div class="spin"></div></div>
+    <table class="tbl hidden" id="poTbl"><thead><tr><th>発注番号</th><th>製造会社</th><th>対象注文</th><th>状態</th><th>作成日</th></tr></thead><tbody id="poBody"></tbody></table>
+    <div class="empty hidden" id="poEmpty">製造発注はまだありません。</div>
+  </div>
+</div>
+
+<div class="ov hidden" id="ov"><div class="box" id="ovBox"></div></div>
+<footer class="p-foot">© 2026 Next Innovation Inc. — Admin Console</footer>
+
+<script src="config.js"></script>
+<script>
+const $=s=>document.querySelector(s), $$=s=>document.querySelectorAll(s);
+let TOKEN=localStorage.getItem('nx_admin');
+const yen=n=>Number(n||0).toLocaleString('ja-JP');
+const STAT={received:'受注',production:'製造発注済',shipped:'出荷済',completed:'完了',cancelled:'キャンセル'};
+const ASTAT={pending:'承認待ち',active:'有効',rejected:'却下',suspended:'停止'};
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function H(){return{'Authorization':'Bearer '+TOKEN,'Content-Type':'application/json'}}
+
+async function adminLogin(){
+  const u=$('#au').value.trim(),p=$('#ap').value;
+  if(!u||!p){return}
+  $('#alogin').disabled=true; $('#amsg').classList.add('hidden');
+  try{
+    const r=await fetch(NX_API+'/api/admin/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:u,pw:p})});
+    const d=await r.json();
+    if(!r.ok){$('#amsg').textContent=d.error||'ログインに失敗しました';$('#amsg').classList.remove('hidden');$('#alogin').disabled=false;return}
+    TOKEN=d.token; localStorage.setItem('nx_admin',TOKEN); enter();
+  }catch(e){$('#amsg').textContent='サーバーに接続できません';$('#amsg').classList.remove('hidden');$('#alogin').disabled=false}
+}
+$('#alogin').addEventListener('click',adminLogin);
+$('#ap').addEventListener('keydown',e=>{if(e.key==='Enter')adminLogin()});
+$('#logout').addEventListener('click',()=>{localStorage.removeItem('nx_admin');location.reload()});
+
+async function api(path,opt={}){
+  const r=await fetch(NX_API+path,{headers:H(),...opt});
+  if(r.status===401){localStorage.removeItem('nx_admin');location.reload();throw new Error('auth')}
+  return r;
+}
+
+function enter(){
+  $('#gate').classList.add('hidden'); $('#console').classList.remove('hidden'); $('#logout').classList.remove('hidden');
+  loadApps();
+}
+$$('.tab').forEach(t=>t.addEventListener('click',()=>{
+  $$('.tab').forEach(x=>x.classList.remove('active')); t.classList.add('active');
+  $$('.panel').forEach(p=>p.classList.remove('active')); $('#p-'+t.dataset.p).classList.add('active');
+  ({apps:loadApps,orders:loadOrders,partners:loadPartners,products:loadProducts,prod:loadPO})[t.dataset.p]();
+}));
+
+/* 取引申請 */
+async function loadApps(){
+  $('#appsLoad').classList.remove('hidden');$('#appsTbl').classList.add('hidden');$('#appsEmpty').classList.add('hidden');
+  const r=await api('/api/admin/accounts?status=pending'); const d=await r.json(); const a=d.accounts||[];
+  const b=$('#badge'); if(a.length){b.textContent=a.length;b.style.display='inline-block'}else b.style.display='none';
+  $('#appsLoad').classList.add('hidden');
+  if(!a.length){$('#appsEmpty').classList.remove('hidden');return}
+  $('#appsTbl').classList.remove('hidden');
+  $('#appsBody').innerHTML=a.map(x=>`<tr>
+    <td>${(x.created_at||'').slice(0,10)}</td><td>${esc(x.salon_name)}</td><td>${esc(x.contact_name)}</td>
+    <td>${esc(x.email)}<br><span style="color:var(--stone)">${esc(x.phone||'')}</span></td>
+    <td style="font-size:12px;color:var(--stone)">${esc(x.postal?'〒'+x.postal+' ':'')}${esc(x.address||'')}${x.note?'<br>備考: '+esc(x.note):''}</td>
+    <td style="white-space:nowrap"><button class="btn sm" onclick="approve(${x.id})">承認</button> <button class="btn danger sm" onclick="reject(${x.id})">却下</button></td></tr>`).join('');
+}
+window.approve=async id=>{if(!confirm('この申請を承認しますか？取引先コードを発行します。'))return;
+  const r=await api('/api/admin/accounts/'+id+'/approve',{method:'POST'});const d=await r.json();
+  if(r.ok)alert('承認しました。取引先コード：'+d.code);else alert(d.error||'失敗');loadApps()}
+window.reject=async id=>{if(!confirm('この申請を却下しますか？'))return;
+  await api('/api/admin/accounts/'+id+'/reject',{method:'POST'});loadApps()}
+
+/* 受注 */
+let ofilter='';
+$('#ofilter').addEventListener('click',e=>{if(e.target.dataset.s===undefined)return;
+  $$('#ofilter button').forEach(b=>b.classList.remove('on'));e.target.classList.add('on');ofilter=e.target.dataset.s;loadOrders()});
+async function loadOrders(){
+  $('#ordLoad').classList.remove('hidden');$('#ordTbl').classList.add('hidden');$('#ordEmpty').classList.add('hidden');
+  const r=await api('/api/admin/orders'+(ofilter?'?status='+ofilter:'')); const d=await r.json(); const o=d.orders||[];
+  $('#ordLoad').classList.add('hidden');
+  if(!o.length){$('#ordEmpty').classList.remove('hidden');return}
+  $('#ordTbl').classList.remove('hidden');
+  $('#ordBody').innerHTML=o.map(x=>`<tr>
+    <td class="ono">${esc(x.order_no)}</td><td>${esc(x.salon_name)}</td><td>${(x.created_at||'').slice(0,10)}</td>
+    <td>${x.item_count}点</td><td class="amt">¥${yen(x.subtotal)}</td>
+    <td><span class="pill ${x.status}">${STAT[x.status]||x.status}</span></td>
+    <td><button class="btn ghost sm" onclick="oDetail('${esc(x.order_no)}')">詳細</button></td></tr>`).join('');
+}
+window.oDetail=async no=>{
+  $('#ov').classList.remove('hidden');$('#ovBox').innerHTML='<div class="center"><div class="spin"></div></div>';
+  const r=await api('/api/admin/orders/'+encodeURIComponent(no));const d=await r.json();const o=d.order;
+  const opts=Object.keys(STAT).map(s=>`<option value="${s}" ${o.status===s?'selected':''}>${STAT[s]}</option>`).join('');
+  $('#ovBox').innerHTML=`<span class="x" onclick="closeOv()">×</span><h2>${esc(o.order_no)}</h2>
+    <div class="dl"><dt>取引先</dt><dd>${esc(o.salon_name)}（${esc(o.code||'-')}）</dd>
+      <dt>発注日</dt><dd>${(o.created_at||'').slice(0,16).replace('T',' ')}</dd>
+      <dt>希望納品</dt><dd>${o.desired_date||'指定なし'}</dd><dt>備考</dt><dd>${esc(o.note||'—')}</dd></div>
+    <table class="tbl"><thead><tr><th>商品</th><th>単価</th><th>数量</th><th>金額</th></tr></thead>
+      <tbody>${(o.items||[]).map(i=>`<tr><td>${esc(i.product_name)}</td><td class="amt">¥${yen(i.unit_price)}</td><td>${i.qty}</td><td class="amt">¥${yen(i.amount)}</td></tr>`).join('')}</tbody></table>
+    <div style="text-align:right;margin:12px 0;font-family:var(--serif);font-size:20px">合計（税抜） ¥${yen(o.subtotal)}</div>
+    <div class="dl" style="grid-template-columns:1fr"><dt>状況の変更</dt><dd style="display:flex;gap:8px"><select id="ostat" style="flex:1;padding:10px;border:1px solid var(--line);background:var(--paper)">${opts}</select><button class="btn sm" onclick="setStat('${esc(o.order_no)}')">更新</button></dd></div>
+    <button class="btn" style="margin-top:8px" onclick="toPO('${esc(o.order_no)}')">この受注を製造会社へ発注</button>`;
+}
+window.setStat=async no=>{const s=$('#ostat').value;
+  await api('/api/admin/orders/'+encodeURIComponent(no)+'/status',{method:'POST',body:JSON.stringify({status:s})});
+  closeOv();loadOrders()}
+window.toPO=no=>{ $('#ovBox').innerHTML=`<span class="x" onclick="closeOv()">×</span><h2>製造発注</h2>
+  <p class="sub" style="margin:8px 0 20px">受注 ${esc(no)} を製造会社へ発注します。</p>
+  <div class="field"><label>製造会社名</label><input id="mname" placeholder="◯◯化粧品 株式会社"></div>
+  <div class="field"><label>製造会社メール（任意・通知送信）</label><input id="memail" placeholder="order@maker.co.jp"></div>
+  <div class="field"><label>指示・備考</label><textarea id="mnote" placeholder="数量・納期・ロットなど"></textarea></div>
+  <button class="btn" onclick="submitPO('${esc(no)}')">発注を確定する</button>`;}
+window.submitPO=async no=>{const mname=$('#mname').value.trim();if(!mname){alert('製造会社名を入力してください');return}
+  const r=await api('/api/admin/production-orders',{method:'POST',body:JSON.stringify({order_no:no,manufacturer:mname,manufacturer_email:$('#memail').value.trim(),note:$('#mnote').value.trim()})});
+  const d=await r.json();if(r.ok){alert('製造発注を作成しました。発注番号：'+d.po_no);closeOv();loadOrders()}else alert(d.error||'失敗')}
+window.closeOv=()=>$('#ov').classList.add('hidden');
+$('#ov').addEventListener('click',e=>{if(e.target.id==='ov')closeOv()});
+
+/* 取引先 */
+async function loadPartners(){
+  $('#prtLoad').classList.remove('hidden');$('#prtTbl').classList.add('hidden');
+  const r=await api('/api/admin/accounts'); const d=await r.json(); const a=d.accounts||[];
+  $('#prtLoad').classList.add('hidden');$('#prtTbl').classList.remove('hidden');
+  $('#prtBody').innerHTML=a.map(x=>`<tr><td class="ono">${esc(x.code||'—')}</td><td>${esc(x.salon_name)}</td><td>${esc(x.contact_name)}</td>
+    <td>${esc(x.email)}<br><span style="color:var(--stone)">${esc(x.phone||'')}</span></td>
+    <td><span class="pill ${x.status}">${ASTAT[x.status]||x.status}</span></td>
+    <td>${x.status==='active'?`<button class="btn danger sm" onclick="susp(${x.id},'suspend')">停止</button>`:x.status==='suspended'?`<button class="btn sm" onclick="susp(${x.id},'activate')">再開</button>`:''}</td></tr>`).join('')
+    ||'<tr><td colspan="6" class="empty">取引先がありません。</td></tr>';
+}
+window.susp=async(id,act)=>{await api('/api/admin/accounts/'+id+'/'+act,{method:'POST'});loadPartners()}
+
+/* 商品 */
+async function loadProducts(){
+  $('#pdLoad').classList.remove('hidden');$('#pdTbl').classList.add('hidden');
+  const r=await api('/api/admin/products'); const d=await r.json(); const p=d.products||[];
+  $('#pdLoad').classList.add('hidden');$('#pdTbl').classList.remove('hidden');
+  $('#pdBody').innerHTML=p.map(x=>`<tr><td>${esc(x.sku||'—')}</td><td>${esc(x.name)}<br><span style="color:var(--stone);font-size:12px">${esc(x.variant||'')}</span></td>
+    <td class="amt">${x.wholesale_price?'¥'+yen(x.wholesale_price):'<span class="pill pending">未設定</span>'}</td>
+    <td>${x.moq||1}${esc(x.unit||'本')}</td><td>${x.case_lot||1}</td>
+    <td><span class="pill ${x.active?'active':'rejected'}">${x.active?'公開':'非公開'}</span></td>
+    <td><button class="btn ghost sm" onclick='editProd(${JSON.stringify(x)})'>編集</button></td></tr>`).join('')
+    ||'<tr><td colspan="7" class="empty">商品がありません。</td></tr>';
+}
+$('#addProd').addEventListener('click',()=>editProd(null));
+window.editProd=p=>{const e=p||{};$('#ov').classList.remove('hidden');
+  $('#ovBox').innerHTML=`<span class="x" onclick="closeOv()">×</span><h2>${p?'商品を編集':'商品を追加'}</h2>
+  <div class="row2" style="margin-top:18px"><div class="field"><label>商品名</label><input id="f_name" value="${esc(e.name||'')}"></div>
+  <div class="field"><label>SKU</label><input id="f_sku" value="${esc(e.sku||'')}"></div></div>
+  <div class="field"><label>バリエーション・容量</label><input id="f_var" value="${esc(e.variant||'')}"></div>
+  <div class="row2"><div class="field"><label>卸価格（税抜・円）</label><input id="f_price" type="number" value="${e.wholesale_price||''}"></div>
+  <div class="field"><label>単位</label><input id="f_unit" value="${esc(e.unit||'本')}"></div></div>
+  <div class="row2"><div class="field"><label>最低発注数</label><input id="f_moq" type="number" value="${e.moq||1}"></div>
+  <div class="field"><label>入数（発注単位）</label><input id="f_lot" type="number" value="${e.case_lot||1}"></div></div>
+  <div class="field"><label>説明</label><textarea id="f_desc">${esc(e.description||'')}</textarea></div>
+  <div class="field"><label><input type="checkbox" id="f_active" ${(!p||e.active)?'checked':''} style="width:auto;margin-right:8px">公開する（取引先に表示）</label></div>
+  <button class="btn" onclick="saveProd(${p?e.id:'null'})">保存</button>`;}
+window.saveProd=async id=>{const g=x=>$('#'+x).value.trim();
+  const body={id,name:g('f_name'),sku:g('f_sku'),variant:g('f_var'),wholesale_price:parseInt($('#f_price').value)||0,
+    unit:g('f_unit')||'本',moq:parseInt($('#f_moq').value)||1,case_lot:parseInt($('#f_lot').value)||1,
+    description:g('f_desc'),active:$('#f_active').checked?1:0};
+  if(!body.name){alert('商品名を入力してください');return}
+  const r=await api('/api/admin/products',{method:'POST',body:JSON.stringify(body)});
+  if(r.ok){closeOv();loadProducts()}else{const d=await r.json();alert(d.error||'失敗')}}
+
+/* 製造発注一覧 */
+async function loadPO(){
+  $('#poLoad').classList.remove('hidden');$('#poTbl').classList.add('hidden');$('#poEmpty').classList.add('hidden');
+  const r=await api('/api/admin/production-orders'); const d=await r.json(); const o=d.production_orders||[];
+  $('#poLoad').classList.add('hidden');
+  if(!o.length){$('#poEmpty').classList.remove('hidden');return}
+  $('#poTbl').classList.remove('hidden');
+  $('#poBody').innerHTML=o.map(x=>`<tr><td class="ono">${esc(x.po_no)}</td><td>${esc(x.manufacturer)}</td>
+    <td>${esc(x.order_no||'—')}</td><td>${esc(x.status)}</td><td>${(x.created_at||'').slice(0,10)}</td></tr>`).join('');
+}
+
+if(TOKEN) enter();
+</script>
+</body>
+</html>
