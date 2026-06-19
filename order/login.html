@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>取引先ログイン｜株式会社Next Innovation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@400;500;600&family=Noto+Serif+JP:wght@300;400;500&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="portal.css">
+</head>
+<body>
+<div class="p-head">
+  <a href="../index.html" class="p-brand">Next <em>Innovation</em><span class="tag">Partner Portal</span></a>
+  <div class="right"><a href="../index.html">コーポレートサイト →</a></div>
+</div>
+
+<div class="auth-wrap">
+  <div class="auth-card">
+    <div class="auth-eyebrow">Partner Login</div>
+    <h1>取引先ログイン</h1>
+    <p class="sub">承認済みの取引先アカウントでログインしてください。発注・注文状況の確認ができます。</p>
+
+    <div id="msg" class="msg err hidden"></div>
+
+    <div class="field">
+      <label>メールアドレス</label>
+      <input type="email" id="email" autocomplete="username" placeholder="you@salon.jp">
+    </div>
+    <div class="field">
+      <label>パスワード</label>
+      <input type="password" id="pw" autocomplete="current-password" placeholder="••••••••">
+    </div>
+    <button class="btn" id="go">ログイン</button>
+
+    <div class="auth-foot">
+      取引をご希望の方は <a href="register.html">取引申請</a><br>
+      <span style="color:var(--stone-light)">承認後にログインいただけます</span>
+    </div>
+  </div>
+</div>
+
+<script src="config.js"></script>
+<script>
+const $=s=>document.querySelector(s);
+const msg=$('#msg');
+function showErr(t){msg.textContent=t;msg.classList.remove('hidden')}
+async function login(){
+  const email=$('#email').value.trim(), pw=$('#pw').value;
+  if(!email||!pw){showErr('メールアドレスとパスワードを入力してください');return}
+  $('#go').disabled=true; msg.classList.add('hidden');
+  try{
+    const r=await fetch(NX_API+'/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,pw})});
+    const d=await r.json();
+    if(!r.ok){showErr(d.error||'ログインに失敗しました');$('#go').disabled=false;return}
+    localStorage.setItem('nx_token',d.token);
+    localStorage.setItem('nx_salon',d.salon_name||'');
+    location.href='mypage.html';
+  }catch(e){showErr('サーバーに接続できません');$('#go').disabled=false}
+}
+$('#go').addEventListener('click',login);
+$('#pw').addEventListener('keydown',e=>{if(e.key==='Enter')login()});
+if(localStorage.getItem('nx_token')) location.href='mypage.html';
+</script>
+</body>
+</html>
