@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>マイページ｜株式会社Next Innovation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@400;500;600&family=Noto+Serif+JP:wght@300;400;500&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="portal.css">
+</head>
+<body>
+<div class="p-head">
+  <a href="../index.html" class="p-brand">Next <em>Innovation</em><span class="tag">Partner Portal</span></a>
+  <div class="right"><span id="hwho"></span><span class="logout" id="logout">ログアウト</span></div>
+</div>
+
+<div class="app">
+  <div class="app-head">
+    <h1>マイページ</h1>
+    <div class="who">取引先：<b id="who">—</b></div>
+  </div>
+  <div class="app-sub">商品の発注、注文状況の確認ができます。お支払いは月締めのご請求にて承ります。</div>
+
+  <div class="tabs">
+    <button class="tab active" data-p="order">発注する</button>
+    <button class="tab" data-p="history">注文履歴</button>
+    <button class="tab" data-p="account">アカウント</button>
+  </div>
+
+  <!-- 発注 -->
+  <div class="panel active" id="p-order">
+    <div id="prodLoad" class="center"><div class="spin"></div></div>
+    <div id="prodWrap" class="hidden">
+      <div class="prod-list" id="prodList"></div>
+      <div class="field" style="margin-top:24px;max-width:480px">
+        <label>希望納品日（任意）</label>
+        <input type="date" id="desired">
+      </div>
+      <div class="field" style="max-width:600px">
+        <label>備考（任意）</label>
+        <textarea id="onote" placeholder="納品先・分納希望など"></textarea>
+      </div>
+      <div class="cart-bar">
+        <div class="sum">発注合計（税抜）<b><span class="yen">¥</span><span id="total">0</span></b></div>
+        <div class="actions">
+          <button class="btn ghost sm" id="clear">クリア</button>
+          <button class="btn sm" id="submit">この内容で発注する</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 履歴 -->
+  <div class="panel" id="p-history">
+    <div id="histLoad" class="center"><div class="spin"></div></div>
+    <table class="tbl hidden" id="histTbl">
+      <thead><tr><th>注文番号</th><th>発注日</th><th>点数</th><th>金額(税抜)</th><th>状況</th><th></th></tr></thead>
+      <tbody id="histBody"></tbody>
+    </table>
+    <div class="empty hidden" id="histEmpty">注文履歴はまだありません。</div>
+  </div>
+
+  <!-- アカウント -->
+  <div class="panel" id="p-account">
+    <dl class="dl" id="acctDl" style="max-width:560px;border-top:1px solid var(--line)"></dl>
+    <p style="font-size:12px;color:var(--stone)">登録情報の変更は当社までご連絡ください。</p>
+  </div>
+</div>
+
+<!-- 注文詳細モーダル -->
+<div class="ov hidden" id="ov"><div class="box" id="ovBox"></div></div>
+
+<footer class="p-foot">© 2026 Next Innovation Inc. — Partner Portal</footer>
+
+<script src="config.js"></script>
+<script>
+const $=s=>document.querySelector(s), $$=s=>document.querySelectorAll(s);
+const TOKEN=localStorage.getItem('nx_token');
+if(!TOKEN) location.href='login.html';
+const H={'Authorization':'Bearer '+TOKEN,'Content-Type':'application/json'};
+const yen=n=>Number(n||0).toLocaleString('ja-JP');
+const STAT={received:'受注',production:'製造発注済',shipped:'出荷済',completed:'完了',cancelled:'キャンセル'};
+
+let products=[], qty={};
+
+function logout(){localStorage.removeItem('nx_token');localStorage.removeItem('nx_salon');location.href='login.html'}
+$('#logout').addEventListener('click',logout);
+
+$$('.tab').forEach(t=>t.addEventListener('click',()=>{
+  $$('.tab').forEach(x=>x.classList.remove('active')); t.classList.add('active');
+  $$('.panel').forEach(p=>p.classList.remove('active'));
+  $('#p-'+t.dataset.p).classList.add('active');
+  if(t.dataset.p==='history') loadHistory();
+  if(t.dataset.p==='account') loadAccount();
+}));
+
+async function api(path,opt={}){
+  const r=await fetch(NX_API+path,{headers:H,...opt});
+  if(r.status===401){logout();throw new Error('auth')}
+  return r;
+}
+
+async function loadMe(){
+  try{const r=await api('/api/me');const d=await r.json();
+    $('#who').textContent=d.salon_name; $('#hwho').textContent=d.salon_name;}
+  catch(e){}
+}
+
+async function loadProducts(){
+  try{
+    const r=await api('/api/products'); const d=await r.json();
+    products=d.products||[];
+    const wrap=$('#prodList'); wrap.innerHTML='';
+    if(!products.length){wrap.innerHTML='<div class="empty">現在発注可能な商品がありません。</div>';}
+    products.forEach(p=>{
+      const unset=!p.wholesale_price;
+      const el=document.createElement('div'); el.className='prod';
+      el.innerHTML=`<div class="pinfo"><h3>${esc(p.name)}</h3>
+        <div class="en">${esc(p.variant||'')}</div>
+        <div class="meta">SKU ${esc(p.sku||'-')}　最低発注 ${p.moq||1}${esc(p.unit||'本')}${p.case_lot>1?'　/ '+p.case_lot+esc(p.unit||'本')+'単位':''}</div></div>
+        <div class="price">${unset?'<span class="unset">卸価格 未設定</span>':`<span class="yen">¥</span>${yen(p.wholesale_price)} <span class="unit">/ ${esc(p.unit||'本')}</span>`}</div>
+        <div class="qty">${unset?'<span class="u">発注不可</span>':`<input type="number" min="0" step="${p.case_lot||1}" value="0" data-id="${p.id}"><span class="u">${esc(p.unit||'本')}</span>`}</div>`;
+      wrap.appendChild(el);
+    });
+    wrap.querySelectorAll('input[data-id]').forEach(i=>i.addEventListener('input',()=>{qty[i.dataset.id]=Math.max(0,parseInt(i.value)||0);calc()}));
+    $('#prodLoad').classList.add('hidden'); $('#prodWrap').classList.remove('hidden');
+  }catch(e){$('#prodLoad').innerHTML='<div class="empty">商品の読み込みに失敗しました。</div>';}
+}
+
+function calc(){
+  let t=0; products.forEach(p=>{const q=qty[p.id]||0; t+=q*(p.wholesale_price||0)});
+  $('#total').textContent=yen(t);
+}
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+
+$('#clear').addEventListener('click',()=>{qty={};$$('input[data-id]').forEach(i=>i.value=0);calc()});
+
+$('#submit').addEventListener('click',async()=>{
+  const items=products.filter(p=>(qty[p.id]||0)>0).map(p=>({product_id:p.id,qty:qty[p.id]}));
+  if(!items.length){alert('発注する数量を入力してください');return}
+  for(const p of products){const q=qty[p.id]||0; if(q>0 && q<(p.moq||1)){alert(`${p.name} は最低 ${p.moq}${p.unit||'本'} からの発注です`);return}}
+  $('#submit').disabled=true;
+  try{
+    const r=await api('/api/orders',{method:'POST',body:JSON.stringify({items,desired_date:$('#desired').value,note:$('#onote').value.trim()})});
+    const d=await r.json();
+    if(!r.ok){alert(d.error||'発注に失敗しました');$('#submit').disabled=false;return}
+    qty={};$$('input[data-id]').forEach(i=>i.value=0);calc();$('#onote').value='';$('#desired').value='';
+    alert('発注を受け付けました。\n注文番号：'+d.order_no);
+    $('#submit').disabled=false;
+    $('.tab[data-p="history"]').click();
+  }catch(e){alert('送信に失敗しました');$('#submit').disabled=false}
+});
+
+let histLoaded=false;
+async function loadHistory(){
+  if(histLoaded) return; histLoaded=true;
+  try{
+    const r=await api('/api/orders'); const d=await r.json();
+    const o=d.orders||[];
+    $('#histLoad').classList.add('hidden');
+    if(!o.length){$('#histEmpty').classList.remove('hidden');return}
+    $('#histTbl').classList.remove('hidden');
+    $('#histBody').innerHTML=o.map(x=>`<tr>
+      <td class="ono">${esc(x.order_no)}</td>
+      <td>${(x.created_at||'').slice(0,10)}</td>
+      <td>${x.item_count}点</td>
+      <td class="amt">¥${yen(x.subtotal)}</td>
+      <td><span class="pill ${x.status}">${STAT[x.status]||x.status}</span></td>
+      <td><button class="btn ghost sm" onclick="detail('${esc(x.order_no)}')">詳細</button></td></tr>`).join('');
+  }catch(e){$('#histLoad').innerHTML='<div class="empty">読み込みに失敗しました。</div>';}
+}
+
+window.detail=async function(no){
+  $('#ov').classList.remove('hidden'); $('#ovBox').innerHTML='<div class="center"><div class="spin"></div></div>';
+  try{
+    const r=await api('/api/orders/'+encodeURIComponent(no)); const d=await r.json();
+    const o=d.order;
+    $('#ovBox').innerHTML=`<span class="x" onclick="closeOv()">×</span>
+      <h2>${esc(o.order_no)}</h2>
+      <div class="dl">
+        <dt>発注日</dt><dd>${(o.created_at||'').slice(0,16).replace('T',' ')}</dd>
+        <dt>状況</dt><dd><span class="pill ${o.status}">${STAT[o.status]||o.status}</span></dd>
+        <dt>希望納品</dt><dd>${o.desired_date||'指定なし'}</dd>
+        <dt>備考</dt><dd>${esc(o.note||'—')}</dd>
+      </div>
+      <table class="tbl"><thead><tr><th>商品</th><th>単価</th><th>数量</th><th>金額</th></tr></thead>
+      <tbody>${(o.items||[]).map(i=>`<tr><td>${esc(i.product_name)}</td><td class="amt">¥${yen(i.unit_price)}</td><td>${i.qty}</td><td class="amt">¥${yen(i.amount)}</td></tr>`).join('')}</tbody></table>
+      <div style="text-align:right;margin-top:14px;font-family:var(--serif);font-size:20px">合計（税抜） ¥${yen(o.subtotal)}</div>`;
+  }catch(e){$('#ovBox').innerHTML='<span class="x" onclick="closeOv()">×</span><div class="empty">読み込みに失敗しました。</div>';}
+}
+window.closeOv=()=>$('#ov').classList.add('hidden');
+$('#ov').addEventListener('click',e=>{if(e.target.id==='ov')closeOv()});
+
+let acctLoaded=false;
+async function loadAccount(){
+  if(acctLoaded)return; acctLoaded=true;
+  try{const r=await api('/api/me');const d=await r.json();
+    $('#acctDl').innerHTML=`
+      <dt>取引先コード</dt><dd>${esc(d.code||'—')}</dd>
+      <dt>店舗・会社名</dt><dd>${esc(d.salon_name)}</dd>
+      <dt>ご担当者</dt><dd>${esc(d.contact_name||'—')}</dd>
+      <dt>メール</dt><dd>${esc(d.email)}</dd>
+      <dt>電話</dt><dd>${esc(d.phone||'—')}</dd>
+      <dt>所在地</dt><dd>${esc(d.postal? '〒'+d.postal+' ':'')}${esc(d.address||'—')}</dd>`;
+  }catch(e){}
+}
+
+loadMe(); loadProducts(); calc();
+</script>
+</body>
+</html>
