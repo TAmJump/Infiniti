@@ -1,0 +1,13 @@
+name = "next-api"
+main = "worker.js"
+compatibility_date = "2025-01-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "next-orders"
+database_id = "REPLACE_WITH_D1_DATABASE_ID"
+
+# vars は secret で投入（下記 SETUP.md 参照）:
+#   SESSION_SECRET   必須
+#   RESEND_API_KEY   任意（メール通知）
+#   MAIL_FROM        任意
