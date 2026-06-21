@@ -1,9 +1,9 @@
 /* Next Innovation — 取引先ポータル 共通スタイル（ハウス標準：温白系エディトリアル） */
 :root{
-  --paper:#f6f3ec; --bone:#efe8dc; --card:#fbf9f4;
-  --ink:#1b1916; --ink-soft:#403b34; --stone:#73695c; --stone-light:#9a9082;
-  --line:#ddd4c5; --line-soft:#e7dfd1;
-  --coral:#cf4747; --coral-deep:#b13838;
+  --paper:#ffffff; --bone:#fdeef0; --card:#fff7f5;
+  --ink:#33272b; --ink-soft:#5e4d53; --stone:#7a676d; --stone-light:#9b8990;
+  --line:#f1dbe0; --line-soft:#f7e7ea;
+  --coral:#d56b82; --coral-deep:#bb5570;
   --ok:#3f7a52; --warn:#b8862f;
   --serif:'Fraunces',serif; --jp-serif:'Noto Serif JP',serif;
   --jp-sans:'Zen Kaku Gothic New',sans-serif; --sans:'Inter','Zen Kaku Gothic New',sans-serif;
@@ -42,8 +42,8 @@ a{color:inherit;text-decoration:none}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 @media(max-width:520px){.row2{grid-template-columns:1fr}}
 
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;width:100%;background:var(--ink);color:var(--paper);border:none;padding:14px 20px;font-family:var(--sans);font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:background .25s}
-.btn:hover{background:var(--coral)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;width:100%;background:var(--coral);color:#fff;border:none;padding:14px 20px;font-family:var(--sans);font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:background .25s;border-radius:2px}
+.btn:hover{background:var(--coral-deep)}
 .btn:disabled{opacity:.5;cursor:default}
 .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
 .btn.ghost:hover{border-color:var(--coral);color:var(--coral);background:transparent}
@@ -131,7 +131,7 @@ a{color:inherit;text-decoration:none}
 .filter{display:flex;gap:2px;border:1px solid var(--line)}
 .filter button{background:none;border:none;padding:8px 14px;font-size:11px;font-weight:600;color:var(--stone);cursor:pointer;border-right:1px solid var(--line)}
 .filter button:last-child{border-right:none}
-.filter button.on{background:var(--ink);color:var(--paper)}
+.filter button.on{background:var(--coral);color:#fff}
 
 footer.p-foot{border-top:1px solid var(--line);padding:30px clamp(18px,4vw,44px);font-size:11px;color:var(--stone-light);letter-spacing:.05em}
 .spin{display:inline-block;width:30px;height:30px;border:2px solid var(--line);border-top-color:var(--coral);border-radius:50%;animation:sp .8s linear infinite}
