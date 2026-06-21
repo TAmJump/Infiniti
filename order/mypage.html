@@ -167,7 +167,7 @@ async function loadHistory(){
       <td>${x.item_count}点</td>
       <td class="amt">¥${yen(x.subtotal)}</td>
       <td><span class="pill ${x.status}">${STAT[x.status]||x.status}</span></td>
-      <td><button class="btn ghost sm" onclick="detail('${esc(x.order_no)}')">詳細</button></td></tr>`).join('');
+      <td style="white-space:nowrap"><button class="btn ghost sm" onclick="detail('${esc(x.order_no)}')">詳細</button> <button class="btn sm" onclick="reorder('${esc(x.order_no)}')">再注文</button></td></tr>`).join('');
   }catch(e){$('#histLoad').innerHTML='<div class="empty">読み込みに失敗しました。</div>';}
 }
 
@@ -191,6 +191,29 @@ window.detail=async function(no){
 }
 window.closeOv=()=>$('#ov').classList.add('hidden');
 $('#ov').addEventListener('click',e=>{if(e.target.id==='ov')closeOv()});
+
+// ASKUL/たのめーる型：過去注文の内容を発注フォームに読み込む
+window.reorder=async function(no){
+  try{
+    const r=await api('/api/orders/'+encodeURIComponent(no)); const d=await r.json();
+    const items=(d.order&&d.order.items)||[];
+    let loaded=0, skipped=0;
+    qty={}; $$('input[data-id]').forEach(i=>i.value=0);
+    items.forEach(it=>{
+      const p=products.find(x=>x.name===it.product_name);
+      if(p && p.wholesale_price){
+        qty[p.id]=(qty[p.id]||0)+it.qty;
+        const inp=document.querySelector(`input[data-id="${p.id}"]`);
+        if(inp) inp.value=qty[p.id];
+        loaded++;
+      } else skipped++;
+    });
+    calc();
+    $('.tab[data-p="order"]').click();
+    window.scrollTo({top:0,behavior:'smooth'});
+    if(skipped) alert(`前回の内容を読み込みました。\n（現在取扱いのない ${skipped} 点は除外しました）`);
+  }catch(e){alert('再注文の読み込みに失敗しました')}
+}
 
 let acctLoaded=false;
 async function loadAccount(){
