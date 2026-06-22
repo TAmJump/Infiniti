@@ -5,7 +5,7 @@ compatibility_date = "2025-01-01"
 [[d1_databases]]
 binding = "DB"
 database_name = "next-orders"
-database_id = "REPLACE_WITH_D1_DATABASE_ID"
+database_id = "01ea16f0-aa4f-4d37-b9a0-8176e4ea17f1"
 
 # vars は secret で投入（下記 SETUP.md 参照）:
 #   SESSION_SECRET   必須
