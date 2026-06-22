@@ -193,6 +193,59 @@
   footer .f-links a:hover{color:var(--rose)}
   footer .f-copy{font-size:11px;letter-spacing:.08em;color:var(--muted);max-width:1320px;margin:24px auto 0;text-align:right}
 
+  /* ---- photos ---- */
+  .hero .hero-photo{position:absolute;right:0;top:0;bottom:0;width:46%;z-index:0;overflow:hidden}
+  .hero-photo img{width:100%;height:100%;object-fit:cover}
+  .hero-photo::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--white),rgba(255,255,255,.15) 52%,rgba(255,255,255,0))}
+  .hero>*{position:relative;z-index:2}
+  .hero h1,.hero-lead{max-width:min(620px,54vw)}
+
+  .prod-visual{padding:0}
+  .prod-visual img{width:100%;height:100%;object-fit:cover;display:block}
+  .prod-inset{position:absolute;left:-20px;bottom:-20px;width:138px;height:172px;border:6px solid var(--white);box-shadow:0 18px 40px rgba(120,60,70,.16);z-index:3;overflow:hidden;border-radius:2px}
+  .prod-inset img{width:100%;height:100%;object-fit:cover}
+
+  .salon-photos{display:grid;grid-template-columns:1.45fr 1fr;gap:18px;margin-bottom:clamp(40px,6vw,64px)}
+  .salon-photos .ph{overflow:hidden;border-radius:3px;aspect-ratio:16/11}
+  .salon-photos img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s}
+  .salon-photos .ph:hover img{transform:scale(1.05)}
+
+  .biz-card{padding:0;overflow:hidden}
+  .biz-photo{height:172px;overflow:hidden}
+  .biz-photo img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s}
+  .biz-card:hover .biz-photo img{transform:scale(1.06)}
+  .biz-body{padding:clamp(22px,2.5vw,32px) clamp(22px,2.6vw,34px) clamp(28px,3vw,38px);display:flex;flex-direction:column;min-height:184px}
+  .biz-body .idx{margin-bottom:14px}
+
+  /* ---- leadership ---- */
+  #leader{background:var(--cream)}
+  #leader .inner{max-width:1320px;margin:0 auto}
+  .leader-grid{display:grid;grid-template-columns:.92fr 1.2fr;gap:clamp(40px,6vw,84px);align-items:center}
+  .leader-portrait{position:relative}
+  .leader-portrait .frame{position:relative;z-index:2;overflow:hidden;border-radius:3px}
+  .leader-portrait .frame img{width:100%;display:block}
+  .leader-portrait::before{content:"";position:absolute;left:-18px;top:-18px;right:36px;bottom:36px;background:var(--panel);z-index:1}
+  .leader-portrait .cap{position:absolute;right:-6px;bottom:-16px;z-index:3;background:var(--rose);color:#fff;padding:13px 20px;font-family:var(--serif);font-style:italic;font-size:15px;box-shadow:0 12px 30px rgba(120,60,70,.18)}
+  .leader-info .eyebrow{font-size:11px;font-weight:600;letter-spacing:.24em;color:var(--rose);text-transform:uppercase;margin-bottom:16px}
+  .leader-info .name{font-family:var(--jp-serif);font-weight:500;font-size:clamp(30px,4vw,46px);color:var(--ink);line-height:1.1}
+  .leader-info .romaji{font-family:var(--serif);font-style:italic;font-size:14px;color:var(--muted);letter-spacing:.12em;margin:6px 0 24px}
+  .leader-info .lead{font-family:var(--jp-serif);font-weight:300;color:var(--ink-soft);line-height:2.15;margin-bottom:14px;max-width:56ch}
+  .leader-info .lead b{color:var(--ink);font-weight:500}
+  .tl{margin-top:30px;border-top:1px solid var(--line)}
+  .tl .it{display:grid;grid-template-columns:80px 1fr;gap:20px;padding:13px 0;border-bottom:1px solid var(--line)}
+  .tl .yr{font-family:var(--serif);font-style:italic;font-size:17px;color:var(--rose)}
+  .tl .ev{font-family:var(--jp-sans);font-size:13.5px;color:var(--ink-soft);line-height:1.7}
+  .tl .ev b{color:var(--ink);font-weight:700}
+  .tl .it.now .ev b{color:var(--rose)}
+
+  .leader-band{margin-top:clamp(44px,6vw,80px);display:grid;grid-template-columns:1fr 1.1fr;border:1px solid var(--line);background:var(--white);overflow:hidden;border-radius:3px}
+  .leader-band .ph{overflow:hidden;min-height:320px}
+  .leader-band .ph img{width:100%;height:100%;object-fit:cover;display:block}
+  .leader-band .quote{display:flex;flex-direction:column;justify-content:center;padding:clamp(34px,5vw,66px)}
+  .leader-band .quote .q{font-family:var(--serif);font-weight:300;font-size:clamp(25px,3.2vw,40px);line-height:1.32;color:var(--ink);letter-spacing:-.01em}
+  .leader-band .quote .q em{font-style:italic;color:var(--rose)}
+  .leader-band .quote .by{margin-top:22px;font-size:12px;letter-spacing:.1em;color:var(--muted)}
+
   @media(max-width:900px){
     nav.main{position:fixed;inset:72px 0 auto 0;flex-direction:column;align-items:flex-start;gap:0;background:var(--white);border-bottom:1px solid var(--line);padding:8px 0;transform:translateY(-130%);transition:transform .35s;pointer-events:none}
     nav.main.open{transform:none;pointer-events:auto}
@@ -202,6 +255,12 @@
     .nav-toggle{display:block}
     .message-grid,.prod-feature,.profile-grid{grid-template-columns:1fr}
     .biz-grid,.salon-steps,.salon-feat{grid-template-columns:1fr}
+    .leader-grid,.leader-band,.salon-photos{grid-template-columns:1fr}
+    .leader-portrait::before{display:none}
+    .leader-band .ph{min-height:240px}
+    .biz-body{min-height:auto}
+    .hero-photo{display:none}
+    .hero h1,.hero-lead{max-width:none}
     .message-grid .side{order:-1}
     .prod-visual{max-width:330px}
     .profile-table .row{grid-template-columns:120px 1fr;gap:12px}
@@ -219,6 +278,7 @@
     <a href="#product">Products</a>
     <a href="#salon">For Salon</a>
     <a href="#business">Business</a>
+    <a href="#leader">Leadership</a>
     <a href="#company">Company</a>
     <a href="#contact">Contact</a>
     <a href="order/login.html" class="nav-cta">取引先ログイン</a>
@@ -228,6 +288,7 @@
 
 <!-- HERO -->
 <section class="hero" id="top">
+  <div class="hero-photo"><img src="assets/hero.jpg" alt="Infinite Repair Serum"></div>
   <div class="hero-eyebrow"><span class="dash"></span>美容と健康の総合事業会社</div>
   <h1>
     <span class="line l1"><span>Beauty, refined</span></span>
@@ -284,8 +345,8 @@
     </div>
     <div class="prod-feature">
       <div class="prod-visual reveal">
-        <div class="ring r1"></div><div class="ring r2"></div><div class="ring r3"></div>
-        <div class="word"><div class="inf">Infinite</div><div class="ser">Repair Serum</div></div>
+        <img src="assets/product-main.jpg" alt="Infinite Repair Serum">
+        <div class="prod-inset"><img src="assets/silk.jpg" alt=""></div>
       </div>
       <div class="prod-info reveal">
         <div class="tag">Hair Care — Flagship</div>
@@ -311,6 +372,11 @@
       <div class="eyebrow">For Salon — Online Order</div>
       <h2>サロンの皆様へ<em>。</em></h2>
       <p>承認された取引先サロン様は、専用のID・パスワードでログインし、サロン専売プロダクトをオンラインでいつでもご発注いただけます。発注履歴の確認・かんたん再注文にも対応しています。</p>
+    </div>
+
+    <div class="salon-photos reveal">
+      <div class="ph"><img src="assets/salon-interior.jpg" alt="サロン内観"></div>
+      <div class="ph"><img src="assets/salon-hands.jpg" alt="施術の様子"></div>
     </div>
 
     <div class="salon-steps reveal">
@@ -340,12 +406,49 @@
   <div class="inner">
     <div class="sec-head reveal"><span class="sec-num">03</span><span class="sec-label">Business Domains</span><span class="sec-line"></span></div>
     <div class="biz-grid">
-      <div class="biz-card reveal"><span class="idx">i</span><h3>コスメティクス事業</h3><span class="en">Cosmetics</span><p>一般用化粧品・化粧薬品、および化粧用エアゾール製品の企画・製造販売。ヘアケアを起点に、肌と髪のためのプロダクトを展開します。</p></div>
-      <div class="biz-card reveal"><span class="idx">ii</span><h3>ファーマシューティカル事業</h3><span class="en">Pharmaceutical</span><p>医薬品および医薬部外品の製造販売。許認可と品質管理を前提に、効能と安全性を満たす製品づくりに取り組みます。</p></div>
-      <div class="biz-card reveal"><span class="idx">iii</span><h3>メディカルデバイス事業</h3><span class="en">Medical Devices</span><p>医療機器類の仕入・販売。医療・美容の現場で必要とされる機器を、信頼できる供給網を通じて届けます。</p></div>
-      <div class="biz-card reveal"><span class="idx">iv</span><h3>ビューティーサロン事業</h3><span class="en">Salon Management</span><p>美容室・理容室の経営管理。プロダクトとサービスをつなぎ、現場から得た知見を製品開発へ還元します。</p></div>
-      <div class="biz-card reveal"><span class="idx">v</span><h3>アニマルケア事業</h3><span class="en">Animal Care</span><p>動物用医薬部外品の製造販売。人だけでなく、ともに暮らす動物の健やかさにも貢献する製品を手がけます。</p></div>
-      <div class="biz-card reveal"><span class="idx">vi</span><h3>リテール・トレーディング事業</h3><span class="en">Retail &amp; Trading</span><p>関連事業に係る店舗の経営、ならびに製品の輸出入。国内外の流通を通じて事業基盤を広げます。</p></div>
+      <div class="biz-card reveal"><div class="biz-photo"><img src="assets/biz-cosmetics.jpg" alt=""></div><div class="biz-body"><span class="idx">i</span><h3>コスメティクス事業</h3><span class="en">Cosmetics</span><p>一般用化粧品・化粧薬品、および化粧用エアゾール製品の企画・製造販売。ヘアケアを起点に、肌と髪のためのプロダクトを展開します。</p></div></div>
+      <div class="biz-card reveal"><div class="biz-photo"><img src="assets/biz-pharma.jpg" alt=""></div><div class="biz-body"><span class="idx">ii</span><h3>ファーマシューティカル事業</h3><span class="en">Pharmaceutical</span><p>医薬品および医薬部外品の製造販売。許認可と品質管理を前提に、効能と安全性を満たす製品づくりに取り組みます。</p></div></div>
+      <div class="biz-card reveal"><div class="biz-photo"><img src="assets/biz-device.jpg" alt=""></div><div class="biz-body"><span class="idx">iii</span><h3>メディカルデバイス事業</h3><span class="en">Medical Devices</span><p>医療機器類の仕入・販売。医療・美容の現場で必要とされる機器を、信頼できる供給網を通じて届けます。</p></div></div>
+      <div class="biz-card reveal"><div class="biz-photo"><img src="assets/biz-salon.jpg" alt=""></div><div class="biz-body"><span class="idx">iv</span><h3>ビューティーサロン事業</h3><span class="en">Salon Management</span><p>美容室・理容室の経営管理。プロダクトとサービスをつなぎ、現場から得た知見を製品開発へ還元します。</p></div></div>
+      <div class="biz-card reveal"><div class="biz-photo"><img src="assets/biz-animal.jpg" alt=""></div><div class="biz-body"><span class="idx">v</span><h3>アニマルケア事業</h3><span class="en">Animal Care</span><p>動物用医薬部外品の製造販売。人だけでなく、ともに暮らす動物の健やかさにも貢献する製品を手がけます。</p></div></div>
+      <div class="biz-card reveal"><div class="biz-photo"><img src="assets/biz-retail.jpg" alt=""></div><div class="biz-body"><span class="idx">vi</span><h3>リテール・トレーディング事業</h3><span class="en">Retail &amp; Trading</span><p>関連事業に係る店舗の経営、ならびに製品の輸出入。国内外の流通を通じて事業基盤を広げます。</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- LEADERSHIP -->
+<section class="block alt" id="leader" style="max-width:none">
+  <div class="inner">
+    <div class="sec-head reveal"><span class="sec-num">04</span><span class="sec-label">Representative</span><span class="sec-line"></span></div>
+    <div class="leader-grid">
+      <div class="leader-portrait reveal">
+        <div class="frame"><img src="assets/okemoto-1.jpg" alt="代表取締役 桶本光司"></div>
+        <span class="cap">Representative Director</span>
+      </div>
+      <div class="leader-info reveal">
+        <div class="eyebrow">Founder &amp; Representative Director</div>
+        <div class="name">桶本 光司</div>
+        <div class="romaji">OKEMOTO MITSUSHI</div>
+        <p class="lead"><b>美容師として現場に立った日から、つくる側へ。</b></p>
+        <p class="lead">専門学校を卒業した1982年、自らのサロンを開業。以来40年以上にわたり、サロン経営とプロダクト開発の両輪で日本の美容業界を歩んできました。ヘアケアブランド「パイモア」、そしてサロン専売ブランド「ハホニコ」の創業をはじめ、数々のブランドを世に送り出してきた経験のすべてを、Next Innovation に注ぎ込みます。</p>
+        <div class="tl">
+          <div class="it"><span class="yr">1982</span><span class="ev">京都理美容専門学校 卒業　／　同年「<b>髪結処 異麗夢</b>」を開業</span></div>
+          <div class="it"><span class="yr">1992</span><span class="ev"><b>パイモア（PaiMore）</b> 立ち上げ・開発</span></div>
+          <div class="it"><span class="yr">1997</span><span class="ev"><b>株式会社ハホニコ（HAHONICO）</b> 設立・代表に就任</span></div>
+          <div class="it"><span class="yr">2002</span><span class="ev"><b>アレン</b> 開発</span></div>
+          <div class="it"><span class="yr">2003</span><span class="ev"><b>レガロア</b> 開業</span></div>
+          <div class="it"><span class="yr">2005</span><span class="ev"><b>十八番屋</b> 設立・代表に就任</span></div>
+          <div class="it now"><span class="yr">2026</span><span class="ev"><b>株式会社Next Innovation</b> 創業</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="leader-band reveal">
+      <div class="ph"><img src="assets/okemoto-2.jpg" alt="桶本光司"></div>
+      <div class="quote">
+        <div class="q">現場を知る者だけが、<br><em>次のスタンダード</em>を<br>つくれる。</div>
+        <div class="by">桶本 光司 — 代表取締役</div>
+      </div>
     </div>
   </div>
 </section>
@@ -353,7 +456,7 @@
 <!-- COMPANY -->
 <section class="block" id="company" style="max-width:none">
   <div class="inner">
-    <div class="sec-head reveal"><span class="sec-num">04</span><span class="sec-label">Company Profile</span><span class="sec-line"></span></div>
+    <div class="sec-head reveal"><span class="sec-num">05</span><span class="sec-label">Company Profile</span><span class="sec-line"></span></div>
     <div class="profile-grid">
       <div class="reveal">
         <div class="profile-lead">A company built to <em>last</em>.</div>
