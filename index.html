@@ -217,6 +217,24 @@
   .biz-body{padding:clamp(22px,2.5vw,32px) clamp(22px,2.6vw,34px) clamp(28px,3vw,38px);display:flex;flex-direction:column;min-height:184px}
   .biz-body .idx{margin-bottom:14px}
 
+  /* ---- business: editorial / portfolio rows ---- */
+  .biz-rows{display:flex;flex-direction:column;gap:clamp(64px,9vw,132px)}
+  .biz-row{display:grid;grid-template-columns:1.04fr 1fr;gap:clamp(40px,6vw,96px);align-items:center}
+  .biz-row:nth-child(even) .biz-visual{order:2}
+  .biz-visual{position:relative}
+  .biz-visual .pic{position:relative;z-index:2;overflow:hidden;border-radius:3px}
+  .biz-visual .pic img{width:100%;height:auto;display:block;transition:transform .9s cubic-bezier(.2,.7,.3,1)}
+  .biz-visual:hover .pic img{transform:scale(1.045)}
+  .biz-visual::before{content:"";position:absolute;z-index:1;background:var(--panel);transition:transform .6s}
+  .biz-row:nth-child(odd) .biz-visual::before{left:-24px;top:-24px;width:56%;height:64%}
+  .biz-row:nth-child(even) .biz-visual::before{right:-24px;bottom:-24px;width:56%;height:64%}
+  .biz-visual:hover::before{transform:translate(6px,6px)}
+  .biz-text .no{font-family:var(--serif);font-style:italic;font-weight:300;font-size:clamp(52px,7vw,104px);color:var(--blush);line-height:.82;letter-spacing:-.02em}
+  .biz-text h3{font-family:var(--jp-sans);font-weight:700;font-size:clamp(22px,2.8vw,32px);color:var(--ink);margin:14px 0 4px;letter-spacing:.01em}
+  .biz-text .en{display:inline-flex;align-items:center;gap:12px;font-family:var(--serif);font-style:italic;font-size:14px;color:var(--rose);margin-bottom:22px}
+  .biz-text .en::before{content:"";width:30px;height:1px;background:var(--rose)}
+  .biz-text p{font-family:var(--jp-serif);font-weight:300;font-size:clamp(13.5px,1.5vw,15px);line-height:2.1;color:var(--ink-soft);max-width:42ch}
+
   /* ---- leadership ---- */
   #leader{background:var(--cream)}
   #leader .inner{max-width:1320px;margin:0 auto}
@@ -255,6 +273,9 @@
     .nav-toggle{display:block}
     .message-grid,.prod-feature,.profile-grid{grid-template-columns:1fr}
     .biz-grid,.salon-steps,.salon-feat{grid-template-columns:1fr}
+    .biz-row{grid-template-columns:1fr;gap:22px}
+    .biz-row:nth-child(even) .biz-visual{order:0}
+    .biz-visual::before{display:none}
     .leader-grid,.leader-band,.salon-photos{grid-template-columns:1fr}
     .leader-portrait::before{display:none}
     .leader-band .ph{min-height:240px}
@@ -405,13 +426,13 @@
 <section class="block alt" id="business" style="max-width:none">
   <div class="inner">
     <div class="sec-head reveal"><span class="sec-num">03</span><span class="sec-label">Business Domains</span><span class="sec-line"></span></div>
-    <div class="biz-grid">
-      <div class="biz-card reveal"><div class="biz-photo"><img src="assets/biz-cosmetics.jpg" alt=""></div><div class="biz-body"><span class="idx">i</span><h3>コスメティクス事業</h3><span class="en">Cosmetics</span><p>一般用化粧品・化粧薬品、および化粧用エアゾール製品の企画・製造販売。ヘアケアを起点に、肌と髪のためのプロダクトを展開します。</p></div></div>
-      <div class="biz-card reveal"><div class="biz-photo"><img src="assets/biz-pharma.jpg" alt=""></div><div class="biz-body"><span class="idx">ii</span><h3>ファーマシューティカル事業</h3><span class="en">Pharmaceutical</span><p>医薬品および医薬部外品の製造販売。許認可と品質管理を前提に、効能と安全性を満たす製品づくりに取り組みます。</p></div></div>
-      <div class="biz-card reveal"><div class="biz-photo"><img src="assets/biz-device.jpg" alt=""></div><div class="biz-body"><span class="idx">iii</span><h3>メディカルデバイス事業</h3><span class="en">Medical Devices</span><p>医療機器類の仕入・販売。医療・美容の現場で必要とされる機器を、信頼できる供給網を通じて届けます。</p></div></div>
-      <div class="biz-card reveal"><div class="biz-photo"><img src="assets/biz-salon.jpg" alt=""></div><div class="biz-body"><span class="idx">iv</span><h3>ビューティーサロン事業</h3><span class="en">Salon Management</span><p>美容室・理容室の経営管理。プロダクトとサービスをつなぎ、現場から得た知見を製品開発へ還元します。</p></div></div>
-      <div class="biz-card reveal"><div class="biz-photo"><img src="assets/biz-animal.jpg" alt=""></div><div class="biz-body"><span class="idx">v</span><h3>アニマルケア事業</h3><span class="en">Animal Care</span><p>動物用医薬部外品の製造販売。人だけでなく、ともに暮らす動物の健やかさにも貢献する製品を手がけます。</p></div></div>
-      <div class="biz-card reveal"><div class="biz-photo"><img src="assets/biz-retail.jpg" alt=""></div><div class="biz-body"><span class="idx">vi</span><h3>リテール・トレーディング事業</h3><span class="en">Retail &amp; Trading</span><p>関連事業に係る店舗の経営、ならびに製品の輸出入。国内外の流通を通じて事業基盤を広げます。</p></div></div>
+    <div class="biz-rows">
+      <div class="biz-row reveal"><div class="biz-visual"><div class="pic"><img src="assets/biz-cosmetics.jpg" alt="コスメティクス事業"></div></div><div class="biz-text"><div class="no">01</div><h3>コスメティクス事業</h3><span class="en">Cosmetics</span><p>一般用化粧品・化粧薬品、および化粧用エアゾール製品の企画・製造販売。ヘアケアを起点に、肌と髪のためのプロダクトを展開します。</p></div></div>
+      <div class="biz-row reveal"><div class="biz-visual"><div class="pic"><img src="assets/biz-pharma.jpg" alt="ファーマシューティカル事業"></div></div><div class="biz-text"><div class="no">02</div><h3>ファーマシューティカル事業</h3><span class="en">Pharmaceutical</span><p>医薬品および医薬部外品の製造販売。許認可と品質管理を前提に、効能と安全性を満たす製品づくりに取り組みます。</p></div></div>
+      <div class="biz-row reveal"><div class="biz-visual"><div class="pic"><img src="assets/biz-device.jpg" alt="メディカルデバイス事業"></div></div><div class="biz-text"><div class="no">03</div><h3>メディカルデバイス事業</h3><span class="en">Medical Devices</span><p>医療機器類の仕入・販売。医療・美容の現場で必要とされる機器を、信頼できる供給網を通じて届けます。</p></div></div>
+      <div class="biz-row reveal"><div class="biz-visual"><div class="pic"><img src="assets/biz-salon.jpg" alt="ビューティーサロン事業"></div></div><div class="biz-text"><div class="no">04</div><h3>ビューティーサロン事業</h3><span class="en">Salon Management</span><p>美容室・理容室の経営管理。プロダクトとサービスをつなぎ、現場から得た知見を製品開発へ還元します。</p></div></div>
+      <div class="biz-row reveal"><div class="biz-visual"><div class="pic"><img src="assets/biz-animal.jpg" alt="アニマルケア事業"></div></div><div class="biz-text"><div class="no">05</div><h3>アニマルケア事業</h3><span class="en">Animal Care</span><p>動物用医薬部外品の製造販売。人だけでなく、ともに暮らす動物の健やかさにも貢献する製品を手がけます。</p></div></div>
+      <div class="biz-row reveal"><div class="biz-visual"><div class="pic"><img src="assets/biz-retail.jpg" alt="リテール・トレーディング事業"></div></div><div class="biz-text"><div class="no">06</div><h3>リテール・トレーディング事業</h3><span class="en">Retail &amp; Trading</span><p>関連事業に係る店舗の経営、ならびに製品の輸出入。国内外の流通を通じて事業基盤を広げます。</p></div></div>
     </div>
   </div>
 </section>
