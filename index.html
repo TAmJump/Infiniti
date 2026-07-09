@@ -359,6 +359,43 @@
 <section class="block alt" id="product" style="max-width:none">
   <div class="inner">
     <div class="sec-head reveal"><span class="sec-num">02</span><span class="sec-label">Products</span><span class="sec-line"></span></div>
+
+    <style>
+    .add-h{font-family:var(--serif);font-style:italic;font-size:clamp(22px,2.6vw,30px);color:var(--ink);margin-bottom:6px}
+    .add-sub{font-size:11px;letter-spacing:.18em;color:var(--muted);margin-bottom:26px;text-transform:uppercase}
+    .worry-band{margin:0 0 clamp(40px,6vw,60px)}
+    .worry-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+    .worry-item{display:flex;align-items:center;gap:13px;padding:16px 18px;border:1px solid var(--line);border-radius:4px;background:var(--white);font-size:14px;color:var(--ink-soft)}
+    .worry-item .ck{flex:0 0 22px;width:22px;height:22px;border-radius:50%;background:var(--panel);color:var(--rose);display:flex;align-items:center;justify-content:center}
+    .worry-item .ck svg{width:12px;height:12px}
+    .worry-close{margin-top:22px;font-family:var(--serif);font-style:italic;font-size:clamp(16px,2vw,21px);color:var(--ink)}
+    .trust-band{margin-top:clamp(44px,6vw,72px)}
+    .trust-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+    .trust-cell{padding:24px 22px;border:1px solid var(--line);border-radius:4px;background:var(--white)}
+    .trust-cell .lb{font-size:10px;letter-spacing:.18em;color:var(--muted);margin-bottom:10px}
+    .trust-cell .vl{font-size:15px;color:var(--ink);line-height:1.5;font-weight:600}
+    .trust-cell .vl small{display:block;font-weight:400;font-size:12px;color:var(--ink-soft);margin-top:5px}
+    @media(max-width:760px){.trust-grid{grid-template-columns:1fr}}
+    .cospa-band{margin-top:clamp(44px,6vw,72px);background:var(--cream);border:1px solid var(--line);border-radius:4px;padding:clamp(30px,5vw,46px)}
+    .cospa-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;text-align:center}
+    .cospa-num{font-family:var(--serif);font-size:clamp(30px,5vw,46px);color:var(--rose);line-height:1}
+    .cospa-lb{margin-top:12px;font-size:12.5px;color:var(--ink-soft)}
+    .cospa-note{margin-top:22px;text-align:center;font-size:11px;color:var(--muted)}
+    @media(max-width:600px){.cospa-grid{grid-template-columns:1fr;gap:20px}}
+    </style>
+    <div class="worry-band reveal">
+      <div class="add-h">こんな髪の悩み、ありませんか？</div>
+      <div class="add-sub">Hair Concerns</div>
+      <div class="worry-grid">
+        <div class="worry-item"><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l5 5L20 6"/></svg></span>乾燥によるパサつき・広がり</div>
+        <div class="worry-item"><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l5 5L20 6"/></svg></span>まとまらない・扱いにくい</div>
+        <div class="worry-item"><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l5 5L20 6"/></svg></span>ハリ・コシが足りない</div>
+        <div class="worry-item"><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l5 5L20 6"/></svg></span>ツヤ・指通りが欲しい</div>
+        <div class="worry-item"><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l5 5L20 6"/></svg></span>年齢とともに変わる髪質</div>
+      </div>
+      <div class="worry-close">ひとつでも当てはまるなら——サロン品質の手触りを、毎日に。</div>
+    </div>
+
     <div class="cat-row reveal">
       <span class="chip on">ヘアケア</span>
       <span class="chip">スタイリング</span>
@@ -383,6 +420,19 @@
           <div class="row"><dt>Channel</dt><dd>サロン専売 ／ 取引先オンライン発注</dd></div>
         </dl>
         <a href="order/login.html" class="more">取引先ログインして発注 →</a>
+      </div>
+    </div>
+
+    <div class="trust-band reveal">
+      <div class="add-h">選ばれる理由</div>
+      <div class="add-sub">Why INFINI WORLD</div>
+      <div class="trust-grid">
+        <div class="trust-cell"><div class="lb">CRAFTSMAN</div><div class="vl">美容ひと筋 40年<small>代表 桶本 光司</small></div></div>
+        <div class="trust-cell"><div class="lb">TRACK RECORD</div><div class="vl">歴任してきたブランド<small>パイモア／ハホニコ ほか</small></div></div>
+        <div class="trust-cell"><div class="lb">PROFESSIONAL</div><div class="vl">本来はサロン専売<small>プロ仕様のヘアトリートメント</small></div></div>
+        <div class="trust-cell"><div class="lb">MADE IN JAPAN</div><div class="vl">日本製<small>大容量 1,000mL</small></div></div>
+        <div class="trust-cell"><div class="lb">MANUFACTURING</div><div class="vl">製造販売元<small>メディカ・ウェーブ株式会社</small></div></div>
+        <div class="trust-cell"><div class="lb">LIMITED</div><div class="vl">今回だけ特別開放<small>数量限定で先行お届け</small></div></div>
       </div>
     </div>
 
@@ -481,6 +531,16 @@
       </div>
       <div class="sci-close">本数が増えるのではなく、<br>一本一本の“存在感”が増していく。</div>
       <p class="sci-note">※効果・実感には個人差があります。／用法：シャンプー後、タオルドライした髪に適量をなじませ、手ぐし・ブラシで整えてから乾かします（乾いた髪にも可）。</p>
+    </div>
+
+    <div class="cospa-band reveal">
+      <div class="add-h" style="text-align:center">サロン品質を、毎日の家で。</div>
+      <div class="cospa-grid">
+        <div><div class="cospa-num">1,000</div><div class="cospa-lb">mL ／ たっぷり大容量</div></div>
+        <div><div class="cospa-num">50–100</div><div class="cospa-lb">回分 ／ 1本の使用目安</div></div>
+        <div><div class="cospa-num">約2–3</div><div class="cospa-lb">ヶ月 ／ 毎日のケアでも</div></div>
+      </div>
+      <div class="cospa-note">※使用量・髪の長さ・回数により異なります。</div>
     </div>
   </div>
 </section>
