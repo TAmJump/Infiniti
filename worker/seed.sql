@@ -1,8 +1,9 @@
--- 初期データ：商品
--- 卸価格は 0（未設定）で登録。管理コンソールの「商品」から正式な卸価格を設定すると発注可能になる。
+-- 初期データ：商品（INFINI WORLD）
+-- 卸価格はサロン直販価格 13,000円（税抜）で登録。
+-- 価格や内容の変更は管理コンソールの「商品」から、または wrangler d1 execute で行う。
 
 INSERT INTO products (sku,name,variant,unit,wholesale_price,moq,case_lot,description,active,sort) VALUES
-('IRS-100','Infinite Repair Serum','洗い流さない ヘアダメージ保護セラム','本',0,1,1,'ケラチン × シルク × CMC 処方。ダメージ保護・手触り改善・つや感。',1,1);
+('IW-1000','INFINI WORLD','ヘアトリートメント（販売名：アンフィニ ワールド）／1000mL','本',13000,1,1,'本来サロン専売のプロ仕様ヘアトリートメント。ハリ・コシとまとまり、ツヤ・指通りへ。シャンプー後タオルドライした髪に塗布し、手ぐし／ブラシで整えて乾かす（乾いた髪にも可）。1000mL／日本製。',1,1);
 
--- 卸価格を設定する例（管理画面からでも可）:
--- UPDATE products SET wholesale_price=3800 WHERE sku='IRS-100';
+-- 卸価格を変更する例:
+-- UPDATE products SET wholesale_price=13000 WHERE sku='IW-1000';
