@@ -387,22 +387,27 @@
     </div>
 
     <style>
-    .ba-band{margin-top:clamp(40px,6vw,64px)}
-    .ba-head{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;margin-bottom:20px}
-    .ba-ey{font-family:var(--serif);font-style:italic;font-size:clamp(20px,2.4vw,28px);color:var(--ink)}
-    .ba-note{font-size:11px;letter-spacing:.02em;color:var(--muted)}
-    .ba-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-    .ba-grid figure{margin:0;overflow:hidden;border:1px solid var(--line);border-radius:3px;background:var(--white)}
-    .ba-grid img{width:100%;height:auto;display:block}
-    .ba-grid figcaption{padding:10px 12px;font-size:12px;color:var(--ink-soft);border-top:1px solid var(--line)}
-    @media(max-width:760px){.ba-grid{grid-template-columns:1fr}}
+    .ba-band{margin-top:clamp(44px,6vw,72px)}
+    .ba-head{display:flex;align-items:baseline;gap:18px;flex-wrap:wrap;margin-bottom:26px}
+    .ba-ey{font-family:var(--serif);font-style:italic;font-size:clamp(22px,2.6vw,30px);color:var(--ink)}
+    .ba-note{font-size:11px;letter-spacing:.04em;color:var(--muted)}
+    .ba-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+    .ba-grid figure{margin:0;background:var(--cream);border:1px solid var(--line);border-radius:4px;overflow:hidden}
+    .ba-im{position:relative;line-height:0}
+    .ba-im img{width:100%;height:auto;display:block}
+    .ba-im .lbl{position:absolute;top:12px;font-size:10px;letter-spacing:.22em;font-weight:600;color:var(--ink);background:rgba(255,255,255,.85);padding:5px 10px;border-radius:2px}
+    .ba-im .lbl.b{left:12px}
+    .ba-im .lbl.a{right:12px}
+    .ba-im::after{content:"";position:absolute;top:0;bottom:0;left:50%;width:1px;background:rgba(255,255,255,.92);transform:translateX(-.5px)}
+    .ba-grid figcaption{padding:14px 16px;font-size:12.5px;letter-spacing:.02em;color:var(--ink-soft);border-top:1px solid var(--line);background:var(--white)}
+    @media(max-width:760px){.ba-grid{grid-template-columns:1fr;gap:16px}}
     </style>
     <div class="ba-band reveal">
       <div class="ba-head"><span class="ba-ey">Before / After</span><span class="ba-note">写真は使用イメージです。効果や感じ方には個人差があります。</span></div>
       <div class="ba-grid">
-        <figure><img src="assets/ba-1.jpg" alt="使用イメージ ブリーチによる傷み"><figcaption>ブリーチによる傷み</figcaption></figure>
-        <figure><img src="assets/ba-2.jpg" alt="使用イメージ 年齢によるパサつき"><figcaption>年齢によるパサつき</figcaption></figure>
-        <figure><img src="assets/ba-3.jpg" alt="使用イメージ 細くペタつく髪"><figcaption>細くペタつく髪</figcaption></figure>
+        <figure><div class="ba-im"><img src="assets/ba-1.jpg" alt="使用イメージ ブリーチによる傷み"><span class="lbl b">BEFORE</span><span class="lbl a">AFTER</span></div><figcaption>ブリーチによる傷み</figcaption></figure>
+        <figure><div class="ba-im"><img src="assets/ba-2.jpg" alt="使用イメージ 年齢によるパサつき"><span class="lbl b">BEFORE</span><span class="lbl a">AFTER</span></div><figcaption>年齢によるパサつき</figcaption></figure>
+        <figure><div class="ba-im"><img src="assets/ba-3.jpg" alt="使用イメージ 細くペタつく髪"><span class="lbl b">BEFORE</span><span class="lbl a">AFTER</span></div><figcaption>細くペタつく髪</figcaption></figure>
       </div>
     </div>
 
