@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>紹介パートナー 動作確認｜Next Innovation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@400;500;600&family=Noto+Serif+JP:wght@300;400;500&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="portal.css">
+<style>
+.step{border:1px solid var(--line);background:var(--card);padding:20px 22px;border-radius:3px;margin-bottom:16px}
+.step h3{font-family:var(--jp-sans);font-size:15px;font-weight:700;margin-bottom:6px}
+.step p{font-size:13px;color:var(--ink-soft);line-height:1.9;margin-bottom:14px}
+.step .out{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;background:var(--paper);border:1px solid var(--line);padding:12px;white-space:pre-wrap;word-break:break-all;margin-top:12px;color:var(--ink-soft);display:none}
+.step.ok{border-color:var(--ok)}
+.step.ng{border-color:var(--coral)}
+.step .num{font-family:var(--serif);font-size:12px;letter-spacing:.14em;color:var(--coral);text-transform:uppercase;margin-bottom:6px}
+.kv{font-size:13px;line-height:2;color:var(--ink-soft)}
+.kv b{color:var(--ink);font-family:ui-monospace,Menlo,Consolas,monospace}
+</style>
+</head>
+<body>
+<div class="p-head">
+  <a href="../index.html" class="p-brand">Next <em>Innovation</em><span class="tag">Partner Portal</span></a>
+  <div class="right"><a href="agent.html">紹介パートナー マイページ →</a></div>
+</div>
+
+<div class="app">
+  <div class="app-head"><h1>紹介パートナー 動作確認</h1></div>
+  <div class="app-sub">テスト用の紹介者を登録し、ログインまで通します。この画面は社内確認用です。</div>
+
+  <div class="step" id="s1">
+    <div class="num">Step 1</div>
+    <h3>テスト紹介者を登録する</h3>
+    <p>ランダムなメールアドレスでテスト用の紹介者を1件登録します。パスワードは <b>test12345</b> で固定です。登録直後は「承認待ち」なので、まだログインはできません。</p>
+    <button class="btn" id="b1">テスト紹介者を登録</button>
+    <div class="out" id="o1"></div>
+  </div>
+
+  <div class="step" id="s2">
+    <div class="num">Step 2</div>
+    <h3>管理コンソールで承認する</h3>
+    <p>管理コンソールの「紹介パートナー」タブを開き、いま登録した1件の <b>承認・コード発行</b> を押してください。AG-0001 形式のコードが発行されます。</p>
+    <a class="btn ghost" href="admin.html" target="_blank">管理コンソールを開く</a>
+  </div>
+
+  <div class="step" id="s3">
+    <div class="num">Step 3</div>
+    <h3>ログインして紹介コードを確認する</h3>
+    <p>承認が終わったら押してください。ログインしてマイページのデータを取得します。</p>
+    <button class="btn" id="b3">ログインして確認</button>
+    <div class="out" id="o3"></div>
+  </div>
+
+  <div class="step" id="s4">
+    <div class="num">Step 4</div>
+    <h3>紹介リンクで取引申請してみる</h3>
+    <p>Step 3 で表示された紹介リンクを開き、テスト用のサロンとして取引申請します。管理コンソールで承認 → そのアカウントでログインして発注すると、紹介報酬が自動計上されます。</p>
+    <div class="kv" id="o4">Step 3 を実行するとリンクが出ます。</div>
+  </div>
+
+  <div class="note-box">
+    テストで作ったデータは、管理コンソールから停止・却下できます。D1 から直接消す場合は
+    <b>DELETE FROM rewards WHERE agent_id=?;</b> → <b>DELETE FROM agents WHERE id=?;</b> の順で実行してください。
+  </div>
+</div>
+
+<script src="config.js"></script>
+<script>
+const $=s=>document.querySelector(s);
+const PW='test12345';
+let EMAIL=localStorage.getItem('nx_agent_test_email')||'';
+function out(id,txt,ok){const e=$('#o'+id);e.style.display='block';e.textContent=txt;
+  const s=$('#s'+id); s.classList.remove('ok','ng'); s.classList.add(ok?'ok':'ng');}
+
+$('#b1').addEventListener('click',async()=>{
+  $('#b1').disabled=true;
+  EMAIL='test-agent-'+Date.now()+'@example.com';
+  const b={name:'テスト紹介者 Tiger',kind:'individual',contact_name:'大下 甚',phone:'080-3080-9905',
+    email:EMAIL,postal:'362-0000',address:'埼玉県上尾市仲町1-7-8',
+    bank_name:'テスト銀行',bank_branch:'本店',bank_type:'普通',bank_number:'1234567',bank_holder:'テスト タロウ',
+    pw:PW,note:'動作確認用',agree:true};
+  try{
+    const r=await fetch(NX_API+'/api/agent/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});
+    const d=await r.json();
+    if(r.ok){
+      localStorage.setItem('nx_agent_test_email',EMAIL);
+      out(1,'登録しました。\n\nログインID：'+EMAIL+'\nパスワード：'+PW+'\n\n次に Step 2 で承認してください。',true);
+    }else{out(1,'失敗：'+(d.error||r.status),false);$('#b1').disabled=false}
+  }catch(e){out(1,'サーバーに接続できません',false);$('#b1').disabled=false}
+});
+
+$('#b3').addEventListener('click',async()=>{
+  if(!EMAIL){out(3,'先に Step 1 を実行してください',false);return}
+  $('#b3').disabled=true;
+  try{
+    const r=await fetch(NX_API+'/api/agent/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:EMAIL,pw:PW})});
+    const d=await r.json();
+    if(!r.ok){out(3,'ログイン不可：'+(d.error||r.status)+'\n\n承認がまだの場合は Step 2 を先に行ってください。',false);$('#b3').disabled=false;return}
+    localStorage.setItem('nx_agent_token',d.token);
+    localStorage.setItem('nx_agent_name',d.name||'');
+    const h={'Content-Type':'application/json','Authorization':'Bearer '+d.token};
+    const me=await (await fetch(NX_API+'/api/agent/me',{headers:h})).json();
+    const sm=await (await fetch(NX_API+'/api/agent/summary',{headers:h})).json();
+    out(3,'ログイン成功\n\n紹介コード：'+(me.agent_code||'未発行')
+      +'\n紹介報酬：'+Number(me.reward_per_unit||0).toLocaleString('ja-JP')+'円 / 本'
+      +'\n累計本数：'+(sm.summary?sm.summary.units:0)+' 本'
+      +'\n確定報酬：'+Number(sm.summary?sm.summary.confirmed:0).toLocaleString('ja-JP')+'円'
+      +'\n紹介した取引先：'+(sm.referred_accounts||0)+' 件'
+      +'\n\nマイページ：agent.html',true);
+    if(me.agent_code){
+      const link=location.origin+'/order/register.html?ref='+me.agent_code;
+      $('#o4').innerHTML='紹介リンク：<a href="'+link+'" target="_blank" style="color:var(--coral);text-decoration:underline">'+link+'</a>';
+    }
+  }catch(e){out(3,'サーバーに接続できません',false);$('#b3').disabled=false}
+});
+</script>
+</body>
+</html>
