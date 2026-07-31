@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>紹介パートナー登録｜株式会社Next Innovation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@400;500;600&family=Noto+Serif+JP:wght@300;400;500&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="portal.css">
+</head>
+<body>
+<div class="p-head">
+  <a href="../index.html" class="p-brand">Next <em>Innovation</em><span class="tag">Partner Portal</span></a>
+  <div class="right"><a href="agent-login.html">紹介パートナー ログイン →</a></div>
+</div>
+
+<div class="auth-wrap">
+  <div class="auth-card wide">
+    <div class="auth-eyebrow">Referral Partner Application</div>
+    <h1>紹介パートナー登録</h1>
+    <p class="sub">ご紹介いただいた取引先のご発注に対して、1本あたりの紹介報酬をお支払いします。登録は無料で、商品のご購入や登録料は一切不要です。</p>
+
+    <div class="note-box">
+      <b>お申し込みの流れ</b><br>
+      1. このフォームからご登録（無料）<br>
+      2. 当社にて確認後、<b>あなた専用の紹介コード</b>と紹介用リンクをメールでお送りします<br>
+      3. ご紹介先がそのリンクから取引申請・ご発注されると、本数に応じて報酬が計上されます<br>
+      4. マイページで本数と報酬をいつでも確認できます
+    </div>
+
+    <div id="msg" class="msg hidden"></div>
+
+    <div id="form">
+      <div class="row2">
+        <div class="field">
+          <label>お名前・屋号・会社名 <span class="req">*</span></label>
+          <input type="text" id="name" placeholder="山田 太郎 / ◯◯サロン">
+        </div>
+        <div class="field">
+          <label>区分 <span class="req">*</span></label>
+          <select id="kind">
+            <option value="individual">個人</option>
+            <option value="salon">サロン・美容室</option>
+            <option value="corp">法人</option>
+          </select>
+        </div>
+      </div>
+      <div class="row2">
+        <div class="field">
+          <label>ご担当者名</label>
+          <input type="text" id="contact" placeholder="法人・サロンの場合">
+        </div>
+        <div class="field">
+          <label>電話番号 <span class="req">*</span></label>
+          <input type="tel" id="phone" placeholder="090-0000-0000">
+        </div>
+      </div>
+      <div class="field">
+        <label>メールアドレス <span class="req">*</span></label>
+        <input type="email" id="email" placeholder="you@example.jp">
+        <div class="hint">ログインIDとして使用します</div>
+      </div>
+      <div class="row2">
+        <div class="field">
+          <label>郵便番号</label>
+          <input type="text" id="postal" placeholder="362-0000">
+        </div>
+        <div class="field">
+          <label>ご住所 <span class="req">*</span></label>
+          <input type="text" id="address" placeholder="埼玉県上尾市…">
+        </div>
+      </div>
+
+      <div class="field" style="margin-top:26px">
+        <label style="font-weight:600">報酬のお振込先</label>
+        <div class="hint">後からマイページで登録・変更もできます</div>
+      </div>
+      <div class="row2">
+        <div class="field"><label>金融機関名</label><input type="text" id="bank" placeholder="◯◯銀行"></div>
+        <div class="field"><label>支店名</label><input type="text" id="branch" placeholder="◯◯支店"></div>
+      </div>
+      <div class="row2">
+        <div class="field"><label>口座種別</label>
+          <select id="btype"><option value="">選択してください</option><option value="普通">普通</option><option value="当座">当座</option></select>
+        </div>
+        <div class="field"><label>口座番号</label><input type="text" id="bnum" placeholder="1234567"></div>
+      </div>
+      <div class="field"><label>口座名義（カナ）</label><input type="text" id="bholder" placeholder="ヤマダ タロウ"></div>
+
+      <div class="row2" style="margin-top:26px">
+        <div class="field">
+          <label>パスワード <span class="req">*</span></label>
+          <input type="password" id="pw" autocomplete="new-password" placeholder="8文字以上">
+        </div>
+        <div class="field">
+          <label>パスワード（確認） <span class="req">*</span></label>
+          <input type="password" id="pw2" autocomplete="new-password" placeholder="再入力">
+        </div>
+      </div>
+      <div class="field">
+        <label>ご紹介の予定・ご質問など</label>
+        <textarea id="note" placeholder="任意"></textarea>
+      </div>
+
+      <div class="field" style="margin-top:10px">
+        <label><input type="checkbox" id="agree" style="width:auto;margin-right:8px"><a href="agent-terms.html" target="_blank" style="color:var(--coral);text-decoration:underline">紹介パートナー規約</a>に同意します <span class="req">*</span></label>
+      </div>
+
+      <button class="btn" id="go">この内容で登録する</button>
+    </div>
+
+    <div id="done" class="hidden center" style="padding:30px 0">
+      <h2 style="font-family:var(--serif);font-size:24px;margin-bottom:14px">ご登録ありがとうございます</h2>
+      <p style="color:var(--ink-soft);line-height:2">内容を確認のうえ、紹介コードと紹介用リンクをメールでお送りします。<br>承認後は <a href="agent-login.html" style="color:var(--coral)">紹介パートナー ログイン</a> からご確認いただけます。</p>
+    </div>
+  </div>
+</div>
+
+<script src="config.js"></script>
+<script>
+const $=s=>document.querySelector(s);
+const msg=$('#msg');
+function show(t,ok){msg.textContent=t;msg.className='msg '+(ok?'ok':'err')}
+async function submit(){
+  const v=id=>$('#'+id).value.trim();
+  const b={name:v('name'),kind:v('kind'),contact_name:v('contact'),phone:v('phone'),email:v('email'),
+    postal:v('postal'),address:v('address'),
+    bank_name:v('bank'),bank_branch:v('branch'),bank_type:v('btype'),bank_number:v('bnum'),bank_holder:v('bholder'),
+    pw:$('#pw').value,note:v('note'),agree:$('#agree').checked};
+  if(!b.name||!b.phone||!b.email||!b.address||!b.pw){show('必須項目をご入力ください');return}
+  if(b.pw.length<8){show('パスワードは8文字以上でご設定ください');return}
+  if(b.pw!==$('#pw2').value){show('パスワードが一致しません');return}
+  if(!b.agree){show('紹介パートナー規約へのご同意が必要です');return}
+  $('#go').disabled=true;
+  try{
+    const r=await fetch(NX_API+'/api/agent/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});
+    const d=await r.json();
+    if(!r.ok){show(d.error||'登録に失敗しました');$('#go').disabled=false;return}
+    $('#form').classList.add('hidden'); msg.className='msg hidden'; $('#done').classList.remove('hidden');
+    window.scrollTo(0,0);
+  }catch(e){show('サーバーに接続できません');$('#go').disabled=false}
+}
+$('#go').addEventListener('click',submit);
+</script>
+</body>
+</html>

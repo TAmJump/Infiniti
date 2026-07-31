@@ -139,3 +139,20 @@ footer.p-foot{border-top:1px solid var(--line);padding:30px clamp(18px,4vw,44px)
 @keyframes sp{to{transform:rotate(360deg)}}
 .center{display:flex;justify-content:center;padding:60px}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ---- 紹介パートナー ---- */
+.score{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:26px}
+.score .s{border:1px solid var(--line);background:var(--card);padding:18px 20px;border-radius:3px}
+.score .s .k{font-size:11px;letter-spacing:.12em;color:var(--stone);text-transform:uppercase;margin-bottom:8px}
+.score .s .v{font-family:var(--serif);font-size:28px;line-height:1.1;color:var(--ink)}
+.score .s .v small{font-size:12px;color:var(--stone);margin-left:4px;font-family:var(--sans)}
+.score .s.hi{border-color:var(--coral)}
+.reflink{display:flex;flex-wrap:wrap;gap:10px;align-items:center;border:1px solid var(--line);background:var(--card);padding:16px 18px;border-radius:3px;margin-bottom:26px}
+.reflink .code{font-family:var(--serif);font-size:22px;letter-spacing:.04em}
+.reflink input{flex:1;min-width:220px;background:var(--paper);border:1px solid var(--line);padding:9px 11px;font-size:12px;color:var(--ink-soft)}
+.pill.confirmed{background:#eef4ef;color:var(--ok)}
+.pill.paid{background:#f6ecef;color:var(--coral-deep)}
+.pill.void{background:#f2eeef;color:var(--stone-light)}
+.pill.active{background:#eef4ef;color:var(--ok)}
+.note-box{border:1px solid var(--line);border-left:2px solid var(--coral);background:var(--card);padding:16px 18px;margin:20px 0;font-size:13px;line-height:1.9;color:var(--ink-soft)}
+.note-box b{color:var(--ink)}

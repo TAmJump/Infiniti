@@ -12,6 +12,7 @@
  */
 
 const TOKEN_TTL = 60 * 60 * 24 * 14; // 14日
+const AGENT_TERMS_VERSION = "1.0";
 const enc = new TextEncoder();
 
 /* ---------- utils ---------- */
@@ -93,6 +94,13 @@ async function authSalon(req, env) {
   if (!acc || acc.status !== "active") return null;
   return acc;
 }
+async function authAgent(req, env) {
+  const p = await verifyToken(bearer(req), env.SESSION_SECRET);
+  if (!p || p.role !== "agent") return null;
+  const a = await env.DB.prepare("SELECT * FROM agents WHERE id=?").bind(p.sub).first();
+  if (!a || a.status !== "active") return null;
+  return a;
+}
 async function authAdmin(req, env) {
   const p = await verifyToken(bearer(req), env.SESSION_SECRET);
   if (!p || p.role !== "admin") return null;
@@ -150,13 +158,26 @@ export default {
         if (String(b.pw).length < 8) return J({ error: "パスワードは8文字以上です" }, 400);
         const exists = await env.DB.prepare("SELECT id FROM accounts WHERE email=?").bind(b.email).first();
         if (exists) return J({ error: "このメールアドレスは既に登録されています" }, 409);
+        let ref = String(b.ref || "").trim().toUpperCase();
+        if (ref) {
+          const ag = await env.DB.prepare("SELECT agent_code FROM agents WHERE agent_code=? AND status='active'").bind(ref).first();
+          if (!ag) ref = "";
+        }
         const { hash, salt } = await hashPw(b.pw);
         await env.DB.prepare(
-          `INSERT INTO accounts (salon_name,contact_name,email,phone,postal,address,note,pw_hash,pw_salt,status,created_at)
-           VALUES (?,?,?,?,?,?,?,?,?, 'pending', ?)`
+          `INSERT INTO accounts (salon_name,contact_name,email,phone,postal,address,note,pw_hash,pw_salt,status,created_at,referred_by)
+           VALUES (?,?,?,?,?,?,?,?,?, 'pending', ?,?)`
         ).bind(b.salon_name, b.contact_name, b.email, b.phone, b.postal || "", b.address,
-               b.note || "", hash, salt, nowISO()).run();
-        return J({ ok: true });
+               b.note || "", hash, salt, nowISO(), ref).run();
+        return J({ ok: true, ref });
+      }
+
+      /* ---------- 紹介コードの照会（公開） ---------- */
+      if (path === "/api/ref/check" && m === "GET") {
+        const code = String(url.searchParams.get("code") || "").trim().toUpperCase();
+        if (!code) return J({ valid: false });
+        const ag = await env.DB.prepare("SELECT agent_code,name FROM agents WHERE agent_code=? AND status='active'").bind(code).first();
+        return J(ag ? { valid: true, agent_code: ag.agent_code, name: ag.name } : { valid: false });
       }
 
       /* ---------- 取引先ログイン ---------- */
@@ -219,6 +240,20 @@ export default {
             "INSERT INTO order_items (order_id,product_id,product_name,unit_price,qty,amount) VALUES (?,?,?,?,?,?)"
           ).bind(oid, l.product_id, l.product_name, l.unit_price, l.qty, l.amount).run();
         }
+        if (acc.referred_by) {
+          const ag = await env.DB.prepare("SELECT * FROM agents WHERE agent_code=? AND status='active'").bind(acc.referred_by).first();
+          if (ag) {
+            await env.DB.prepare("UPDATE orders SET agent_code=?, agent_id=? WHERE id=?").bind(ag.agent_code, ag.id, oid).run();
+            const units = lines.reduce((t, l) => t + l.qty, 0);
+            const per = ag.reward_per_unit || 0;
+            if (units > 0 && per > 0) {
+              await env.DB.prepare(
+                `INSERT INTO rewards (agent_id,agent_code,order_id,order_no,units,unit_reward,amount,kind,status,created_at)
+                 VALUES (?,?,?,?,?,?,?, 'unit','pending', ?)`
+              ).bind(ag.id, ag.agent_code, oid, order_no, units, per, units * per, nowISO()).run();
+            }
+          }
+        }
         await sendMail(env, acc.email, "ご発注を受け付けました｜Next Innovation",
           `${acc.salon_name} 様\n\nご発注を受け付けました。\n注文番号：${order_no}\n合計（税抜）：¥${subtotal.toLocaleString("ja-JP")}\n\nマイページにて状況をご確認いただけます。\n\n株式会社Next Innovation`);
         return J({ ok: true, order_no });
@@ -246,6 +281,86 @@ export default {
         const { results } = await env.DB.prepare("SELECT product_name,unit_price,qty,amount FROM order_items WHERE order_id=?").bind(o.id).all();
         o.items = results || [];
         return J({ order: o });
+      }
+
+      /* ====================== 紹介パートナー ====================== */
+      /* 登録（無料・商品購入不要） */
+      if (path === "/api/agent/register" && m === "POST") {
+        const b = await body();
+        for (const f of ["name", "email", "phone", "address", "pw"])
+          if (!b[f]) return J({ error: "必須項目が不足しています" }, 400);
+        if (String(b.pw).length < 8) return J({ error: "パスワードは8文字以上です" }, 400);
+        if (!b.agree) return J({ error: "規約への同意が必要です" }, 400);
+        const dup = await env.DB.prepare("SELECT id FROM agents WHERE email=?").bind(b.email).first();
+        if (dup) return J({ error: "このメールアドレスは既に登録されています" }, 409);
+        const { hash, salt } = await hashPw(b.pw);
+        await env.DB.prepare(
+          `INSERT INTO agents (name,kind,contact_name,email,phone,postal,address,
+             bank_name,bank_branch,bank_type,bank_number,bank_holder,
+             reward_per_unit,pw_hash,pw_salt,status,agreed_version,agreed_at,agreed_ip,agreed_ua,note,created_at)
+           VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?, 'pending', ?,?,?,?,?,?)`
+        ).bind(b.name, b.kind || "individual", b.contact_name || "", b.email, b.phone,
+               b.postal || "", b.address,
+               b.bank_name || "", b.bank_branch || "", b.bank_type || "", b.bank_number || "", b.bank_holder || "",
+               1000, hash, salt,
+               AGENT_TERMS_VERSION, nowISO(),
+               req.headers.get("CF-Connecting-IP") || "", (req.headers.get("User-Agent") || "").slice(0, 300),
+               b.note || "", nowISO()).run();
+        return J({ ok: true });
+      }
+
+      /* ログイン */
+      if (path === "/api/agent/login" && m === "POST") {
+        const b = await body();
+        const a = await env.DB.prepare("SELECT * FROM agents WHERE email=?").bind(b.email || "").first();
+        if (!a || !(await verifyPw(b.pw || "", a.pw_hash, a.pw_salt)))
+          return J({ error: "メールアドレスまたはパスワードが違います" }, 401);
+        if (a.status === "pending") return J({ error: "登録は審査中です。承認後にご利用いただけます" }, 403);
+        if (a.status !== "active") return J({ error: "このアカウントはご利用いただけません" }, 403);
+        const token = await signToken({ sub: a.id, role: "agent", exp: Math.floor(Date.now() / 1000) + TOKEN_TTL }, env.SESSION_SECRET);
+        return J({ token, name: a.name, agent_code: a.agent_code });
+      }
+
+      /* 自分の情報 */
+      if (path === "/api/agent/me" && m === "GET") {
+        const a = await authAgent(req, env);
+        if (!a) return J({ error: "unauthorized" }, 401);
+        return J({ agent_code: a.agent_code, name: a.name, email: a.email, phone: a.phone,
+                   postal: a.postal, address: a.address, reward_per_unit: a.reward_per_unit,
+                   bank_name: a.bank_name, bank_branch: a.bank_branch, bank_type: a.bank_type,
+                   bank_number: a.bank_number, bank_holder: a.bank_holder });
+      }
+
+      /* スコア集計 */
+      if (path === "/api/agent/summary" && m === "GET") {
+        const a = await authAgent(req, env);
+        if (!a) return J({ error: "unauthorized" }, 401);
+        const tot = await env.DB.prepare(
+          `SELECT COALESCE(SUM(units),0) units,
+                  COALESCE(SUM(CASE WHEN status='pending'   THEN amount ELSE 0 END),0) pending,
+                  COALESCE(SUM(CASE WHEN status='confirmed' THEN amount ELSE 0 END),0) confirmed,
+                  COALESCE(SUM(CASE WHEN status='paid'      THEN amount ELSE 0 END),0) paid,
+                  COALESCE(SUM(CASE WHEN status<>'void'     THEN amount ELSE 0 END),0) total
+           FROM rewards WHERE agent_id=?`).bind(a.id).first();
+        const intro = await env.DB.prepare(
+          "SELECT COUNT(*) c FROM accounts WHERE referred_by=?").bind(a.agent_code || "").first();
+        const { results: months } = await env.DB.prepare(
+          `SELECT substr(created_at,1,7) ym, SUM(units) units, SUM(amount) amount
+           FROM rewards WHERE agent_id=? AND status<>'void'
+           GROUP BY ym ORDER BY ym DESC LIMIT 12`).bind(a.id).all();
+        return J({ summary: tot, referred_accounts: intro ? intro.c : 0, months: months || [],
+                   reward_per_unit: a.reward_per_unit });
+      }
+
+      /* 報酬明細 */
+      if (path === "/api/agent/rewards" && m === "GET") {
+        const a = await authAgent(req, env);
+        if (!a) return J({ error: "unauthorized" }, 401);
+        const { results } = await env.DB.prepare(
+          `SELECT r.id,r.order_no,r.units,r.unit_reward,r.amount,r.kind,r.status,r.memo,r.created_at,r.paid_at,
+                  (SELECT salon_name FROM accounts WHERE id=(SELECT account_id FROM orders WHERE id=r.order_id)) salon_name
+           FROM rewards r WHERE r.agent_id=? ORDER BY r.id DESC`).bind(a.id).all();
+        return J({ rewards: results || [] });
       }
 
       /* ====================== ADMIN ====================== */
@@ -378,6 +493,85 @@ export default {
           }
           return J({ ok: true, po_no });
         }
+        /* 紹介パートナー: 一覧 */
+        if (path === "/api/admin/agents" && m === "GET") {
+          const st = url.searchParams.get("status");
+          const sql = `SELECT a.id,a.agent_code,a.name,a.kind,a.email,a.phone,a.address,a.status,
+                         a.reward_per_unit,a.agreed_version,a.agreed_at,a.created_at,
+                         a.bank_name,a.bank_branch,a.bank_type,a.bank_number,a.bank_holder,
+                         (SELECT COALESCE(SUM(units),0) FROM rewards WHERE agent_id=a.id AND status<>'void') units,
+                         (SELECT COALESCE(SUM(amount),0) FROM rewards WHERE agent_id=a.id AND status<>'void') amount,
+                         (SELECT COALESCE(SUM(amount),0) FROM rewards WHERE agent_id=a.id AND status='paid') paid
+                       FROM agents a ${st ? "WHERE a.status=?" : ""} ORDER BY a.id DESC`;
+          const q = st ? env.DB.prepare(sql).bind(st) : env.DB.prepare(sql);
+          const { results } = await q.all();
+          return J({ agents: results || [] });
+        }
+        /* 紹介パートナー: 承認（コード発行） */
+        let mAg = path.match(/^\/api\/admin\/agents\/(\d+)\/approve$/);
+        if (mAg && m === "POST") {
+          const a = await env.DB.prepare("SELECT * FROM agents WHERE id=?").bind(mAg[1]).first();
+          if (!a) return J({ error: "not found" }, 404);
+          const code = a.agent_code || ("AG-" + pad(await nextSeq(env, "agent"), 4));
+          await env.DB.prepare("UPDATE agents SET status='active', agent_code=?, approved_at=? WHERE id=?")
+            .bind(code, nowISO(), a.id).run();
+          const link = "https://nextinnovation.tamjump.com/order/register.html?ref=" + code;
+          await sendMail(env, a.email, "紹介パートナー登録を承認しました｜Next Innovation",
+            `${a.name} 様\n\n紹介パートナー登録を承認しました。\n\n紹介コード：${code}\n紹介用リンク：${link}\n\nご紹介先がこのリンクから取引申請し、ご発注されると報酬が計上されます。\nマイページで本数と報酬をご確認いただけます。\nhttps://nextinnovation.tamjump.com/order/agent.html\n\n株式会社Next Innovation`);
+          return J({ ok: true, agent_code: code });
+        }
+        /* 紹介パートナー: 却下 / 停止 / 再開 */
+        let mAs = path.match(/^\/api\/admin\/agents\/(\d+)\/(reject|suspend|activate)$/);
+        if (mAs && m === "POST") {
+          const st = mAs[2] === "reject" ? "rejected" : (mAs[2] === "suspend" ? "suspended" : "active");
+          await env.DB.prepare("UPDATE agents SET status=? WHERE id=?").bind(st, mAs[1]).run();
+          return J({ ok: true });
+        }
+        /* 紹介パートナー: 単価変更 */
+        let mAr = path.match(/^\/api\/admin\/agents\/(\d+)\/rate$/);
+        if (mAr && m === "POST") {
+          const b = await body();
+          const v = parseInt(b.reward_per_unit);
+          if (isNaN(v) || v < 0) return J({ error: "invalid" }, 400);
+          await env.DB.prepare("UPDATE agents SET reward_per_unit=? WHERE id=?").bind(v, mAr[1]).run();
+          return J({ ok: true });
+        }
+
+        /* 報酬: 一覧 */
+        if (path === "/api/admin/rewards" && m === "GET") {
+          const st = url.searchParams.get("status");
+          const sql = `SELECT r.*, a.name agent_name,
+                         (SELECT salon_name FROM accounts WHERE id=(SELECT account_id FROM orders WHERE id=r.order_id)) salon_name
+                       FROM rewards r JOIN agents a ON a.id=r.agent_id
+                       ${st ? "WHERE r.status=?" : ""} ORDER BY r.id DESC`;
+          const q = st ? env.DB.prepare(sql).bind(st) : env.DB.prepare(sql);
+          const { results } = await q.all();
+          return J({ rewards: results || [] });
+        }
+        /* 報酬: ステータス更新 */
+        let mRs = path.match(/^\/api\/admin\/rewards\/(\d+)\/status$/);
+        if (mRs && m === "POST") {
+          const b = await body();
+          const allowed = ["pending", "confirmed", "paid", "void"];
+          if (!allowed.includes(b.status)) return J({ error: "invalid status" }, 400);
+          await env.DB.prepare("UPDATE rewards SET status=?, paid_at=? WHERE id=?")
+            .bind(b.status, b.status === "paid" ? nowISO() : null, mRs[1]).run();
+          return J({ ok: true });
+        }
+        /* 報酬: 手動追加（ボーナス・調整） */
+        if (path === "/api/admin/rewards" && m === "POST") {
+          const b = await body();
+          const a = await env.DB.prepare("SELECT * FROM agents WHERE id=?").bind(b.agent_id).first();
+          if (!a) return J({ error: "紹介パートナーが見つかりません" }, 404);
+          const amt = parseInt(b.amount);
+          if (isNaN(amt)) return J({ error: "金額が不正です" }, 400);
+          await env.DB.prepare(
+            `INSERT INTO rewards (agent_id,agent_code,units,unit_reward,amount,kind,status,memo,created_at)
+             VALUES (?,?,0,0,?,?, 'confirmed', ?,?)`
+          ).bind(a.id, a.agent_code, amt, b.kind === "adjust" ? "adjust" : "bonus", b.memo || "", nowISO()).run();
+          return J({ ok: true });
+        }
+
         /* 製造発注: 一覧 */
         if (path === "/api/admin/production-orders" && m === "GET") {
           const { results } = await env.DB.prepare("SELECT * FROM production_orders ORDER BY id DESC").all();

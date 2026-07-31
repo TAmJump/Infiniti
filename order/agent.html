@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>紹介パートナー マイページ｜株式会社Next Innovation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@400;500;600&family=Noto+Serif+JP:wght@300;400;500&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="portal.css">
+</head>
+<body>
+<div class="p-head">
+  <a href="../index.html" class="p-brand">Next <em>Innovation</em><span class="tag">Partner Portal</span></a>
+  <div class="right"><span id="who" style="color:var(--stone)"></span> <a href="#" class="logout" id="lo">ログアウト</a></div>
+</div>
+
+<div class="app">
+  <div class="app-head">
+    <h1>紹介パートナー マイページ</h1>
+    <div class="app-sub" id="codeHead"></div>
+  </div>
+
+  <div class="reflink" id="refBox" style="display:none">
+    <div>
+      <div style="font-size:11px;letter-spacing:.12em;color:var(--stone);text-transform:uppercase">Your Code</div>
+      <div class="code" id="agCode">—</div>
+    </div>
+    <input type="text" id="agLink" readonly>
+    <button class="btn sm" id="copy">リンクをコピー</button>
+  </div>
+
+  <div class="score" id="score"></div>
+
+  <div class="tabs">
+    <button class="tab active" data-p="rw">報酬明細</button>
+    <button class="tab" data-p="mo">月別</button>
+    <button class="tab" data-p="ac">お振込先・登録情報</button>
+  </div>
+
+  <div class="panel active" id="p-rw">
+    <div id="rwLoad" class="empty">読み込み中…</div>
+    <table class="tbl hidden" id="rwTbl"><thead><tr><th>計上日</th><th>注文番号</th><th>紹介先</th><th>本数</th><th>単価</th><th>報酬</th><th>状態</th></tr></thead><tbody id="rwBody"></tbody></table>
+    <div class="note-box">
+      <b>状態について</b><br>
+      未確定：ご発注を受け付けた段階です。<br>
+      確定：出荷・ご入金の確認が取れ、お支払い対象として確定した状態です。<br>
+      支払済：お振込みが完了した状態です。<br>
+      報酬は毎月末締め・翌月末までのお振込みを予定しています。
+    </div>
+  </div>
+
+  <div class="panel" id="p-mo">
+    <table class="tbl" id="moTbl"><thead><tr><th>年月</th><th>本数</th><th>報酬</th></tr></thead><tbody id="moBody"></tbody></table>
+  </div>
+
+  <div class="panel" id="p-ac">
+    <div id="acBox"></div>
+  </div>
+</div>
+
+<script src="config.js"></script>
+<script>
+const $=s=>document.querySelector(s), $$=s=>document.querySelectorAll(s);
+const T=localStorage.getItem('nx_agent_token');
+if(!T) location.href='agent-login.html';
+const api=(p,o={})=>fetch(NX_API+p,{...o,headers:{'Content-Type':'application/json','Authorization':'Bearer '+T,...(o.headers||{})}});
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const yen=n=>Number(n||0).toLocaleString('ja-JP');
+const dt=s=>s?String(s).slice(0,10):'—';
+const ST={pending:'未確定',confirmed:'確定',paid:'支払済',void:'無効'};
+
+$('#lo').addEventListener('click',e=>{e.preventDefault();localStorage.removeItem('nx_agent_token');location.href='agent-login.html'});
+$$('.tab').forEach(t=>t.addEventListener('click',()=>{
+  $$('.tab').forEach(x=>x.classList.remove('active')); t.classList.add('active');
+  $$('.panel').forEach(x=>x.classList.remove('active'));
+  $('#p-'+t.dataset.p).classList.add('active');
+}));
+
+let ME=null;
+async function loadMe(){
+  const r=await api('/api/agent/me'); if(!r.ok){localStorage.removeItem('nx_agent_token');location.href='agent-login.html';return}
+  ME=await r.json();
+  $('#who').textContent=ME.name||'';
+  $('#codeHead').textContent='紹介報酬 '+yen(ME.reward_per_unit)+'円 / 本';
+  if(ME.agent_code){
+    $('#refBox').style.display='flex';
+    $('#agCode').textContent=ME.agent_code;
+    $('#agLink').value=location.origin+'/order/register.html?ref='+ME.agent_code;
+  }
+  $('#acBox').innerHTML=`
+    <table class="tbl"><tbody>
+      <tr><th style="width:200px">紹介コード</th><td>${esc(ME.agent_code||'発行準備中')}</td></tr>
+      <tr><th>お名前・屋号</th><td>${esc(ME.name)}</td></tr>
+      <tr><th>メールアドレス</th><td>${esc(ME.email)}</td></tr>
+      <tr><th>電話番号</th><td>${esc(ME.phone)}</td></tr>
+      <tr><th>ご住所</th><td>${esc(ME.postal)} ${esc(ME.address)}</td></tr>
+      <tr><th>お振込先</th><td>${ME.bank_name?esc(ME.bank_name)+' '+esc(ME.bank_branch)+' '+esc(ME.bank_type)+' '+esc(ME.bank_number)+' '+esc(ME.bank_holder):'<span style="color:var(--warn)">未登録（お支払いまでにご登録ください）</span>'}</td></tr>
+    </tbody></table>
+    <div class="note-box">登録情報の変更は <a href="mailto:tiger@tamjump.com" style="color:var(--coral)">tiger@tamjump.com</a> までご連絡ください。</div>`;
+}
+async function loadSummary(){
+  const r=await api('/api/agent/summary'); const d=await r.json();
+  const s=d.summary||{};
+  $('#score').innerHTML=`
+    <div class="s hi"><div class="k">Total Units</div><div class="v">${yen(s.units)}<small>本</small></div></div>
+    <div class="s"><div class="k">確定報酬</div><div class="v"><small>¥</small>${yen(s.confirmed)}</div></div>
+    <div class="s"><div class="k">未確定</div><div class="v"><small>¥</small>${yen(s.pending)}</div></div>
+    <div class="s"><div class="k">支払済</div><div class="v"><small>¥</small>${yen(s.paid)}</div></div>
+    <div class="s"><div class="k">紹介した取引先</div><div class="v">${yen(d.referred_accounts)}<small>件</small></div></div>`;
+  $('#moBody').innerHTML=(d.months||[]).length
+    ? d.months.map(m=>`<tr><td>${esc(m.ym)}</td><td>${yen(m.units)} 本</td><td class="amt">¥${yen(m.amount)}</td></tr>`).join('')
+    : '<tr><td colspan="3" class="empty">まだ実績がありません</td></tr>';
+}
+async function loadRewards(){
+  const r=await api('/api/agent/rewards'); const d=await r.json();
+  const rows=d.rewards||[];
+  $('#rwLoad').classList.add('hidden'); $('#rwTbl').classList.remove('hidden');
+  $('#rwBody').innerHTML=rows.length
+    ? rows.map(x=>`<tr>
+        <td>${dt(x.created_at)}</td>
+        <td>${esc(x.order_no||(x.kind==='bonus'?'ボーナス':'調整'))}</td>
+        <td>${esc(x.salon_name||'—')}</td>
+        <td>${x.units?yen(x.units)+' 本':'—'}</td>
+        <td class="amt">${x.unit_reward?'¥'+yen(x.unit_reward):'—'}</td>
+        <td class="amt">¥${yen(x.amount)}</td>
+        <td><span class="pill ${esc(x.status)}">${ST[x.status]||esc(x.status)}</span></td></tr>`).join('')
+    : '<tr><td colspan="7" class="empty">まだ報酬の計上がありません</td></tr>';
+}
+$('#copy').addEventListener('click',()=>{
+  const i=$('#agLink'); i.select(); document.execCommand('copy');
+  $('#copy').textContent='コピーしました'; setTimeout(()=>$('#copy').textContent='リンクをコピー',1800);
+});
+(async()=>{ await loadMe(); await loadSummary(); await loadRewards(); })();
+</script>
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>取引先ログイン｜株式会社Next Innovation</title>
+<title>紹介パートナー ログイン｜株式会社Next Innovation</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@400;500;600&family=Noto+Serif+JP:wght@300;400;500&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
@@ -17,15 +17,15 @@
 
 <div class="auth-wrap">
   <div class="auth-card">
-    <div class="auth-eyebrow">Partner Login</div>
-    <h1>取引先ログイン</h1>
-    <p class="sub">承認済みの取引先アカウントでログインしてください。発注・注文状況の確認ができます。</p>
+    <div class="auth-eyebrow">Referral Partner</div>
+    <h1>紹介パートナー ログイン</h1>
+    <p class="sub">紹介コード・紹介本数・報酬の確認ができます。</p>
 
     <div id="msg" class="msg err hidden"></div>
 
     <div class="field">
       <label>メールアドレス</label>
-      <input type="email" id="email" autocomplete="username" placeholder="you@salon.jp">
+      <input type="email" id="email" autocomplete="username" placeholder="you@example.jp">
     </div>
     <div class="field">
       <label>パスワード</label>
@@ -34,9 +34,8 @@
     <button class="btn" id="go">ログイン</button>
 
     <div class="auth-foot">
-      取引をご希望の方は <a href="register.html">取引申請</a><br>
-      <span style="color:var(--stone-light)">承認後にログインいただけます</span><br>
-      <span style="display:inline-block;margin-top:12px">紹介パートナーの方は <a href="agent-login.html">こちら</a></span>
+      紹介パートナーの登録は <a href="agent-register.html">こちら</a><br>
+      <span style="color:var(--stone-light)">登録は無料。商品のご購入は不要です</span>
     </div>
   </div>
 </div>
@@ -51,17 +50,16 @@ async function login(){
   if(!email||!pw){showErr('メールアドレスとパスワードを入力してください');return}
   $('#go').disabled=true; msg.classList.add('hidden');
   try{
-    const r=await fetch(NX_API+'/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,pw})});
+    const r=await fetch(NX_API+'/api/agent/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,pw})});
     const d=await r.json();
     if(!r.ok){showErr(d.error||'ログインに失敗しました');$('#go').disabled=false;return}
-    localStorage.setItem('nx_token',d.token);
-    localStorage.setItem('nx_salon',d.salon_name||'');
-    location.href='mypage.html';
+    localStorage.setItem('nx_agent_token',d.token);
+    localStorage.setItem('nx_agent_name',d.name||'');
+    location.href='agent.html';
   }catch(e){showErr('サーバーに接続できません');$('#go').disabled=false}
 }
 $('#go').addEventListener('click',login);
 $('#pw').addEventListener('keydown',e=>{if(e.key==='Enter')login()});
-if(localStorage.getItem('nx_token')) location.href='mypage.html';
 </script>
 </body>
 </html>

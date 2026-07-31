@@ -21,6 +21,7 @@
     <h1>取引申請</h1>
     <p class="sub">サロン・販売店さま向けの取引申請フォームです。お申し込み後、当社にて内容を確認し、承認後にログイン情報をご案内します。</p>
 
+    <div id="refNote" class="note-box hidden"></div>
     <div id="msg" class="msg hidden"></div>
 
     <div id="form">
@@ -80,6 +81,15 @@
 <script src="config.js"></script>
 <script>
 const $=s=>document.querySelector(s);
+const REF=(new URLSearchParams(location.search).get('ref')||'').trim().toUpperCase();
+if(REF){
+  fetch(NX_API+'/api/ref/check?code='+encodeURIComponent(REF)).then(r=>r.json()).then(d=>{
+    const box=$('#refNote');
+    if(d.valid){box.innerHTML='紹介コード <b>'+REF+'</b>（'+String(d.name||'').replace(/[<>&]/g,'')+' 様のご紹介）でお申し込みいただきます。';}
+    else{box.innerHTML='紹介コード <b>'+REF+'</b> は確認できませんでした。紹介なしとしてお申し込みを続けられます。';}
+    box.classList.remove('hidden');
+  }).catch(()=>{});
+}
 const msg=$('#msg');
 function show(t,ok){msg.textContent=t;msg.className='msg '+(ok?'ok':'err')}
 async function apply(){
@@ -91,7 +101,7 @@ async function apply(){
   $('#go').disabled=true; msg.classList.add('hidden');
   try{
     const r=await fetch(NX_API+'/api/register',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({salon_name:salon,contact_name:contact,phone,email,postal:v('postal'),address,pw,note:v('note')})});
+      body:JSON.stringify({salon_name:salon,contact_name:contact,phone,email,postal:v('postal'),address,pw,note:v('note'),ref:REF})});
     const d=await r.json();
     if(!r.ok){show(d.error||'申請に失敗しました');$('#go').disabled=false;return}
     $('#form').classList.add('hidden'); $('#done').classList.remove('hidden');

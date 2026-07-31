@@ -38,6 +38,8 @@
     <button class="tab" data-p="partners">取引先</button>
     <button class="tab" data-p="products">商品</button>
     <button class="tab" data-p="prod">製造発注</button>
+    <button class="tab" data-p="agents">紹介パートナー <span id="agBadge" class="pill pending" style="margin-left:6px;display:none"></span></button>
+    <button class="tab" data-p="rewards">紹介報酬</button>
   </div>
 
   <div class="panel active" id="p-apps">
@@ -64,6 +66,24 @@
     <div class="toolbar"><div class="sp"></div><button class="btn sm" id="addProd">＋ 商品を追加</button></div>
     <div id="pdLoad" class="center"><div class="spin"></div></div>
     <table class="tbl hidden" id="pdTbl"><thead><tr><th>SKU</th><th>商品名</th><th>卸価格(税抜)</th><th>最低発注</th><th>入数</th><th>公開</th><th></th></tr></thead><tbody id="pdBody"></tbody></table>
+  </div>
+
+  <div class="panel" id="p-agents">
+    <div class="toolbar"><div class="filter" id="agfilter">
+      <button class="on" data-s="">すべて</button><button data-s="pending">承認待ち</button><button data-s="active">有効</button><button data-s="suspended">停止中</button>
+    </div><div class="sp"></div></div>
+    <div id="agLoad" class="center"><div class="spin"></div></div>
+    <table class="tbl hidden" id="agTbl"><thead><tr><th>コード</th><th>お名前・屋号</th><th>連絡先</th><th>単価</th><th>本数</th><th>報酬計</th><th>状態</th><th></th></tr></thead><tbody id="agBody"></tbody></table>
+    <div class="empty hidden" id="agEmpty">該当する紹介パートナーはいません。</div>
+  </div>
+
+  <div class="panel" id="p-rewards">
+    <div class="toolbar"><div class="filter" id="rwfilter">
+      <button class="on" data-s="">すべて</button><button data-s="pending">未確定</button><button data-s="confirmed">確定</button><button data-s="paid">支払済</button>
+    </div><div class="sp"></div><button class="btn sm" id="addRw">＋ ボーナス・調整を追加</button></div>
+    <div id="rwLoad" class="center"><div class="spin"></div></div>
+    <table class="tbl hidden" id="rwTbl"><thead><tr><th>計上日</th><th>紹介者</th><th>注文番号</th><th>紹介先</th><th>本数</th><th>報酬</th><th>状態</th><th></th></tr></thead><tbody id="rwBody"></tbody></table>
+    <div class="empty hidden" id="rwEmpty">該当する報酬はありません。</div>
   </div>
 
   <div class="panel" id="p-prod">
@@ -114,8 +134,92 @@ function enter(){
 $$('.tab').forEach(t=>t.addEventListener('click',()=>{
   $$('.tab').forEach(x=>x.classList.remove('active')); t.classList.add('active');
   $$('.panel').forEach(p=>p.classList.remove('active')); $('#p-'+t.dataset.p).classList.add('active');
-  ({apps:loadApps,orders:loadOrders,partners:loadPartners,products:loadProducts,prod:loadPO})[t.dataset.p]();
+  ({apps:loadApps,orders:loadOrders,partners:loadPartners,products:loadProducts,prod:loadPO,agents:loadAgents,rewards:loadRewards})[t.dataset.p]();
 }));
+
+
+/* ---------- 紹介パートナー ---------- */
+let AGF='', RWF='', AGENTS=[];
+const AGST={pending:'承認待ち',active:'有効',suspended:'停止中',rejected:'却下'};
+const RWST={pending:'未確定',confirmed:'確定',paid:'支払済',void:'無効'};
+$$('#agfilter button').forEach(b=>b.addEventListener('click',()=>{
+  $$('#agfilter button').forEach(x=>x.classList.remove('on')); b.classList.add('on'); AGF=b.dataset.s; loadAgents();
+}));
+$$('#rwfilter button').forEach(b=>b.addEventListener('click',()=>{
+  $$('#rwfilter button').forEach(x=>x.classList.remove('on')); b.classList.add('on'); RWF=b.dataset.s; loadRewards();
+}));
+
+async function loadAgents(){
+  $('#agLoad').classList.remove('hidden');$('#agTbl').classList.add('hidden');$('#agEmpty').classList.add('hidden');
+  const r=await api('/api/admin/agents'+(AGF?'?status='+AGF:'')); const d=await r.json(); const a=d.agents||[];
+  if(!AGF) AGENTS=a;
+  const pend=(AGF?a.filter(x=>x.status==='pending'):a.filter(x=>x.status==='pending')).length;
+  const b=$('#agBadge'); if(pend){b.textContent=pend;b.style.display='inline-block'}else b.style.display='none';
+  $('#agLoad').classList.add('hidden');
+  if(!a.length){$('#agEmpty').classList.remove('hidden');return}
+  $('#agTbl').classList.remove('hidden');
+  $('#agBody').innerHTML=a.map(x=>`<tr>
+    <td>${esc(x.agent_code||'—')}</td>
+    <td>${esc(x.name)}${x.contact_name?'<br><span style="color:var(--stone);font-size:12px">'+esc(x.contact_name)+'</span>':''}</td>
+    <td style="font-size:12px">${esc(x.email)}<br><span style="color:var(--stone)">${esc(x.phone||'')}</span></td>
+    <td class="amt">¥${yen(x.reward_per_unit)}</td>
+    <td>${yen(x.units)} 本</td>
+    <td class="amt">¥${yen(x.amount)}<br><span style="color:var(--stone);font-size:12px">支払済 ¥${yen(x.paid)}</span></td>
+    <td><span class="pill ${esc(x.status)}">${AGST[x.status]||esc(x.status)}</span></td>
+    <td style="white-space:nowrap">
+      ${x.status==='pending'?`<button class="btn sm" onclick="agApprove(${x.id})">承認・コード発行</button> <button class="btn danger sm" onclick="agSet(${x.id},'reject')">却下</button>`:''}
+      ${x.status==='active'?`<button class="btn ghost sm" onclick="agRate(${x.id},${x.reward_per_unit})">単価</button> <button class="btn danger sm" onclick="agSet(${x.id},'suspend')">停止</button>`:''}
+      ${x.status==='suspended'?`<button class="btn sm" onclick="agSet(${x.id},'activate')">再開</button>`:''}
+    </td></tr>`).join('');
+}
+window.agApprove=async id=>{if(!confirm('承認して紹介コードを発行しますか？登録メールへコードと紹介用リンクを送信します。'))return;
+  const r=await api('/api/admin/agents/'+id+'/approve',{method:'POST'}); const d=await r.json();
+  if(r.ok){alert('紹介コード '+d.agent_code+' を発行しました');loadAgents()}else alert(d.error||'エラー')};
+window.agSet=async (id,act)=>{const t={reject:'却下',suspend:'停止',activate:'再開'}[act];
+  if(!confirm(t+'しますか？'))return;
+  const r=await api('/api/admin/agents/'+id+'/'+act,{method:'POST'}); if(r.ok)loadAgents()};
+window.agRate=async (id,cur)=>{const v=prompt('1本あたりの紹介報酬（円）',cur);
+  if(v===null)return; const n=parseInt(v); if(isNaN(n)||n<0){alert('数値を入力してください');return}
+  const r=await api('/api/admin/agents/'+id+'/rate',{method:'POST',body:JSON.stringify({reward_per_unit:n})});
+  if(r.ok)loadAgents()};
+
+async function loadRewards(){
+  $('#rwLoad').classList.remove('hidden');$('#rwTbl').classList.add('hidden');$('#rwEmpty').classList.add('hidden');
+  const r=await api('/api/admin/rewards'+(RWF?'?status='+RWF:'')); const d=await r.json(); const a=d.rewards||[];
+  $('#rwLoad').classList.add('hidden');
+  if(!a.length){$('#rwEmpty').classList.remove('hidden');return}
+  $('#rwTbl').classList.remove('hidden');
+  $('#rwBody').innerHTML=a.map(x=>`<tr>
+    <td>${(x.created_at||'').slice(0,10)}</td>
+    <td>${esc(x.agent_name)}<br><span style="color:var(--stone);font-size:12px">${esc(x.agent_code||'')}</span></td>
+    <td>${esc(x.order_no||(x.kind==='bonus'?'ボーナス':x.kind==='adjust'?'調整':'—'))}${x.memo?'<br><span style="color:var(--stone);font-size:12px">'+esc(x.memo)+'</span>':''}</td>
+    <td>${esc(x.salon_name||'—')}</td>
+    <td>${x.units?yen(x.units)+' 本':'—'}</td>
+    <td class="amt">¥${yen(x.amount)}</td>
+    <td><span class="pill ${esc(x.status)}">${RWST[x.status]||esc(x.status)}</span></td>
+    <td style="white-space:nowrap">
+      ${x.status==='pending'?`<button class="btn sm" onclick="rwSet(${x.id},'confirmed')">確定</button> <button class="btn danger sm" onclick="rwSet(${x.id},'void')">無効</button>`:''}
+      ${x.status==='confirmed'?`<button class="btn sm" onclick="rwSet(${x.id},'paid')">支払済</button>`:''}
+    </td></tr>`).join('');
+}
+window.rwSet=async (id,st)=>{const t={confirmed:'確定',paid:'支払済',void:'無効'}[st];
+  if(!confirm(t+'にしますか？'))return;
+  const r=await api('/api/admin/rewards/'+id+'/status',{method:'POST',body:JSON.stringify({status:st})});
+  if(r.ok)loadRewards()};
+$('#addRw').addEventListener('click',async()=>{
+  if(!AGENTS.length){const r=await api('/api/admin/agents');const d=await r.json();AGENTS=d.agents||[]}
+  const act=AGENTS.filter(x=>x.status==='active');
+  if(!act.length){alert('有効な紹介パートナーがいません');return}
+  const list=act.map((x,i)=>`${i+1}. ${x.agent_code||''} ${x.name}`).join('\n');
+  const sel=prompt('対象の番号を入力してください\n\n'+list);
+  if(sel===null)return; const idx=parseInt(sel)-1;
+  if(isNaN(idx)||!act[idx]){alert('番号が不正です');return}
+  const amt=prompt('金額（円）。マイナスも可');
+  if(amt===null)return; const n=parseInt(amt); if(isNaN(n)){alert('数値を入力してください');return}
+  const memo=prompt('メモ（例：10本達成ボーナス）')||'';
+  const r=await api('/api/admin/rewards',{method:'POST',body:JSON.stringify({agent_id:act[idx].id,amount:n,kind:n<0?'adjust':'bonus',memo})});
+  const d=await r.json(); if(r.ok){loadRewards()}else alert(d.error||'エラー');
+});
 
 /* 取引申請 */
 async function loadApps(){
