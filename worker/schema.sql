@@ -32,6 +32,7 @@ CREATE TABLE IF NOT EXISTS products (
   variant TEXT,
   unit TEXT DEFAULT '本',
   wholesale_price INTEGER NOT NULL DEFAULT 0,
+  retail_price INTEGER DEFAULT 0,
   moq INTEGER DEFAULT 1,
   case_lot INTEGER DEFAULT 1,
   description TEXT,

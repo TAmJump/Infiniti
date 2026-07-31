@@ -214,7 +214,9 @@ window.editProd=p=>{const e=p||{};$('#ov').classList.remove('hidden');
   <div class="field"><label>SKU</label><input id="f_sku" value="${esc(e.sku||'')}"></div></div>
   <div class="field"><label>バリエーション・容量</label><input id="f_var" value="${esc(e.variant||'')}"></div>
   <div class="row2"><div class="field"><label>卸価格（税抜・円）</label><input id="f_price" type="number" value="${e.wholesale_price||''}"></div>
-  <div class="field"><label>単位</label><input id="f_unit" value="${esc(e.unit||'本')}"></div></div>
+  <div class="field"><label>メーカー希望小売価格（税抜・円）</label><input id="f_retail" type="number" value="${e.retail_price||''}"></div></div>
+  <div class="row2"><div class="field"><label>単位</label><input id="f_unit" value="${esc(e.unit||'本')}"></div>
+  <div class="field"></div></div>
   <div class="row2"><div class="field"><label>最低発注数</label><input id="f_moq" type="number" value="${e.moq||1}"></div>
   <div class="field"><label>入数（発注単位）</label><input id="f_lot" type="number" value="${e.case_lot||1}"></div></div>
   <div class="field"><label>説明</label><textarea id="f_desc">${esc(e.description||'')}</textarea></div>
@@ -222,6 +224,7 @@ window.editProd=p=>{const e=p||{};$('#ov').classList.remove('hidden');
   <button class="btn" onclick="saveProd(${p?e.id:'null'})">保存</button>`;}
 window.saveProd=async id=>{const g=x=>$('#'+x).value.trim();
   const body={id,name:g('f_name'),sku:g('f_sku'),variant:g('f_var'),wholesale_price:parseInt($('#f_price').value)||0,
+    retail_price:parseInt($('#f_retail').value)||0,
     unit:g('f_unit')||'本',moq:parseInt($('#f_moq').value)||1,case_lot:parseInt($('#f_lot').value)||1,
     description:g('f_desc'),active:$('#f_active').checked?1:0};
   if(!body.name){alert('商品名を入力してください');return}

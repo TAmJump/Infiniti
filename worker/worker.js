@@ -185,7 +185,7 @@ export default {
         const acc = await authSalon(req, env);
         if (!acc) return J({ error: "unauthorized" }, 401);
         const { results } = await env.DB.prepare(
-          "SELECT id,sku,name,variant,unit,wholesale_price,moq,case_lot,description FROM products WHERE active=1 ORDER BY sort,id").all();
+          "SELECT id,sku,name,variant,unit,wholesale_price,retail_price,moq,case_lot,description FROM products WHERE active=1 ORDER BY sort,id").all();
         return J({ products: results || [] });
       }
 
@@ -342,15 +342,15 @@ export default {
           if (!b.name) return J({ error: "商品名が必要です" }, 400);
           if (b.id) {
             await env.DB.prepare(
-              `UPDATE products SET sku=?,name=?,variant=?,unit=?,wholesale_price=?,moq=?,case_lot=?,description=?,active=? WHERE id=?`
+              `UPDATE products SET sku=?,name=?,variant=?,unit=?,wholesale_price=?,retail_price=?,moq=?,case_lot=?,description=?,active=? WHERE id=?`
             ).bind(b.sku || "", b.name, b.variant || "", b.unit || "本", b.wholesale_price || 0,
-                   b.moq || 1, b.case_lot || 1, b.description || "", b.active ? 1 : 0, b.id).run();
+                   b.retail_price || 0, b.moq || 1, b.case_lot || 1, b.description || "", b.active ? 1 : 0, b.id).run();
           } else {
             await env.DB.prepare(
-              `INSERT INTO products (sku,name,variant,unit,wholesale_price,moq,case_lot,description,active,sort)
-               VALUES (?,?,?,?,?,?,?,?,?, (SELECT COALESCE(MAX(sort),0)+1 FROM products))`
+              `INSERT INTO products (sku,name,variant,unit,wholesale_price,retail_price,moq,case_lot,description,active,sort)
+               VALUES (?,?,?,?,?,?,?,?,?,?, (SELECT COALESCE(MAX(sort),0)+1 FROM products))`
             ).bind(b.sku || "", b.name, b.variant || "", b.unit || "本", b.wholesale_price || 0,
-                   b.moq || 1, b.case_lot || 1, b.description || "", b.active ? 1 : 0).run();
+                   b.retail_price || 0, b.moq || 1, b.case_lot || 1, b.description || "", b.active ? 1 : 0).run();
           }
           return J({ ok: true });
         }

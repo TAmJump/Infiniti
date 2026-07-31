@@ -119,7 +119,7 @@ async function loadProducts(){
       el.innerHTML=`<div class="pinfo"><h3>${esc(p.name)}</h3>
         <div class="en">${esc(p.variant||'')}</div>
         <div class="meta">SKU ${esc(p.sku||'-')}　最低発注 ${p.moq||1}${esc(p.unit||'本')}${p.case_lot>1?'　/ '+p.case_lot+esc(p.unit||'本')+'単位':''}</div></div>
-        <div class="price">${unset?'<span class="unset">卸価格 未設定</span>':`<span class="yen">¥</span>${yen(p.wholesale_price)} <span class="unit">/ ${esc(p.unit||'本')}</span>`}</div>
+        <div class="price">${unset?'<span class="unset">卸価格 未設定</span>':`<span class="yen">¥</span>${yen(p.wholesale_price)} <span class="unit">/ ${esc(p.unit||'本')}</span>${p.retail_price?`<div class="retail">メーカー希望小売価格 ¥${yen(p.retail_price)}</div>`:''}`}</div>
         <div class="qty">${unset?'<span class="u">発注不可</span>':`<input type="number" min="0" step="${p.case_lot||1}" value="0" data-id="${p.id}"><span class="u">${esc(p.unit||'本')}</span>`}</div>`;
       wrap.appendChild(el);
     });
