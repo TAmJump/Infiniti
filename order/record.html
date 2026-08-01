@@ -443,6 +443,7 @@ function loadDraft(){
 /* ===== 収集 ===== */
 function collect(){
   var r = {
+    recNo: recordNo,
     recordNo: recordNo,
     date: document.getElementById('date').value,
     time: document.getElementById('time').value,
@@ -496,7 +497,7 @@ function dataUrlToBlob(u){
   return new Blob([a], {type: mime});
 }
 async function uploadOne(m, rec){
-  var body = {recordNo: rec, fileName: m.name || (m.id + ''), contentType: m.type || 'application/octet-stream', kind: m.kind};
+  var body = {recNo: rec, recordNo: rec, fileName: m.name || (m.id + ''), contentType: m.type || 'application/octet-stream', kind: m.kind};
   var r = await fetch(UPLOAD_URL, {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)});
   if(!r.ok) throw new Error('upload-url ' + r.status);
   var j = await r.json();
@@ -567,6 +568,7 @@ async function flushQueue(){
   var rest = [];
   for(var i = 0; i < q.length; i++){
     try{
+      if(!q[i].recNo) q[i].recNo = q[i].recordNo;
       var r = await fetch(REC_URL, {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(q[i])});
       if(!r.ok) throw new Error(r.status);
     }catch(e){ rest.push(q[i]); }
@@ -588,7 +590,7 @@ async function testApi(){
   setStatus('接続テスト中');
   try{
     var r = await fetch(REC_URL, {method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({recordNo:'TEST-' + Date.now(), test:true, operator:'接続テスト', date: new Date().toISOString().slice(0,10)})});
+      body: JSON.stringify({recNo:'TEST-' + Date.now(), recordNo:'TEST-' + Date.now(), test:true, operator:'接続テスト', date: new Date().toISOString().slice(0,10)})});
     var t = ''; try{ t = await r.text(); }catch(e){}
     setStatus('接続テスト：HTTP ' + r.status + (r.ok ? '（正常）' : '（エラー）') + ' ' + t.slice(0,300), r.ok ? 'ok' : 'err');
   }catch(e){ setStatus('接続テスト：通信できません（' + e.message + '）', 'err'); }
