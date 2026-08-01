@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>INFINI WORLD サンプル施術 記録</title>
+<style>
+:root{
+  --cream:#FAF6F0; --card:#FFFFFF; --ink:#2B2622; --sub:#6E645C;
+  --line:#E3D9CE; --rose:#C4506B; --rose-soft:#F6E7EB;
+  --gold:#B9924A; --teal:#2E7D7B; --ok:#2E7D5B; --warn:#B4552E;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  background:var(--cream); color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP","Yu Gothic",sans-serif;
+  font-size:16px; line-height:1.7; padding-bottom:96px;
+}
+header{
+  background:var(--card); border-bottom:2px solid var(--rose);
+  padding:14px 16px calc(12px + env(safe-area-inset-top,0)); position:sticky; top:0; z-index:20;
+}
+header .t{font-size:15px;font-weight:700;letter-spacing:.06em}
+header .s{font-size:12px;color:var(--sub);margin-top:2px}
+header .no{float:right;font-size:12px;color:var(--rose);font-weight:700;border:1px solid var(--rose);border-radius:4px;padding:2px 8px}
+.wrap{max-width:720px;margin:0 auto;padding:16px}
+section{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:14px}
+h2{font-size:14px;margin:0 0 14px;padding-left:10px;border-left:4px solid var(--rose);letter-spacing:.04em}
+label.f{display:block;font-size:13px;color:var(--sub);margin:14px 0 6px;font-weight:600}
+label.f:first-of-type{margin-top:0}
+.req{color:var(--rose);font-size:11px;margin-left:6px}
+input[type=text],input[type=date],input[type=time],input[type=number],textarea,select{
+  width:100%;padding:11px 12px;font-size:16px;font-family:inherit;color:var(--ink);
+  background:var(--cream);border:1px solid var(--line);border-radius:8px;
+}
+textarea{min-height:96px;resize:vertical}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--rose);background:#fff}
+.row{display:flex;gap:10px}
+.row>div{flex:1}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{
+  display:inline-block;padding:8px 14px;font-size:14px;border-radius:20px;
+  border:1px solid var(--line);background:var(--cream);color:var(--sub);cursor:pointer;user-select:none;
+}
+.chip.on{background:var(--rose-soft);border-color:var(--rose);color:var(--rose);font-weight:700}
+.chip.teal.on{background:#E4F0EF;border-color:var(--teal);color:var(--teal)}
+.note{font-size:12px;color:var(--sub);margin-top:6px}
+.gate{background:var(--rose-soft);border:1px solid var(--rose);border-radius:10px;padding:16px;margin-bottom:14px}
+.gate h3{margin:0 0 8px;font-size:14px;color:var(--rose)}
+.gate p{margin:0 0 10px;font-size:13px;line-height:1.8}
+.check{display:flex;align-items:flex-start;gap:10px;padding:10px 0;font-size:14px;cursor:pointer}
+.check input{width:22px;height:22px;margin:2px 0 0;flex:none;accent-color:var(--rose)}
+.media{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
+.thumb{width:88px;height:88px;border:1px solid var(--line);border-radius:8px;overflow:hidden;position:relative;background:var(--cream)}
+.thumb img,.thumb video{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .x{position:absolute;top:2px;right:2px;width:22px;height:22px;line-height:20px;text-align:center;
+  background:#fff;border:1px solid var(--line);border-radius:11px;font-size:14px;color:var(--warn);cursor:pointer}
+.thumb .tag{position:absolute;bottom:0;left:0;right:0;background:rgba(255,255,255,.9);font-size:10px;text-align:center;color:var(--sub)}
+.addbtn{width:88px;height:88px;border:1px dashed var(--rose);border-radius:8px;background:var(--rose-soft);
+  color:var(--rose);font-size:12px;display:flex;align-items:center;justify-content:center;text-align:center;cursor:pointer;padding:6px}
+canvas#sig{width:100%;height:150px;background:var(--cream);border:1px solid var(--line);border-radius:8px;touch-action:none;display:block}
+.bar{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);
+  padding:12px 16px calc(12px + env(safe-area-inset-bottom,0));z-index:30}
+.bar .inner{max-width:720px;margin:0 auto;display:flex;gap:10px;align-items:center}
+button.primary{flex:1;padding:15px;font-size:16px;font-weight:700;color:#fff;background:var(--rose);
+  border:none;border-radius:8px;font-family:inherit;cursor:pointer}
+button.primary:disabled{background:#CDBFB6}
+button.ghost{padding:15px 16px;font-size:14px;color:var(--sub);background:var(--cream);
+  border:1px solid var(--line);border-radius:8px;font-family:inherit;cursor:pointer}
+.status{font-size:12px;text-align:center;color:var(--sub);padding-bottom:6px;max-width:720px;margin:0 auto}
+.status.err{color:var(--warn);font-weight:700}
+.status.ok{color:var(--ok);font-weight:700}
+.queue{background:#FDF3E7;border:1px solid var(--gold);border-radius:8px;padding:12px;font-size:13px;margin-bottom:14px;display:none}
+.queue b{color:var(--gold)}
+.queue button{margin-top:8px;padding:8px 14px;font-size:13px;background:var(--gold);color:#fff;border:none;border-radius:6px;font-family:inherit;cursor:pointer}
+.tool{font-size:12px;color:var(--sub);text-align:center;padding:4px 0 24px}
+.tool a{color:var(--rose);cursor:pointer;text-decoration:underline;margin:0 8px}
+.done{display:none;text-align:center;padding:56px 20px}
+.done .mk{font-size:15px;color:var(--ok);font-weight:700;margin-bottom:8px}
+.done .no2{font-size:22px;font-weight:700;letter-spacing:.06em;margin:12px 0}
+.hide{display:none!important}
+</style>
+</head>
+<body>
+
+<header>
+  <span class="no" id="hdNo">—</span>
+  <div class="t">INFINI WORLD ／ サンプル施術 記録</div>
+  <div class="s">記録シート・撮影同意 兼用フォーム</div>
+</header>
+
+<div class="wrap" id="form">
+
+  <div class="queue" id="queue">
+    <b>未送信の記録が <span id="qn">0</span> 件あります。</b><br>
+    電波の良い場所で送信してください。
+    <br><button onclick="flushQueue()">今すぐ送信する</button>
+  </div>
+
+  <div class="gate">
+    <h3>撮影・録画 同意の確認</h3>
+    <p>紙の「撮影・録画 同意書」に署名をいただいてから記録を開始してください。顔出しはしません。撮影範囲は髪・手元のみです。</p>
+    <label class="check"><input type="checkbox" id="g1"><span>同意書の説明を行い、署名をいただいた</span></label>
+    <label class="check"><input type="checkbox" id="g2"><span>顔が写らない範囲での撮影であることを説明した</span></label>
+  </div>
+
+  <section>
+    <h2>施術の基本情報</h2>
+    <div class="row">
+      <div><label class="f">日付<span class="req">必須</span></label><input type="date" id="date"></div>
+      <div><label class="f">開始時間</label><input type="time" id="time"></div>
+    </div>
+    <label class="f">施術時間（分）</label>
+    <div class="chips" data-single="durationMin">
+      <span class="chip" data-v="10">10分</span><span class="chip" data-v="20">20分</span>
+      <span class="chip" data-v="30">30分</span><span class="chip" data-v="45">45分</span>
+      <span class="chip" data-v="60">60分以上</span>
+    </div>
+    <label class="f">場所（店舗名・エリア）</label>
+    <input type="text" id="place" placeholder="例：〇〇サロン／上尾">
+    <label class="f">施術者<span class="req">必須</span></label>
+    <input type="text" id="operator" placeholder="施術した方のお名前">
+  </section>
+
+  <section>
+    <h2>お客様の情報</h2>
+    <label class="f">性別</label>
+    <div class="chips" data-single="gender">
+      <span class="chip" data-v="女性">女性</span><span class="chip" data-v="男性">男性</span>
+      <span class="chip" data-v="回答なし">回答なし</span>
+    </div>
+    <label class="f">年代</label>
+    <div class="chips" data-single="ageGroup">
+      <span class="chip" data-v="10代">10代</span><span class="chip" data-v="20代">20代</span>
+      <span class="chip" data-v="30代">30代</span><span class="chip" data-v="40代">40代</span>
+      <span class="chip" data-v="50代">50代</span><span class="chip" data-v="60代以上">60代以上</span>
+    </div>
+    <label class="f">髪の長さ</label>
+    <div class="chips" data-single="hairLength">
+      <span class="chip" data-v="ショート">ショート</span><span class="chip" data-v="ボブ">ボブ</span>
+      <span class="chip" data-v="ミディアム">ミディアム</span><span class="chip" data-v="セミロング">セミロング</span>
+      <span class="chip" data-v="ロング">ロング</span>
+    </div>
+    <label class="f">髪質（複数選択可）</label>
+    <div class="chips" data-multi="hairType">
+      <span class="chip" data-v="細い">細い</span><span class="chip" data-v="普通">普通</span>
+      <span class="chip" data-v="太い">太い</span><span class="chip" data-v="くせ毛">くせ毛</span>
+      <span class="chip" data-v="直毛">直毛</span><span class="chip" data-v="硬い">硬い</span>
+      <span class="chip" data-v="やわらかい">やわらかい</span><span class="chip" data-v="毛量多い">毛量多い</span>
+      <span class="chip" data-v="毛量少ない">毛量少ない</span>
+    </div>
+    <label class="f">髪の状態・お悩み（複数選択可）</label>
+    <div class="chips" data-multi="concerns">
+      <span class="chip" data-v="乾燥">乾燥</span><span class="chip" data-v="広がり">広がり</span>
+      <span class="chip" data-v="パサつき">パサつき</span><span class="chip" data-v="うねり">うねり</span>
+      <span class="chip" data-v="ごわつき">ごわつき</span><span class="chip" data-v="からまり">からまり</span>
+      <span class="chip" data-v="毛先の傷み">毛先の傷み</span><span class="chip" data-v="ツヤ不足">ツヤ不足</span>
+      <span class="chip" data-v="カラー履歴あり">カラー履歴あり</span><span class="chip" data-v="パーマ履歴あり">パーマ履歴あり</span>
+      <span class="chip" data-v="縮毛矯正履歴あり">縮毛矯正履歴あり</span><span class="chip" data-v="ブリーチ履歴あり">ブリーチ履歴あり</span>
+    </div>
+  </section>
+
+  <section>
+    <h2>使用状況</h2>
+    <label class="f">使用量</label>
+    <div class="chips" data-single="amount">
+      <span class="chip" data-v="20g未満">20g未満</span><span class="chip" data-v="20〜30g">20〜30g</span>
+      <span class="chip" data-v="30〜40g">30〜40g</span><span class="chip" data-v="40〜50g">40〜50g</span>
+      <span class="chip" data-v="50g以上">50g以上</span>
+    </div>
+    <label class="f">併用メニュー（複数選択可）</label>
+    <div class="chips" data-multi="menu">
+      <span class="chip" data-v="単体使用">単体使用</span><span class="chip" data-v="カット">カット</span>
+      <span class="chip" data-v="カラー">カラー</span><span class="chip" data-v="パーマ">パーマ</span>
+      <span class="chip" data-v="縮毛矯正">縮毛矯正</span><span class="chip" data-v="他トリートメント併用">他トリートメント併用</span>
+    </div>
+    <label class="f">使用後の変化（当てはまるものすべて）</label>
+    <div class="chips teal" data-multi="changes">
+      <span class="chip teal" data-v="指通りが良くなった">指通りが良くなった</span>
+      <span class="chip teal" data-v="ツヤが出た">ツヤが出た</span>
+      <span class="chip teal" data-v="まとまりが出た">まとまりが出た</span>
+      <span class="chip teal" data-v="はり・こしを感じた">はり・こしを感じた</span>
+      <span class="chip teal" data-v="乾燥による広がりが抑えられた">乾燥による広がりが抑えられた</span>
+      <span class="chip teal" data-v="やわらかくなった">やわらかくなった</span>
+      <span class="chip teal" data-v="香りが良かった">香りが良かった</span>
+      <span class="chip teal" data-v="変化を感じにくかった">変化を感じにくかった</span>
+    </div>
+    <div class="note">※効果・実感には個人差があります。</div>
+  </section>
+
+  <section>
+    <h2>写真・動画</h2>
+    <div class="note">顔が写らない角度で撮影してください。ビフォー／アフターは同じ角度・同じ明るさで撮ると比較しやすくなります。</div>
+    <label class="f">ビフォー</label>
+    <div class="media" id="mBefore">
+      <div class="addbtn" onclick="pick('before')">追加</div>
+    </div>
+    <label class="f">アフター</label>
+    <div class="media" id="mAfter">
+      <div class="addbtn" onclick="pick('after')">追加</div>
+    </div>
+    <input type="file" id="filePick" class="hide" accept="image/*,video/*" multiple>
+  </section>
+
+  <section>
+    <h2>感想・掲載可否</h2>
+    <label class="f">お客様の感想（そのままの言葉で）</label>
+    <textarea id="comment" placeholder="例：いつもより乾かした後のまとまりが違いました"></textarea>
+    <label class="f">施術者コメント</label>
+    <textarea id="opComment" placeholder="伸び・すすぎ・仕上がりなど、施術者側で気づいた点"></textarea>
+    <label class="f">SNS・販促での掲載可否<span class="req">必須</span></label>
+    <div class="chips" data-single="snsOk">
+      <span class="chip" data-v="掲載可">掲載可</span>
+      <span class="chip" data-v="写真のみ可（コメント不可）">写真のみ可</span>
+      <span class="chip" data-v="コメントのみ可（写真不可）">コメントのみ可</span>
+      <span class="chip" data-v="掲載不可">掲載不可</span>
+    </div>
+    <label class="f">掲載時の呼称</label>
+    <input type="text" id="displayName" placeholder="例：40代・女性／A様">
+    <div class="note">実名での掲載は行いません。イニシャルまたは属性表記のみ使用します。</div>
+  </section>
+
+  <section>
+    <h2>記録者サイン</h2>
+    <canvas id="sig"></canvas>
+    <div class="note">指またはタッチペンで署名してください。<a href="#" onclick="clearSig();return false;" style="color:var(--rose)">消してやり直す</a></div>
+  </section>
+
+  <div class="tool">
+    <a onclick="testApi()">接続テスト</a>
+    <a onclick="if(confirm('入力内容を消去します。よろしいですか。'))resetForm()">入力をクリア</a>
+  </div>
+</div>
+
+<div class="done" id="done">
+  <div class="mk">記録を送信しました</div>
+  <div>記録No.</div>
+  <div class="no2" id="doneNo">—</div>
+  <button class="primary" style="max-width:280px;margin:0 auto" onclick="resetForm()">次の記録を入力する</button>
+</div>
+
+<div class="bar" id="bar">
+  <div class="status" id="status"></div>
+  <div class="inner">
+    <button class="ghost" onclick="saveLocal()">一時保存</button>
+    <button class="primary" id="send" onclick="submit()">記録を送信する</button>
+  </div>
+</div>
+
+<script>
+/* ===== 設定 ===== */
+var API_ENDPOINT = 'https://zgrp36rmn0.execute-api.ap-northeast-1.amazonaws.com/prod';
+var REC_URL    = API_ENDPOINT + '/records';
+var UPLOAD_URL = API_ENDPOINT + '/upload-url';
+var STORE_KEY  = 'infini_records_queue';
+var SEQ_KEY    = 'infini_records_seq';
+var DRAFT_KEY  = 'infini_records_draft';
+
+/* ===== ストレージ（失敗時はメモリ） ===== */
+var mem = {};
+function LS(k, v){
+  try{
+    if(v === undefined) return localStorage.getItem(k);
+    localStorage.setItem(k, v); return v;
+  }catch(e){
+    if(v === undefined) return mem[k] === undefined ? null : mem[k];
+    mem[k] = v; return v;
+  }
+}
+
+/* ===== 記録No. ===== */
+function pad(n,l){ n = String(n); while(n.length < l) n = '0' + n; return n; }
+function todayStr(d){ d = d || new Date();
+  return d.getFullYear() + pad(d.getMonth()+1,2) + pad(d.getDate(),2); }
+function newRecordNo(){
+  var t = todayStr(), raw = LS(SEQ_KEY), seq = 1;
+  if(raw){ try{ var o = JSON.parse(raw); if(o.d === t) seq = o.n + 1; }catch(e){} }
+  LS(SEQ_KEY, JSON.stringify({d:t, n:seq}));
+  return 'INF-' + t + '-' + pad(seq,3);
+}
+var recordNo = '';
+
+/* ===== チップ ===== */
+var state = {};
+document.querySelectorAll('.chips').forEach(function(box){
+  var single = box.getAttribute('data-single'), multi = box.getAttribute('data-multi');
+  box.querySelectorAll('.chip').forEach(function(c){
+    c.addEventListener('click', function(){
+      if(single){
+        box.querySelectorAll('.chip').forEach(function(o){ o.classList.remove('on'); });
+        c.classList.add('on'); state[single] = c.getAttribute('data-v');
+      }else{
+        c.classList.toggle('on');
+        state[multi] = Array.prototype.filter.call(box.querySelectorAll('.chip'), function(o){
+          return o.classList.contains('on');
+        }).map(function(o){ return o.getAttribute('data-v'); });
+      }
+      saveDraft();
+    });
+  });
+});
+
+/* ===== 署名 ===== */
+var cv = document.getElementById('sig'), cx = cv.getContext('2d'), drawing = false, signed = false;
+function fitSig(){
+  var r = cv.getBoundingClientRect(), dpr = window.devicePixelRatio || 1;
+  var data = signed ? cv.toDataURL() : null;
+  cv.width = r.width * dpr; cv.height = r.height * dpr;
+  cx.scale(dpr, dpr); cx.lineWidth = 2.2; cx.lineCap = 'round'; cx.strokeStyle = '#2B2622';
+  if(data){ var im = new Image(); im.onload = function(){ cx.drawImage(im, 0, 0, r.width, r.height); }; im.src = data; }
+}
+window.addEventListener('resize', fitSig);
+function pos(e){ var r = cv.getBoundingClientRect(); var p = e.touches ? e.touches[0] : e;
+  return {x: p.clientX - r.left, y: p.clientY - r.top}; }
+function down(e){ e.preventDefault(); drawing = true; signed = true; var p = pos(e); cx.beginPath(); cx.moveTo(p.x, p.y); }
+function move(e){ if(!drawing) return; e.preventDefault(); var p = pos(e); cx.lineTo(p.x, p.y); cx.stroke(); }
+function up(){ drawing = false; }
+cv.addEventListener('mousedown', down); cv.addEventListener('mousemove', move);
+window.addEventListener('mouseup', up);
+cv.addEventListener('touchstart', down, {passive:false});
+cv.addEventListener('touchmove', move, {passive:false});
+cv.addEventListener('touchend', up);
+function clearSig(){ cx.clearRect(0, 0, cv.width, cv.height); signed = false; }
+
+/* ===== メディア ===== */
+var media = [];   // {id, kind:'before'|'after', type, name, dataUrl, file}
+var pickKind = 'before';
+function pick(kind){ pickKind = kind; document.getElementById('filePick').click(); }
+document.getElementById('filePick').addEventListener('change', function(e){
+  var files = Array.prototype.slice.call(e.target.files || []);
+  files.forEach(function(f){
+    var rd = new FileReader();
+    rd.onload = function(){
+      media.push({id: 'm' + Date.now() + Math.random().toString(36).slice(2,6),
+                  kind: pickKind, type: f.type, name: f.name, dataUrl: rd.result, file: f});
+      renderMedia();
+    };
+    rd.readAsDataURL(f);
+  });
+  e.target.value = '';
+});
+function renderMedia(){
+  ['before','after'].forEach(function(k){
+    var box = document.getElementById(k === 'before' ? 'mBefore' : 'mAfter');
+    box.innerHTML = '';
+    media.filter(function(m){ return m.kind === k; }).forEach(function(m){
+      var d = document.createElement('div'); d.className = 'thumb';
+      var isV = (m.type || '').indexOf('video') === 0;
+      d.innerHTML = (isV ? '<video src="' + m.dataUrl + '" muted playsinline></video>'
+                         : '<img src="' + m.dataUrl + '">')
+                  + '<div class="x" data-id="' + m.id + '">×</div>'
+                  + '<div class="tag">' + (isV ? '動画' : '写真') + '</div>';
+      d.querySelector('.x').addEventListener('click', function(){
+        media = media.filter(function(x){ return x.id !== m.id; }); renderMedia();
+      });
+      box.appendChild(d);
+    });
+    var a = document.createElement('div'); a.className = 'addbtn'; a.textContent = '追加';
+    a.addEventListener('click', function(){ pick(k); });
+    box.appendChild(a);
+  });
+}
+
+/* ===== 下書き ===== */
+var TEXT_IDS = ['date','time','place','operator','comment','opComment','displayName'];
+function saveDraft(){
+  var d = {state: state};
+  TEXT_IDS.forEach(function(i){ d[i] = document.getElementById(i).value; });
+  LS(DRAFT_KEY, JSON.stringify(d));
+}
+TEXT_IDS.forEach(function(i){ document.getElementById(i).addEventListener('input', saveDraft); });
+function loadDraft(){
+  var raw = LS(DRAFT_KEY); if(!raw) return;
+  try{
+    var d = JSON.parse(raw);
+    TEXT_IDS.forEach(function(i){ if(d[i]) document.getElementById(i).value = d[i]; });
+    state = d.state || {};
+    document.querySelectorAll('.chips').forEach(function(box){
+      var s = box.getAttribute('data-single'), m = box.getAttribute('data-multi');
+      box.querySelectorAll('.chip').forEach(function(c){
+        var v = c.getAttribute('data-v');
+        if(s && state[s] === v) c.classList.add('on');
+        if(m && (state[m] || []).indexOf(v) >= 0) c.classList.add('on');
+      });
+    });
+  }catch(e){}
+}
+
+/* ===== 収集 ===== */
+function collect(){
+  var r = {
+    recordNo: recordNo,
+    date: document.getElementById('date').value,
+    time: document.getElementById('time').value,
+    durationMin: state.durationMin || '',
+    place: document.getElementById('place').value,
+    operator: document.getElementById('operator').value,
+    gender: state.gender || '',
+    ageGroup: state.ageGroup || '',
+    hairLength: state.hairLength || '',
+    hairType: state.hairType || [],
+    concerns: state.concerns || [],
+    amount: state.amount || '',
+    menu: state.menu || [],
+    changes: state.changes || [],
+    comment: document.getElementById('comment').value,
+    opComment: document.getElementById('opComment').value,
+    snsOk: state.snsOk || '',
+    displayName: document.getElementById('displayName').value,
+    consentExplained: document.getElementById('g1').checked,
+    consentNoFace: document.getElementById('g2').checked,
+    signature: signed ? cv.toDataURL('image/png') : '',
+    product: 'INFINI WORLD 1000mL',
+    clientAt: new Date().toISOString(),
+    ua: navigator.userAgent
+  };
+  return r;
+}
+function validate(){
+  if(!document.getElementById('g1').checked || !document.getElementById('g2').checked)
+    return '同意の確認2項目にチェックしてください。';
+  if(!document.getElementById('date').value) return '日付を入力してください。';
+  if(!document.getElementById('operator').value.trim()) return '施術者を入力してください。';
+  if(!state.snsOk) return '掲載可否を選択してください。';
+  return '';
+}
+
+/* ===== 送信 ===== */
+function setStatus(t, cls){
+  var s = document.getElementById('status');
+  s.textContent = t || ''; s.className = 'status' + (cls ? ' ' + cls : '');
+}
+function dataUrlToBlob(u){
+  var p = u.split(','), mime = (p[0].match(/:(.*?);/) || [])[1] || 'application/octet-stream';
+  var b = atob(p[1]), n = b.length, a = new Uint8Array(n);
+  while(n--) a[n] = b.charCodeAt(n);
+  return new Blob([a], {type: mime});
+}
+async function uploadOne(m, rec){
+  var body = {recordNo: rec, fileName: m.name || (m.id + ''), contentType: m.type || 'application/octet-stream', kind: m.kind};
+  var r = await fetch(UPLOAD_URL, {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)});
+  if(!r.ok) throw new Error('upload-url ' + r.status);
+  var j = await r.json();
+  var url = j.uploadUrl || j.url || j.signedUrl;
+  var key = j.key || j.objectKey || '';
+  if(!url) throw new Error('no upload url');
+  var blob = m.file || dataUrlToBlob(m.dataUrl);
+  var pr = await fetch(url, {method:'PUT', headers:{'Content-Type': m.type || 'application/octet-stream'}, body: blob});
+  if(!pr.ok) throw new Error('put ' + pr.status);
+  return {key: key, kind: m.kind, contentType: m.type, fileName: m.name};
+}
+async function submit(){
+  var err = validate();
+  if(err){ setStatus(err, 'err'); window.scrollTo({top:0, behavior:'smooth'}); return; }
+  document.getElementById('send').disabled = true;
+  setStatus('送信中です。画面を閉じないでください。');
+  var rec = collect();
+  try{
+    var uploaded = [];
+    for(var i = 0; i < media.length; i++){
+      setStatus('画像・動画を送信中（' + (i+1) + '/' + media.length + '）');
+      try{
+        uploaded.push(await uploadOne(media[i], rec.recordNo));
+      }catch(e){
+        uploaded.push({kind: media[i].kind, contentType: media[i].type,
+                       fileName: media[i].name, dataUrl: media[i].dataUrl, inline: true});
+      }
+    }
+    rec.media = uploaded;
+    setStatus('記録を送信中');
+    var r = await fetch(REC_URL, {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(rec)});
+    if(!r.ok) throw new Error('records ' + r.status);
+    finishOk(rec.recordNo);
+  }catch(e){
+    rec.media = media.map(function(m){
+      return {kind:m.kind, contentType:m.type, fileName:m.name, dataUrl:m.dataUrl, inline:true};
+    });
+    pushQueue(rec);
+    document.getElementById('send').disabled = false;
+    setStatus('送信できませんでした。端末に保存しました。電波の良い場所で「今すぐ送信する」を押してください。', 'err');
+    renderQueue();
+  }
+}
+function finishOk(no){
+  document.getElementById('doneNo').textContent = no;
+  document.getElementById('form').style.display = 'none';
+  document.getElementById('bar').style.display = 'none';
+  document.getElementById('done').style.display = 'block';
+  LS(DRAFT_KEY, '');
+  window.scrollTo(0, 0);
+}
+
+/* ===== オフライン退避 ===== */
+function getQueue(){ try{ return JSON.parse(LS(STORE_KEY) || '[]'); }catch(e){ return []; } }
+function pushQueue(r){ var q = getQueue(); q.push(r); LS(STORE_KEY, JSON.stringify(q)); }
+function renderQueue(){
+  var q = getQueue(), box = document.getElementById('queue');
+  document.getElementById('qn').textContent = q.length;
+  box.style.display = q.length ? 'block' : 'none';
+}
+async function flushQueue(){
+  var q = getQueue(); if(!q.length) return;
+  setStatus('未送信の記録を送信中');
+  var rest = [];
+  for(var i = 0; i < q.length; i++){
+    try{
+      var r = await fetch(REC_URL, {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(q[i])});
+      if(!r.ok) throw new Error(r.status);
+    }catch(e){ rest.push(q[i]); }
+  }
+  LS(STORE_KEY, JSON.stringify(rest));
+  renderQueue();
+  setStatus(rest.length ? (rest.length + '件がまだ送信できていません。') : 'すべて送信しました。', rest.length ? 'err' : 'ok');
+}
+window.addEventListener('online', flushQueue);
+
+/* ===== その他 ===== */
+function saveLocal(){
+  var rec = collect();
+  rec.media = media.map(function(m){ return {kind:m.kind, contentType:m.type, fileName:m.name, dataUrl:m.dataUrl, inline:true}; });
+  pushQueue(rec); renderQueue();
+  setStatus('端末に保存しました。あとから送信できます。', 'ok');
+}
+async function testApi(){
+  setStatus('接続テスト中');
+  try{
+    var r = await fetch(REC_URL, {method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({recordNo:'TEST-' + Date.now(), test:true, operator:'接続テスト', date: new Date().toISOString().slice(0,10)})});
+    setStatus('接続テスト：HTTP ' + r.status + (r.ok ? '（正常）' : '（エラー）'), r.ok ? 'ok' : 'err');
+  }catch(e){ setStatus('接続テスト：通信できません（' + e.message + '）', 'err'); }
+}
+function resetForm(){
+  LS(DRAFT_KEY, '');
+  location.reload();
+}
+
+/* ===== 初期化 ===== */
+(function init(){
+  var d = new Date();
+  document.getElementById('date').value = d.getFullYear() + '-' + pad(d.getMonth()+1,2) + '-' + pad(d.getDate(),2);
+  document.getElementById('time').value = pad(d.getHours(),2) + ':' + pad(d.getMinutes(),2);
+  recordNo = newRecordNo();
+  document.getElementById('hdNo').textContent = recordNo;
+  loadDraft(); fitSig(); renderMedia(); renderQueue();
+  if(navigator.onLine) flushQueue();
+})();
+</script>
+</body>
+</html>
