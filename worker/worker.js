@@ -123,6 +123,66 @@ function ymd() {
   return d.getFullYear() + pad(d.getMonth() + 1, 2) + pad(d.getDate(), 2);
 }
 
+/* ---------- AWS S3 (SigV4) ---------- */
+function s3cfg(env) {
+  if (!env.DOC_AWS_ACCESS_KEY_ID || !env.DOC_AWS_SECRET_ACCESS_KEY) return null;
+  return {
+    key: env.DOC_AWS_ACCESS_KEY_ID,
+    secret: env.DOC_AWS_SECRET_ACCESS_KEY,
+    bucket: env.DOC_S3_BUCKET || "nextinnovation-docs",
+    region: env.DOC_S3_REGION || "ap-northeast-1",
+  };
+}
+function hex(buf) {
+  return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, "0")).join("");
+}
+async function sha256hex(data) {
+  return hex(await crypto.subtle.digest("SHA-256", typeof data === "string" ? enc.encode(data) : data));
+}
+async function hmac(key, msg) {
+  const k = await crypto.subtle.importKey("raw", typeof key === "string" ? enc.encode(key) : key,
+    { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+  return crypto.subtle.sign("HMAC", k, enc.encode(msg));
+}
+/* S3 に署名付きリクエストを送る。method は PUT / GET / DELETE */
+async function s3fetch(env, method, key, body, contentType) {
+  const c = s3cfg(env);
+  if (!c) throw new Error("S3 未設定");
+  const host = `${c.bucket}.s3.${c.region}.amazonaws.com`;
+  const path = "/" + key.split("/").map(encodeURIComponent).join("/");
+  const now = new Date();
+  const amzDate = now.toISOString().replace(/[:-]|\.\d{3}/g, "");
+  const date = amzDate.slice(0, 8);
+  const payloadHash = body ? await sha256hex(body) : await sha256hex("");
+
+  const headers = {
+    "host": host,
+    "x-amz-content-sha256": payloadHash,
+    "x-amz-date": amzDate,
+  };
+  if (contentType) headers["content-type"] = contentType;
+  if (method === "PUT") headers["x-amz-server-side-encryption"] = "AES256";
+
+  const names = Object.keys(headers).sort();
+  const canonicalHeaders = names.map(n => n + ":" + String(headers[n]).trim() + "\n").join("");
+  const signedHeaders = names.join(";");
+  const canonical = [method, path, "", canonicalHeaders, signedHeaders, payloadHash].join("\n");
+  const scope = `${date}/${c.region}/s3/aws4_request`;
+  const sts = ["AWS4-HMAC-SHA256", amzDate, scope, await sha256hex(canonical)].join("\n");
+
+  let k = await hmac("AWS4" + c.secret, date);
+  k = await hmac(k, c.region);
+  k = await hmac(k, "s3");
+  k = await hmac(k, "aws4_request");
+  const sig = hex(await hmac(k, sts));
+
+  headers["Authorization"] =
+    `AWS4-HMAC-SHA256 Credential=${c.key}/${scope}, SignedHeaders=${signedHeaders}, Signature=${sig}`;
+  delete headers.host;
+
+  return fetch(`https://${host}${path}`, { method, headers, body: body || undefined });
+}
+
 /* ---------- email (Resend, optional) ---------- */
 async function sendMail(env, to, subject, text) {
   if (!env.RESEND_API_KEY || !to) return;
@@ -320,7 +380,7 @@ export default {
 
       /* ---------- 本人確認書類のアップロード（公開・登録前） ---------- */
       if (path === "/api/upload/id-doc" && m === "POST") {
-        if (!env.DOCS) return J({ error: "現在アップロードをご利用いただけません。恐れ入りますが info@tamjump.com へ書類をお送りください。" }, 503);
+        if (!s3cfg(env)) return J({ error: "現在アップロードをご利用いただけません。恐れ入りますが info@tamjump.com へ書類をお送りください。" }, 503);
         const ct = req.headers.get("Content-Type") || "";
         if (!/^image\/(jpeg|png|webp|heic)$|^application\/pdf$/.test(ct))
           return J({ error: "JPEG・PNG・WebP・PDF のいずれかでお願いします" }, 400);
@@ -330,7 +390,8 @@ export default {
         const ext = ct === "application/pdf" ? "pdf" : ct.split("/")[1];
         const key = "id-docs/" + new Date().toISOString().slice(0, 10) + "/" +
                     crypto.randomUUID() + "." + ext;
-        await env.DOCS.put(key, buf, { httpMetadata: { contentType: ct } });
+        const up = await s3fetch(env, "PUT", key, buf, ct);
+        if (!up.ok) return J({ error: "アップロードに失敗しました（" + up.status + "）" }, 502);
         return J({ ok: true, key });
       }
 
@@ -597,14 +658,14 @@ export default {
         /* 紹介パートナー: 本人確認書類の閲覧（署名なしの直接配信） */
         let mDoc = path.match(/^\/api\/admin\/agents\/(\d+)\/doc\/(front|back)$/);
         if (mDoc && m === "GET") {
-          if (!env.DOCS) return J({ error: "R2 が未設定です" }, 503);
+          if (!s3cfg(env)) return J({ error: "S3 が未設定です" }, 503);
           const a = await env.DB.prepare("SELECT id_doc_front,id_doc_back FROM agents WHERE id=?").bind(mDoc[1]).first();
           const key = a && (mDoc[2] === "front" ? a.id_doc_front : a.id_doc_back);
           if (!key) return J({ error: "書類がありません" }, 404);
-          const obj = await env.DOCS.get(key);
-          if (!obj) return J({ error: "書類が見つかりません" }, 404);
+          const obj = await s3fetch(env, "GET", key);
+          if (!obj.ok) return J({ error: "書類を取得できませんでした（" + obj.status + "）" }, 404);
           return new Response(obj.body, { headers: {
-            "Content-Type": obj.httpMetadata?.contentType || "application/octet-stream",
+            "Content-Type": obj.headers.get("Content-Type") || "application/octet-stream",
             "Cache-Control": "private, no-store",
             "Access-Control-Allow-Origin": origin,
           }});

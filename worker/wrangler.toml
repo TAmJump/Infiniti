@@ -7,10 +7,6 @@ binding = "DB"
 database_name = "next-orders"
 database_id = "01ea16f0-aa4f-4d37-b9a0-8176e4ea17f1"
 
-[[r2_buckets]]
-binding = "DOCS"
-bucket_name = "next-docs"
-
 [triggers]
 crons = ["0 18 * * *"]   # 毎日 03:00 JST に休眠パートナーを自動解約
 
@@ -20,3 +16,7 @@ crons = ["0 18 * * *"]   # 毎日 03:00 JST に休眠パートナーを自動解
 #   MAIL_FROM        例: Next Innovation <info@tamjump.com>
 #   MAIL_REPLY_TO    例: info@tamjump.com
 #   ADMIN_EMAIL      例: info@tamjump.com
+#   DOC_AWS_ACCESS_KEY_ID       本人確認書類用 IAM のアクセスキー
+#   DOC_AWS_SECRET_ACCESS_KEY   同シークレット
+#   DOC_S3_BUCKET               既定 nextinnovation-docs
+#   DOC_S3_REGION               既定 ap-northeast-1
