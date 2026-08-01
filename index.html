@@ -188,6 +188,21 @@
   .profile-table ul li{position:relative;padding-left:16px;font-size:13.5px;color:var(--ink-soft);line-height:1.95}
   .profile-table ul li::before{content:"—";position:absolute;left:0;color:var(--rose)}
 
+  .cform{max-width:660px;margin:0 auto 26px;text-align:left}
+  .crow{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .cfield{margin-bottom:16px}
+  .cfield label{display:block;font-family:var(--jp-sans);font-size:12px;font-weight:500;color:var(--ink);margin-bottom:7px;letter-spacing:.04em}
+  .cfield label span{color:var(--rose);margin-left:3px}
+  .cfield input,.cfield select,.cfield textarea{width:100%;background:var(--white);border:1px solid var(--line);padding:12px 13px;font-family:var(--jp-sans);font-size:14px;color:var(--ink);border-radius:2px;transition:border-color .2s}
+  .cfield input:focus,.cfield select:focus,.cfield textarea:focus{outline:none;border-color:var(--rose)}
+  .cfield textarea{resize:vertical;line-height:1.8}
+  .cpot{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+  .cmsg{display:none;padding:13px 15px;border-radius:2px;font-size:13px;line-height:1.8;margin-bottom:18px;font-family:var(--jp-sans)}
+  .cmsg.err{display:block;background:#fdf0f2;border:1px solid var(--rose);color:var(--rose-deep)}
+  .cmsg.ok{display:block;background:#f2f7f3;border:1px solid #7ba07f;color:#4a6b4e}
+  .cmail{font-size:12px;color:var(--muted);font-family:var(--jp-serif)}
+  .cmail a{color:var(--rose);border-bottom:1px solid var(--rose)}
+  @media(max-width:640px){.crow{grid-template-columns:1fr;gap:0}}
   /* contact */
   .contact{padding:clamp(78px,10vw,130px) clamp(20px,5vw,80px);max-width:1320px;margin:0 auto;text-align:center}
   .contact .eyebrow{font-size:11px;font-weight:600;letter-spacing:.24em;color:var(--rose);text-transform:uppercase;margin-bottom:26px}
@@ -740,7 +755,37 @@
     <div class="eyebrow">Get in touch</div>
     <h2>お問い合わせ<em>。</em></h2>
     <p>製品・取引・協業に関するご相談を承っております。下記よりお気軽にご連絡ください。</p>
-    <a class="btn-rose" href="mailto:info@nextinnovation.co.jp">お問い合わせ <span>→</span></a>
+
+    <div class="cform">
+      <div id="cmsg" class="cmsg"></div>
+      <div id="cform">
+        <div class="crow">
+          <div class="cfield"><label>お名前 <span>*</span></label><input type="text" id="c_name" placeholder="山田 太郎"></div>
+          <div class="cfield"><label>会社名・サロン名</label><input type="text" id="c_company" placeholder="任意"></div>
+        </div>
+        <div class="crow">
+          <div class="cfield"><label>メールアドレス <span>*</span></label><input type="email" id="c_email" placeholder="you@example.jp"></div>
+          <div class="cfield"><label>お電話番号</label><input type="tel" id="c_phone" placeholder="任意"></div>
+        </div>
+        <div class="cfield"><label>お問い合わせの種別</label>
+          <select id="c_cat">
+            <option>製品について</option>
+            <option>お取引について</option>
+            <option>紹介パートナー制度について</option>
+            <option>OEM・協業のご相談</option>
+            <option>採用について</option>
+            <option>その他</option>
+          </select>
+        </div>
+        <div class="cfield"><label>お問い合わせ内容 <span>*</span></label><textarea id="c_msg" rows="5" placeholder="ご相談内容をご記入ください"></textarea></div>
+        <input type="text" id="c_web" class="cpot" tabindex="-1" autocomplete="off">
+        <div class="cfield" style="text-align:left;font-size:11px;color:var(--muted);line-height:1.9">
+          ご入力いただいた情報は、お問い合わせへの回答および当社からのご連絡にのみ利用します。
+        </div>
+        <button class="btn-rose" id="c_go" style="margin-top:8px">送信する <span>→</span></button>
+      </div>
+    </div>
+    <div class="cmail">お電話・メールでも承ります　<a href="mailto:info@tamjump.com">info@tamjump.com</a></div>
   </div>
 </section>
 
@@ -765,6 +810,29 @@
   nm.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>nm.classList.remove('open')));
   const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.14});
   document.querySelectorAll('.reveal').forEach((el,i)=>{el.style.transitionDelay=(i%3*60)+'ms';io.observe(el)});
+</script>
+<script src="order/config.js"></script>
+<script>
+(function(){
+  var $=function(x){return document.getElementById(x)};
+  var msg=$('cmsg');
+  function show(t,ok){msg.textContent=t;msg.className='cmsg '+(ok?'ok':'err')}
+  $('c_go').addEventListener('click',async function(){
+    var b={name:$('c_name').value.trim(),company:$('c_company').value.trim(),
+      email:$('c_email').value.trim(),phone:$('c_phone').value.trim(),
+      category:$('c_cat').value,message:$('c_msg').value.trim(),website:$('c_web').value};
+    if(!b.name||!b.email||!b.message){show('お名前・メールアドレス・お問い合わせ内容をご入力ください');return}
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(b.email)){show('メールアドレスをご確認ください');return}
+    $('c_go').disabled=true; show('送信しています…',true);
+    try{
+      var r=await fetch(window.NX_API+'/api/contact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});
+      var d=await r.json();
+      if(!r.ok){show(d.error||'送信できませんでした。お手数ですが info@tamjump.com までご連絡ください');$('c_go').disabled=false;return}
+      $('cform').style.display='none';
+      show('お問い合わせを受け付けました。確認のうえ、担当者よりご連絡いたします。',true);
+    }catch(e){show('送信できませんでした。お手数ですが info@tamjump.com までご連絡ください');$('c_go').disabled=false}
+  });
+})();
 </script>
 </body>
 </html>

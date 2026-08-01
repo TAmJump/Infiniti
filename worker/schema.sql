@@ -15,7 +15,8 @@ CREATE TABLE IF NOT EXISTS accounts (
   status TEXT NOT NULL DEFAULT 'pending',
   created_at TEXT,
   approved_at TEXT,
-  referred_by TEXT
+  referred_by TEXT,
+  pref TEXT, city TEXT, addr1 TEXT, addr2 TEXT
 );
 
 CREATE TABLE IF NOT EXISTS admins (
@@ -113,8 +114,27 @@ CREATE TABLE IF NOT EXISTS agents (
   agreed_ua TEXT,
   note TEXT,
   created_at TEXT,
-  approved_at TEXT
+  approved_at TEXT,
+  pref TEXT, city TEXT, addr1 TEXT, addr2 TEXT,
+  birthday TEXT, corp_no TEXT,
+  id_doc_type TEXT, id_doc_front TEXT, id_doc_back TEXT,
+  id_doc_status TEXT DEFAULT 'none', id_doc_at TEXT,
+  last_activity_at TEXT, closed_at TEXT, close_reason TEXT
 );
+
+CREATE TABLE IF NOT EXISTS contacts (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT NOT NULL,
+  company TEXT,
+  email TEXT NOT NULL,
+  phone TEXT,
+  category TEXT,
+  message TEXT NOT NULL,
+  status TEXT DEFAULT 'new',
+  ip TEXT,
+  created_at TEXT
+);
+CREATE INDEX IF NOT EXISTS idx_contacts_status ON contacts(status);
 
 CREATE TABLE IF NOT EXISTS rewards (
   id INTEGER PRIMARY KEY AUTOINCREMENT,

@@ -61,15 +61,71 @@
         <input type="email" id="email" placeholder="you@example.jp">
         <div class="hint">ログインIDとして使用します</div>
       </div>
+      <div class="field">
+        <label>生年月日 <span class="req" id="bdReq">*</span></label>
+        <input type="date" id="birthday" autocomplete="bday" max="2010-12-31">
+        <div class="hint">本人確認書類の記載と一致している必要があります</div>
+      </div>
+      <div class="field hidden" id="corpNoField">
+        <label>法人番号</label>
+        <input type="text" id="corp_no" inputmode="numeric" placeholder="13桁（任意）">
+      </div>
+
+      <div class="field" style="margin-top:26px"><label style="font-weight:600">ご住所</label></div>
       <div class="row2">
         <div class="field">
-          <label>郵便番号</label>
+          <label>郵便番号 <span class="req">*</span></label>
           <input type="text" id="postal" inputmode="numeric" autocomplete="postal-code" placeholder="362-0000">
         </div>
         <div class="field">
-          <label>ご住所 <span class="req">*</span></label>
-          <input type="text" id="address" placeholder="埼玉県上尾市…">
+          <label>都道府県 <span class="req">*</span></label>
+          <select id="pref" autocomplete="address-level1"><option value="">選択してください</option><option>北海道</option><option>青森県</option><option>岩手県</option><option>宮城県</option><option>秋田県</option><option>山形県</option><option>福島県</option><option>茨城県</option><option>栃木県</option><option>群馬県</option><option>埼玉県</option><option>千葉県</option><option>東京都</option><option>神奈川県</option><option>新潟県</option><option>富山県</option><option>石川県</option><option>福井県</option><option>山梨県</option><option>長野県</option><option>岐阜県</option><option>静岡県</option><option>愛知県</option><option>三重県</option><option>滋賀県</option><option>京都府</option><option>大阪府</option><option>兵庫県</option><option>奈良県</option><option>和歌山県</option><option>鳥取県</option><option>島根県</option><option>岡山県</option><option>広島県</option><option>山口県</option><option>徳島県</option><option>香川県</option><option>愛媛県</option><option>高知県</option><option>福岡県</option><option>佐賀県</option><option>長崎県</option><option>熊本県</option><option>大分県</option><option>宮崎県</option><option>鹿児島県</option><option>沖縄県</option></select>
         </div>
+      </div>
+      <div class="field">
+        <label>市区町村 <span class="req">*</span></label>
+        <input type="text" id="city" autocomplete="address-level2" placeholder="上尾市">
+      </div>
+      <div class="field">
+        <label>町名・番地 <span class="req">*</span></label>
+        <input type="text" id="addr1" autocomplete="address-line1" placeholder="仲町1-7-8">
+      </div>
+      <div class="field">
+        <label>建物名・部屋番号</label>
+        <input type="text" id="addr2" autocomplete="address-line2" placeholder="◯◯ビル 301（任意）">
+      </div>
+
+      <div class="field" style="margin-top:26px">
+        <label style="font-weight:600">本人確認書類 <span class="req">*</span></label>
+        <div class="hint">報酬のお支払いと不正防止のため、ご本人（法人の場合はご担当者）の確認をさせていただきます。ご提出いただいた画像は本人確認以外の目的では使用しません。</div>
+      </div>
+      <div class="field">
+        <label>書類の種類 <span class="req">*</span></label>
+        <select id="doctype">
+          <option value="">選択してください</option>
+          <option value="運転免許証">運転免許証（表・裏）</option>
+          <option value="マイナンバーカード">マイナンバーカード（表のみ）</option>
+          <option value="パスポート">パスポート（顔写真ページ・所持人記入欄）</option>
+          <option value="健康保険証＋住民票">健康保険証＋住民票</option>
+          <option value="在留カード">在留カード（表・裏）</option>
+        </select>
+        <div class="hint">マイナンバーカードをご提出の場合、個人番号が記載された<b>裏面はアップロードしないでください</b>。</div>
+      </div>
+      <div class="row2">
+        <div class="field">
+          <label>表面・顔写真のあるページ <span class="req">*</span></label>
+          <input type="file" id="doc1" accept="image/jpeg,image/png,image/webp,application/pdf">
+          <div class="hint" id="doc1hint">JPEG・PNG・PDF／6MBまで</div>
+        </div>
+        <div class="field">
+          <label>裏面・2枚目</label>
+          <input type="file" id="doc2" accept="image/jpeg,image/png,image/webp,application/pdf">
+          <div class="hint" id="doc2hint">書類の種類により必要です</div>
+        </div>
+      </div>
+      <div class="note-box" style="font-size:12px">
+        <b>撮影のお願い</b><br>
+        四隅が写り、氏名・住所・生年月日・有効期限がはっきり読み取れる状態でご提出ください。反射やぼやけがある場合、確認できず再提出をお願いすることがあります。
       </div>
 
       <div class="field" style="margin-top:26px">
@@ -119,10 +175,12 @@
 
 <script src="config.js"></script>
 <script>
-/* 郵便番号 → 住所の自動補完（zipcloud）。ハイフンあり・なし双方に対応 */
-function nxZipAuto(postalId, addrId){
-  const zi=document.getElementById(postalId), ai=document.getElementById(addrId);
-  if(!zi||!ai) return;
+/* 郵便番号 → 住所の自動補完（zipcloud）。分割入力に対応 */
+function nxZipAuto(postalId, cityId, prefId, addr1Id){
+  const zi=document.getElementById(postalId);
+  const ci=document.getElementById(cityId), pi=prefId?document.getElementById(prefId):null;
+  const a1=addr1Id?document.getElementById(addr1Id):null;
+  if(!zi||!ci) return;
   let last='';
   const hint=document.createElement('div');
   hint.className='hint'; hint.style.display='none'; hint.style.marginTop='6px';
@@ -137,13 +195,11 @@ function nxZipAuto(postalId, addrId){
       const d=await r.json();
       if(d.status===200&&d.results&&d.results.length){
         const x=d.results[0];
-        const a=x.address1+x.address2+x.address3;
-        if(!ai.value.trim()||confirm('住所を「'+a+'」に置き換えますか？')){
-          ai.value=a; ai.focus();
-          const n=ai.value.length; ai.setSelectionRange(n,n);
-        }
+        if(pi) pi.value=x.address1;
+        ci.value=x.address2+x.address3;
         zi.value=z.slice(0,3)+'-'+z.slice(3);
         hint.textContent='番地・建物名を続けてご入力ください';
+        if(a1) a1.focus();
       }else{
         hint.textContent='該当する住所が見つかりませんでした。手入力してください';
       }
@@ -156,28 +212,64 @@ function nxZipAuto(postalId, addrId){
 <script>
 const $=s=>document.querySelector(s);
 const msg=$('#msg');
-function show(t,ok){msg.textContent=t;msg.className='msg '+(ok?'ok':'err')}
+const TWO_SIDED=['運転免許証','パスポート','健康保険証＋住民票','在留カード'];
+const MAXB=6*1024*1024;
+function show(t,ok){msg.textContent=t;msg.className='msg '+(ok?'ok':'err');msg.scrollIntoView({block:'nearest'})}
+async function upload(file){
+  if(file.size>MAXB) throw new Error(file.name+' は6MBを超えています。画質を下げてお試しください');
+  const r=await fetch(NX_API+'/api/upload/id-doc',{method:'POST',headers:{'Content-Type':file.type},body:file});
+  const d=await r.json();
+  if(!r.ok) throw new Error(d.error||'アップロードに失敗しました');
+  return d.key;
+}
+$('#kind').addEventListener('change',()=>{
+  const c=$('#kind').value==='corp'||$('#kind').value==='salon';
+  $('#corpNoField').classList.toggle('hidden',!c);
+  $('#bdReq').style.display=c?'none':'inline';
+});
+$('#doctype').addEventListener('change',()=>{
+  const t=$('#doctype').value;
+  $('#doc2hint').textContent=TWO_SIDED.includes(t)?t+'は2枚目もご提出ください（必須）':'この書類では2枚目は不要です';
+});
+['doc1','doc2'].forEach(id=>$('#'+id).addEventListener('change',()=>{
+  const f=$('#'+id).files[0]; if(!f) return;
+  $('#'+id+'hint').textContent=f.size>MAXB
+    ? f.name+'（'+(f.size/1048576).toFixed(1)+'MB）はサイズ超過です'
+    : f.name+'（'+(f.size/1048576).toFixed(1)+'MB）を選択しました';
+}));
 async function submit(){
   const v=id=>$('#'+id).value.trim();
   const b={name:v('name'),kind:v('kind'),contact_name:v('contact'),phone:v('phone'),email:v('email'),
-    postal:v('postal'),address:v('address'),
+    birthday:v('birthday'),corp_no:v('corp_no'),
+    postal:v('postal'),pref:v('pref'),city:v('city'),addr1:v('addr1'),addr2:v('addr2'),
+    id_doc_type:v('doctype'),
     bank_name:v('bank'),bank_branch:v('branch'),bank_type:v('btype'),bank_number:v('bnum'),bank_holder:v('bholder'),
     pw:$('#pw').value,note:v('note'),agree:$('#agree').checked};
-  if(!b.name||!b.phone||!b.email||!b.address||!b.pw){show('必須項目をご入力ください');return}
+  const isCorp=b.kind==='corp'||b.kind==='salon';
+  if(!b.name||!b.phone||!b.email||!b.pw){show('必須項目をご入力ください');return}
+  if(!b.postal||!b.pref||!b.city||!b.addr1){show('ご住所を最後までご入力ください');return}
+  if(!isCorp&&!b.birthday){show('生年月日をご入力ください');return}
   if(b.pw.length<8){show('パスワードは8文字以上でご設定ください');return}
   if(b.pw!==$('#pw2').value){show('パスワードが一致しません');return}
+  if(!b.id_doc_type){show('本人確認書類の種類をお選びください');return}
+  if(!$('#doc1').files[0]){show('本人確認書類（表面）をアップロードしてください');return}
+  if(TWO_SIDED.includes(b.id_doc_type)&&!$('#doc2').files[0]){show(b.id_doc_type+'は2枚のご提出が必要です');return}
   if(!b.agree){show('紹介パートナー規約へのご同意が必要です');return}
   $('#go').disabled=true;
   try{
+    show('本人確認書類をアップロードしています…',true);
+    b.id_doc_front=await upload($('#doc1').files[0]);
+    if($('#doc2').files[0]) b.id_doc_back=await upload($('#doc2').files[0]);
+    show('ご登録内容を送信しています…',true);
     const r=await fetch(NX_API+'/api/agent/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});
     const d=await r.json();
     if(!r.ok){show(d.error||'登録に失敗しました');$('#go').disabled=false;return}
     $('#form').classList.add('hidden'); msg.className='msg hidden'; $('#done').classList.remove('hidden');
     window.scrollTo(0,0);
-  }catch(e){show('サーバーに接続できません');$('#go').disabled=false}
+  }catch(e){show(e.message||'サーバーに接続できません');$('#go').disabled=false}
 }
 $('#go').addEventListener('click',submit);
-nxZipAuto('postal','address');
+nxZipAuto('postal','city','pref','addr1');
 </script>
 </body>
 </html>

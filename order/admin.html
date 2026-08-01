@@ -40,6 +40,7 @@
     <button class="tab" data-p="prod">製造発注</button>
     <button class="tab" data-p="agents">紹介パートナー <span id="agBadge" class="pill pending" style="margin-left:6px;display:none"></span></button>
     <button class="tab" data-p="rewards">紹介報酬</button>
+    <button class="tab" data-p="contacts">お問い合わせ <span id="ctBadge" class="pill pending" style="margin-left:6px;display:none"></span></button>
   </div>
 
   <div class="panel active" id="p-apps">
@@ -70,10 +71,10 @@
 
   <div class="panel" id="p-agents">
     <div class="toolbar"><div class="filter" id="agfilter">
-      <button class="on" data-s="">すべて</button><button data-s="pending">承認待ち</button><button data-s="active">有効</button><button data-s="suspended">停止中</button>
-    </div><div class="sp"></div></div>
+      <button class="on" data-s="">すべて</button><button data-s="pending">承認待ち</button><button data-s="active">有効</button><button data-s="suspended">停止中</button><button data-s="closed">解約済</button><button data-s="rejected">却下</button>
+    </div><div class="sp"></div><button class="btn ghost sm" id="closeDorm">90日無実績を一括解約</button></div>
     <div id="agLoad" class="center"><div class="spin"></div></div>
-    <table class="tbl hidden" id="agTbl"><thead><tr><th>コード</th><th>お名前・屋号</th><th>連絡先</th><th>単価</th><th>本数</th><th>報酬計</th><th>状態</th><th></th></tr></thead><tbody id="agBody"></tbody></table>
+    <table class="tbl hidden" id="agTbl"><thead><tr><th>コード</th><th>お名前・屋号</th><th>連絡先・住所</th><th>本人確認</th><th>単価</th><th>実績</th><th>状態</th><th></th></tr></thead><tbody id="agBody"></tbody></table>
     <div class="empty hidden" id="agEmpty">該当する紹介パートナーはいません。</div>
   </div>
 
@@ -84,6 +85,12 @@
     <div id="rwLoad" class="center"><div class="spin"></div></div>
     <table class="tbl hidden" id="rwTbl"><thead><tr><th>計上日</th><th>紹介者</th><th>注文番号</th><th>紹介先</th><th>本数</th><th>報酬</th><th>状態</th><th></th></tr></thead><tbody id="rwBody"></tbody></table>
     <div class="empty hidden" id="rwEmpty">該当する報酬はありません。</div>
+  </div>
+
+  <div class="panel" id="p-contacts">
+    <div id="ctLoad" class="center"><div class="spin"></div></div>
+    <table class="tbl hidden" id="ctTbl"><thead><tr><th>受信日</th><th>お名前</th><th>連絡先</th><th>種別</th><th>内容</th><th>状態</th><th></th></tr></thead><tbody id="ctBody"></tbody></table>
+    <div class="empty hidden" id="ctEmpty">お問い合わせはありません。</div>
   </div>
 
   <div class="panel" id="p-prod">
@@ -134,13 +141,26 @@ function enter(){
 $$('.tab').forEach(t=>t.addEventListener('click',()=>{
   $$('.tab').forEach(x=>x.classList.remove('active')); t.classList.add('active');
   $$('.panel').forEach(p=>p.classList.remove('active')); $('#p-'+t.dataset.p).classList.add('active');
-  ({apps:loadApps,orders:loadOrders,partners:loadPartners,products:loadProducts,prod:loadPO,agents:loadAgents,rewards:loadRewards})[t.dataset.p]();
+  ({apps:loadApps,orders:loadOrders,partners:loadPartners,products:loadProducts,prod:loadPO,agents:loadAgents,rewards:loadRewards,contacts:loadContacts})[t.dataset.p]();
 }));
 
 
 /* ---------- 紹介パートナー ---------- */
 let AGF='', RWF='', AGENTS=[];
-const AGST={pending:'承認待ち',active:'有効',suspended:'停止中',rejected:'却下'};
+const AGST={pending:'承認待ち',active:'有効',suspended:'停止中',rejected:'却下',closed:'解約済'};
+const KYC={none:'未提出',submitted:'確認待ち',verified:'確認済',rejected:'要再提出'};
+const KIND={individual:'個人',salon:'サロン',corp:'法人'};
+window.viewDoc=async (id,side)=>{
+  const r=await api('/api/admin/agents/'+id+'/doc/'+side);
+  if(!r.ok){const d=await r.json().catch(()=>({}));alert(d.error||'書類を表示できません');return}
+  const b=await r.blob(); const u=URL.createObjectURL(b);
+  window.open(u,'_blank','noopener'); setTimeout(()=>URL.revokeObjectURL(u),60000);
+};
+window.kyc=async (id,st)=>{
+  if(st==='verified'&&!confirm('書類の記載と登録内容が一致していることを確認しましたか？'))return;
+  const r=await api('/api/admin/agents/'+id+'/kyc',{method:'POST',body:JSON.stringify({id_doc_status:st})});
+  if(r.ok)loadAgents();
+};
 const RWST={pending:'未確定',confirmed:'確定',paid:'支払済',void:'無効'};
 $$('#agfilter button').forEach(b=>b.addEventListener('click',()=>{
   $$('#agfilter button').forEach(x=>x.classList.remove('on')); b.classList.add('on'); AGF=b.dataset.s; loadAgents();
@@ -158,26 +178,66 @@ async function loadAgents(){
   $('#agLoad').classList.add('hidden');
   if(!a.length){$('#agEmpty').classList.remove('hidden');return}
   $('#agTbl').classList.remove('hidden');
-  $('#agBody').innerHTML=a.map(x=>`<tr>
-    <td>${esc(x.agent_code||'—')}</td>
-    <td>${esc(x.name)}${x.contact_name?'<br><span style="color:var(--stone);font-size:12px">'+esc(x.contact_name)+'</span>':''}</td>
-    <td style="font-size:12px">${esc(x.email)}<br><span style="color:var(--stone)">${esc(x.phone||'')}</span></td>
+  const dleft=x=>{const t=Date.parse(x.last_activity_at||x.approved_at||x.created_at);
+    if(isNaN(t))return null; return 90-Math.floor((Date.now()-t)/86400000)};
+  $('#agBody').innerHTML=a.map(x=>{
+    const dl=x.status==='active'?dleft(x):null;
+    return `<tr>
+    <td>${esc(x.agent_code||'—')}<br><span style="color:var(--stone);font-size:11px">${esc(KIND[x.kind]||x.kind||'')}</span></td>
+    <td>${esc(x.name)}${x.contact_name?'<br><span style="color:var(--stone);font-size:12px">'+esc(x.contact_name)+'</span>':''}${x.birthday?'<br><span style="color:var(--stone);font-size:11px">生年月日 '+esc(x.birthday)+'</span>':''}</td>
+    <td style="font-size:12px">${esc(x.email)}<br><span style="color:var(--stone)">${esc(x.phone||'')}</span><br><span style="color:var(--stone)">〒${esc(x.postal||'')} ${esc(x.address||'')}</span></td>
+    <td style="font-size:12px;white-space:nowrap">
+      <span class="pill ${x.id_doc_status==='verified'?'confirmed':x.id_doc_status==='rejected'?'void':'pending'}">${KYC[x.id_doc_status]||'未提出'}</span>
+      ${x.id_doc_type?'<br><span style="color:var(--stone);font-size:11px">'+esc(x.id_doc_type)+'</span>':''}
+      ${x.id_doc_front?`<br><button class="btn ghost sm" style="margin-top:6px" onclick="viewDoc(${x.id},'front')">表</button> ${x.id_doc_back?`<button class="btn ghost sm" onclick="viewDoc(${x.id},'back')">裏</button>`:''}`:''}
+      ${x.id_doc_front&&x.id_doc_status!=='verified'?`<br><button class="btn sm" style="margin-top:6px" onclick="kyc(${x.id},'verified')">本人確認OK</button>`:''}
+      ${x.id_doc_status==='verified'?`<br><button class="btn ghost sm" style="margin-top:6px" onclick="kyc(${x.id},'rejected')">取消</button>`:''}
+    </td>
     <td class="amt">¥${yen(x.reward_per_unit)}</td>
-    <td>${yen(x.units)} 本</td>
-    <td class="amt">¥${yen(x.amount)}<br><span style="color:var(--stone);font-size:12px">支払済 ¥${yen(x.paid)}</span></td>
-    <td><span class="pill ${esc(x.status)}">${AGST[x.status]||esc(x.status)}</span></td>
+    <td>${yen(x.units)} 本<br><span class="amt" style="font-size:12px">¥${yen(x.amount)}</span><br><span style="color:var(--stone);font-size:11px">支払済 ¥${yen(x.paid)}</span>${dl!==null?`<br><span style="font-size:11px;color:${dl<=14?'var(--warn)':'var(--stone)'}">自動解約まで ${dl>0?dl:0}日</span>`:''}</td>
+    <td><span class="pill ${esc(x.status)}">${AGST[x.status]||esc(x.status)}</span>${x.close_reason?'<br><span style="color:var(--stone);font-size:11px">'+esc(x.close_reason)+'</span>':''}</td>
     <td style="white-space:nowrap">
       ${x.status==='pending'?`<button class="btn sm" onclick="agApprove(${x.id})">承認・コード発行</button> <button class="btn danger sm" onclick="agSet(${x.id},'reject')">却下</button>`:''}
-      ${x.status==='active'?`<button class="btn ghost sm" onclick="agRate(${x.id},${x.reward_per_unit})">単価</button> <button class="btn danger sm" onclick="agSet(${x.id},'suspend')">停止</button>`:''}
-      ${x.status==='suspended'?`<button class="btn sm" onclick="agSet(${x.id},'activate')">再開</button>`:''}
-    </td></tr>`).join('');
+      ${x.status==='active'?`<button class="btn ghost sm" onclick="agRate(${x.id},${x.reward_per_unit})">単価</button> <button class="btn danger sm" onclick="agSet(${x.id},'suspend')">停止</button> <button class="btn danger sm" onclick="agSet(${x.id},'close')">解約</button>`:''}
+      ${x.status==='suspended'?`<button class="btn sm" onclick="agSet(${x.id},'activate')">再開</button> <button class="btn danger sm" onclick="agSet(${x.id},'close')">解約</button>`:''}
+    </td></tr>`}).join('');
 }
 window.agApprove=async id=>{if(!confirm('承認して紹介コードを発行しますか？登録メールへコードと紹介用リンクを送信します。'))return;
   const r=await api('/api/admin/agents/'+id+'/approve',{method:'POST'}); const d=await r.json();
   if(r.ok){alert('紹介コード '+d.agent_code+' を発行しました');loadAgents()}else alert(d.error||'エラー')};
-window.agSet=async (id,act)=>{const t={reject:'却下',suspend:'停止',activate:'再開'}[act];
-  if(!confirm(t+'しますか？'))return;
-  const r=await api('/api/admin/agents/'+id+'/'+act,{method:'POST'}); if(r.ok)loadAgents()};
+window.agSet=async (id,act)=>{const t={reject:'却下',suspend:'停止',activate:'再開',close:'解約'}[act];
+  if(!confirm(t+'しますか？登録メールへ通知が送信されます。'))return;
+  let reason='';
+  if(act!=='activate'){reason=prompt(t+'の理由（本人への通知に記載されます。空欄可）')||''}
+  const r=await api('/api/admin/agents/'+id+'/'+act,{method:'POST',body:JSON.stringify({reason})});
+  const d=await r.json().catch(()=>({}));
+  if(r.ok)loadAgents(); else alert(d.error||'エラー')};
+$('#closeDorm').addEventListener('click',async()=>{
+  if(!confirm('90日間ご紹介実績のない有効パートナーを一括で解約します。対象者へ通知メールが送信されます。よろしいですか？'))return;
+  const r=await api('/api/admin/agents/close-dormant',{method:'POST'});
+  const d=await r.json(); if(r.ok){alert(d.closed+'件を解約しました');loadAgents()}else alert(d.error||'エラー')});
+
+/* ---------- お問い合わせ ---------- */
+async function loadContacts(){
+  $('#ctLoad').classList.remove('hidden');$('#ctTbl').classList.add('hidden');$('#ctEmpty').classList.add('hidden');
+  const r=await api('/api/admin/contacts'); const d=await r.json(); const a=d.contacts||[];
+  $('#ctLoad').classList.add('hidden');
+  const nw=a.filter(x=>x.status==='new').length;
+  const b=$('#ctBadge'); if(nw){b.textContent=nw;b.style.display='inline-block'}else b.style.display='none';
+  if(!a.length){$('#ctEmpty').classList.remove('hidden');return}
+  $('#ctTbl').classList.remove('hidden');
+  $('#ctBody').innerHTML=a.map(x=>`<tr>
+    <td style="white-space:nowrap">${(x.created_at||'').slice(0,10)}</td>
+    <td>${esc(x.name)}${x.company?'<br><span style="color:var(--stone);font-size:12px">'+esc(x.company)+'</span>':''}</td>
+    <td style="font-size:12px"><a href="mailto:${esc(x.email)}" style="color:var(--coral)">${esc(x.email)}</a><br><span style="color:var(--stone)">${esc(x.phone||'')}</span></td>
+    <td style="font-size:12px">${esc(x.category||'')}</td>
+    <td style="font-size:12px;max-width:380px;white-space:pre-wrap">${esc(x.message)}</td>
+    <td><span class="pill ${x.status==='new'?'pending':'confirmed'}">${x.status==='new'?'未対応':'対応済'}</span></td>
+    <td>${x.status==='new'?`<button class="btn sm" onclick="ctDone(${x.id})">対応済</button>`:''}</td></tr>`).join('');
+}
+window.ctDone=async id=>{
+  const r=await api('/api/admin/contacts/'+id+'/status',{method:'POST',body:JSON.stringify({status:'done'})});
+  if(r.ok)loadContacts()};
 window.agRate=async (id,cur)=>{const v=prompt('1本あたりの紹介報酬（円）',cur);
   if(v===null)return; const n=parseInt(v); if(isNaN(n)||n<0){alert('数値を入力してください');return}
   const r=await api('/api/admin/agents/'+id+'/rate',{method:'POST',body:JSON.stringify({reward_per_unit:n})});

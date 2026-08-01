@@ -44,15 +44,28 @@
         <input type="email" id="email" placeholder="you@salon.jp">
         <div class="hint">ログインIDとして使用します</div>
       </div>
+      <div class="field" style="margin-top:20px"><label style="font-weight:600">サロン所在地</label></div>
       <div class="row2">
         <div class="field">
-          <label>郵便番号</label>
+          <label>郵便番号 <span class="req">*</span></label>
           <input type="text" id="postal" inputmode="numeric" autocomplete="postal-code" placeholder="362-0000">
         </div>
         <div class="field">
-          <label>所在地 <span class="req">*</span></label>
-          <input type="text" id="address" placeholder="埼玉県上尾市…">
+          <label>都道府県 <span class="req">*</span></label>
+          <select id="pref" autocomplete="address-level1"><option value="">選択してください</option><option>北海道</option><option>青森県</option><option>岩手県</option><option>宮城県</option><option>秋田県</option><option>山形県</option><option>福島県</option><option>茨城県</option><option>栃木県</option><option>群馬県</option><option>埼玉県</option><option>千葉県</option><option>東京都</option><option>神奈川県</option><option>新潟県</option><option>富山県</option><option>石川県</option><option>福井県</option><option>山梨県</option><option>長野県</option><option>岐阜県</option><option>静岡県</option><option>愛知県</option><option>三重県</option><option>滋賀県</option><option>京都府</option><option>大阪府</option><option>兵庫県</option><option>奈良県</option><option>和歌山県</option><option>鳥取県</option><option>島根県</option><option>岡山県</option><option>広島県</option><option>山口県</option><option>徳島県</option><option>香川県</option><option>愛媛県</option><option>高知県</option><option>福岡県</option><option>佐賀県</option><option>長崎県</option><option>熊本県</option><option>大分県</option><option>宮崎県</option><option>鹿児島県</option><option>沖縄県</option></select>
         </div>
+      </div>
+      <div class="field">
+        <label>市区町村 <span class="req">*</span></label>
+        <input type="text" id="city" autocomplete="address-level2" placeholder="上尾市">
+      </div>
+      <div class="field">
+        <label>町名・番地 <span class="req">*</span></label>
+        <input type="text" id="addr1" autocomplete="address-line1" placeholder="仲町1-7-8">
+      </div>
+      <div class="field">
+        <label>建物名・部屋番号</label>
+        <input type="text" id="addr2" autocomplete="address-line2" placeholder="◯◯ビル 301（任意）">
       </div>
       <div class="row2">
         <div class="field">
@@ -80,10 +93,12 @@
 
 <script src="config.js"></script>
 <script>
-/* 郵便番号 → 住所の自動補完（zipcloud）。ハイフンあり・なし双方に対応 */
-function nxZipAuto(postalId, addrId){
-  const zi=document.getElementById(postalId), ai=document.getElementById(addrId);
-  if(!zi||!ai) return;
+/* 郵便番号 → 住所の自動補完（zipcloud）。分割入力に対応 */
+function nxZipAuto(postalId, cityId, prefId, addr1Id){
+  const zi=document.getElementById(postalId);
+  const ci=document.getElementById(cityId), pi=prefId?document.getElementById(prefId):null;
+  const a1=addr1Id?document.getElementById(addr1Id):null;
+  if(!zi||!ci) return;
   let last='';
   const hint=document.createElement('div');
   hint.className='hint'; hint.style.display='none'; hint.style.marginTop='6px';
@@ -98,13 +113,11 @@ function nxZipAuto(postalId, addrId){
       const d=await r.json();
       if(d.status===200&&d.results&&d.results.length){
         const x=d.results[0];
-        const a=x.address1+x.address2+x.address3;
-        if(!ai.value.trim()||confirm('住所を「'+a+'」に置き換えますか？')){
-          ai.value=a; ai.focus();
-          const n=ai.value.length; ai.setSelectionRange(n,n);
-        }
+        if(pi) pi.value=x.address1;
+        ci.value=x.address2+x.address3;
         zi.value=z.slice(0,3)+'-'+z.slice(3);
         hint.textContent='番地・建物名を続けてご入力ください';
+        if(a1) a1.focus();
       }else{
         hint.textContent='該当する住所が見つかりませんでした。手入力してください';
       }
@@ -129,21 +142,24 @@ const msg=$('#msg');
 function show(t,ok){msg.textContent=t;msg.className='msg '+(ok?'ok':'err')}
 async function apply(){
   const v=id=>$('#'+id).value.trim();
-  const salon=v('salon'),contact=v('contact'),phone=v('phone'),email=v('email'),address=v('address'),pw=$('#pw').value,pw2=$('#pw2').value;
-  if(!salon||!contact||!phone||!email||!address||!pw){show('必須項目をすべて入力してください');return}
+  const salon=v('salon'),contact=v('contact'),phone=v('phone'),email=v('email'),pw=$('#pw').value,pw2=$('#pw2').value;
+  const postal=v('postal'),pref=v('pref'),city=v('city'),addr1=v('addr1'),addr2=v('addr2');
+  const address=[pref,city,addr1,addr2].filter(Boolean).join(' ');
+  if(!salon||!contact||!phone||!email||!pw){show('必須項目をすべて入力してください');return}
+  if(!postal||!pref||!city||!addr1){show('所在地を最後までご入力ください');return}
   if(pw.length<8){show('パスワードは8文字以上で設定してください');return}
   if(pw!==pw2){show('パスワードが一致しません');return}
   $('#go').disabled=true; msg.classList.add('hidden');
   try{
     const r=await fetch(NX_API+'/api/register',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({salon_name:salon,contact_name:contact,phone,email,postal:v('postal'),address,pw,note:v('note'),ref:REF})});
+      body:JSON.stringify({salon_name:salon,contact_name:contact,phone,email,postal,pref,city,addr1,addr2,address,pw,note:v('note'),ref:REF})});
     const d=await r.json();
     if(!r.ok){show(d.error||'申請に失敗しました');$('#go').disabled=false;return}
     $('#form').classList.add('hidden'); $('#done').classList.remove('hidden');
   }catch(e){show('サーバーに接続できません');$('#go').disabled=false}
 }
 $('#go').addEventListener('click',apply);
-nxZipAuto('postal','address');
+nxZipAuto('postal','city','pref','addr1');
 </script>
 </body>
 </html>

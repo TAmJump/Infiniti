@@ -7,7 +7,16 @@ binding = "DB"
 database_name = "next-orders"
 database_id = "01ea16f0-aa4f-4d37-b9a0-8176e4ea17f1"
 
+[[r2_buckets]]
+binding = "DOCS"
+bucket_name = "next-docs"
+
+[triggers]
+crons = ["0 18 * * *"]   # 毎日 03:00 JST に休眠パートナーを自動解約
+
 # vars は secret で投入（下記 SETUP.md 参照）:
 #   SESSION_SECRET   必須
-#   RESEND_API_KEY   任意（メール通知）
-#   MAIL_FROM        任意
+#   RESEND_API_KEY   メール通知に必須
+#   MAIL_FROM        例: Next Innovation <info@tamjump.com>
+#   MAIL_REPLY_TO    例: info@tamjump.com
+#   ADMIN_EMAIL      例: info@tamjump.com

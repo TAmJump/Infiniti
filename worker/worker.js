@@ -37,6 +37,14 @@ function fromB64url(s) {
   return atob(s);
 }
 const nowISO = () => new Date().toISOString();
+function joinAddr(b) {
+  return [b.pref, b.city, b.addr1, b.addr2].map(x => String(x || "").trim()).filter(Boolean).join(" ");
+}
+function daysSince(iso) {
+  if (!iso) return null;
+  const t = Date.parse(iso);
+  return isNaN(t) ? null : Math.floor((Date.now() - t) / 86400000);
+}
 
 /* ---------- password (PBKDF2-SHA256) ---------- */
 async function hashPw(pw, saltB64) {
@@ -158,6 +166,8 @@ export default {
         if (String(b.pw).length < 8) return J({ error: "パスワードは8文字以上です" }, 400);
         const exists = await env.DB.prepare("SELECT id FROM accounts WHERE email=?").bind(b.email).first();
         if (exists) return J({ error: "このメールアドレスは既に登録されています" }, 409);
+        const dupA = await env.DB.prepare("SELECT id FROM accounts WHERE lower(email)=?").bind(String(b.email).toLowerCase()).first();
+        if (dupA) return J({ error: "このメールアドレスは既にご登録いただいています。ログインできない場合は info@tamjump.com までご連絡ください。" }, 409);
         let ref = String(b.ref || "").trim().toUpperCase();
         if (ref) {
           const ag = await env.DB.prepare("SELECT agent_code FROM agents WHERE agent_code=? AND status='active'").bind(ref).first();
@@ -165,10 +175,15 @@ export default {
         }
         const { hash, salt } = await hashPw(b.pw);
         await env.DB.prepare(
-          `INSERT INTO accounts (salon_name,contact_name,email,phone,postal,address,note,pw_hash,pw_salt,status,created_at,referred_by)
-           VALUES (?,?,?,?,?,?,?,?,?, 'pending', ?,?)`
-        ).bind(b.salon_name, b.contact_name, b.email, b.phone, b.postal || "", b.address,
+          `INSERT INTO accounts (salon_name,contact_name,email,phone,postal,pref,city,addr1,addr2,address,note,pw_hash,pw_salt,status,created_at,referred_by)
+           VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?, 'pending', ?,?)`
+        ).bind(b.salon_name, b.contact_name, b.email, b.phone, b.postal || "",
+               b.pref || "", b.city || "", b.addr1 || "", b.addr2 || "", b.address || joinAddr(b),
                b.note || "", hash, salt, nowISO(), ref).run();
+        await sendMail(env, b.email, "取引申請を受け付けました｜Next Innovation",
+          `${b.salon_name} ${b.contact_name} 様\n\n取引申請を受け付けました。内容を確認のうえ、承認後に取引先コードとログイン方法をご案内します。\n\n株式会社Next Innovation\ninfo@tamjump.com`);
+        await sendMail(env, env.ADMIN_EMAIL || "info@tamjump.com", "【要確認】取引申請",
+          `${b.salon_name}／${b.contact_name}\n${b.email}／${b.phone}\n〒${b.postal || ""} ${b.address || joinAddr(b)}\n紹介コード：${ref || "なし"}\n\nhttps://nextinnovation.tamjump.com/order/admin.html`);
         return J({ ok: true, ref });
       }
 
@@ -283,29 +298,94 @@ export default {
         return J({ order: o });
       }
 
+      /* ---------- お問い合わせ（公開） ---------- */
+      if (path === "/api/contact" && m === "POST") {
+        const b = await body();
+        for (const f of ["name", "email", "message"])
+          if (!b[f]) return J({ error: "お名前・メールアドレス・お問い合わせ内容は必須です" }, 400);
+        if (String(b.message).length > 4000) return J({ error: "お問い合わせ内容が長すぎます" }, 400);
+        if (b.website) return J({ ok: true });   /* honeypot */
+        await env.DB.prepare(
+          `INSERT INTO contacts (name,company,email,phone,category,message,status,ip,created_at)
+           VALUES (?,?,?,?,?,?, 'new', ?,?)`
+        ).bind(b.name, b.company || "", b.email, b.phone || "", b.category || "その他",
+               b.message, req.headers.get("CF-Connecting-IP") || "", nowISO()).run();
+        await sendMail(env, env.ADMIN_EMAIL || "info@tamjump.com",
+          `【お問い合わせ】${b.category || "その他"}｜${b.name} 様`,
+          `お問い合わせを受け付けました。\n\nお名前：${b.name}\n会社名・サロン名：${b.company || "—"}\nメール：${b.email}\n電話：${b.phone || "—"}\n種別：${b.category || "その他"}\n\n${b.message}`);
+        await sendMail(env, b.email, "お問い合わせを受け付けました｜Next Innovation",
+          `${b.name} 様\n\nお問い合わせいただきありがとうございます。以下の内容で受け付けました。\n担当者より順次ご連絡いたします。\n\n──────────\n${b.message}\n──────────\n\n株式会社Next Innovation\n埼玉県上尾市仲町1-7-8\ninfo@tamjump.com`);
+        return J({ ok: true });
+      }
+
+      /* ---------- 本人確認書類のアップロード（公開・登録前） ---------- */
+      if (path === "/api/upload/id-doc" && m === "POST") {
+        if (!env.DOCS) return J({ error: "現在アップロードをご利用いただけません。恐れ入りますが info@tamjump.com へ書類をお送りください。" }, 503);
+        const ct = req.headers.get("Content-Type") || "";
+        if (!/^image\/(jpeg|png|webp|heic)$|^application\/pdf$/.test(ct))
+          return J({ error: "JPEG・PNG・WebP・PDF のいずれかでお願いします" }, 400);
+        const buf = await req.arrayBuffer();
+        if (buf.byteLength > MAX_DOC_BYTES) return J({ error: "ファイルサイズは6MBまでです" }, 400);
+        if (buf.byteLength < 1024) return J({ error: "ファイルを読み取れませんでした" }, 400);
+        const ext = ct === "application/pdf" ? "pdf" : ct.split("/")[1];
+        const key = "id-docs/" + new Date().toISOString().slice(0, 10) + "/" +
+                    crypto.randomUUID() + "." + ext;
+        await env.DOCS.put(key, buf, { httpMetadata: { contentType: ct } });
+        return J({ ok: true, key });
+      }
+
       /* ====================== 紹介パートナー ====================== */
       /* 登録（無料・商品購入不要） */
       if (path === "/api/agent/register" && m === "POST") {
         const b = await body();
-        for (const f of ["name", "email", "phone", "address", "pw"])
-          if (!b[f]) return J({ error: "必須項目が不足しています" }, 400);
-        if (String(b.pw).length < 8) return J({ error: "パスワードは8文字以上です" }, 400);
-        if (!b.agree) return J({ error: "規約への同意が必要です" }, 400);
-        const dup = await env.DB.prepare("SELECT id FROM agents WHERE email=?").bind(b.email).first();
-        if (dup) return J({ error: "このメールアドレスは既に登録されています" }, 409);
+        const isCorp = b.kind === "corp" || b.kind === "salon";
+        for (const f of ["name", "email", "phone", "postal", "pref", "city", "addr1", "pw"])
+          if (!b[f]) return J({ error: "必須項目が入力されていません" }, 400);
+        if (!isCorp && !b.birthday) return J({ error: "生年月日をご入力ください" }, 400);
+        if (String(b.pw).length < 8) return J({ error: "パスワードは8文字以上でご設定ください" }, 400);
+        if (!b.agree) return J({ error: "紹介パートナー規約へのご同意が必要です" }, 400);
+        if (!b.id_doc_type) return J({ error: "本人確認書類の種類をお選びください" }, 400);
+        if (!b.id_doc_front) return J({ error: "本人確認書類の画像をアップロードしてください" }, 400);
+
+        const email = String(b.email).trim().toLowerCase();
+        const dup = await env.DB.prepare("SELECT id,status FROM agents WHERE lower(email)=?").bind(email).first();
+        if (dup) {
+          const msg = dup.status === "closed" || dup.status === "rejected"
+            ? "このメールアドレスは過去に登録されています。再登録をご希望の場合は info@tamjump.com までご連絡ください。"
+            : "このメールアドレスは既に登録されています。ログインできない場合は info@tamjump.com までご連絡ください。";
+          return J({ error: msg }, 409);
+        }
+        /* 同一の携帯番号での重複登録も拒否する */
+        const phone = String(b.phone).replace(/[^0-9]/g, "");
+        if (phone) {
+          const dupP = await env.DB.prepare(
+            "SELECT id FROM agents WHERE replace(replace(phone,'-',''),' ','')=? AND status IN ('pending','active')"
+          ).bind(phone).first();
+          if (dupP) return J({ error: "この電話番号は既に登録されています。重複してのご登録はいただけません。" }, 409);
+        }
+
+        const address = joinAddr(b);
         const { hash, salt } = await hashPw(b.pw);
         await env.DB.prepare(
-          `INSERT INTO agents (name,kind,contact_name,email,phone,postal,address,
+          `INSERT INTO agents (name,kind,contact_name,email,phone,postal,pref,city,addr1,addr2,address,
+             birthday,corp_no,id_doc_type,id_doc_front,id_doc_back,id_doc_status,id_doc_at,
              bank_name,bank_branch,bank_type,bank_number,bank_holder,
-             reward_per_unit,pw_hash,pw_salt,status,agreed_version,agreed_at,agreed_ip,agreed_ua,note,created_at)
-           VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?, 'pending', ?,?,?,?,?,?)`
-        ).bind(b.name, b.kind || "individual", b.contact_name || "", b.email, b.phone,
-               b.postal || "", b.address,
+             reward_per_unit,pw_hash,pw_salt,status,agreed_version,agreed_at,agreed_ip,agreed_ua,note,created_at,last_activity_at)
+           VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?, 'submitted', ?,?,?,?,?,?,?,?,?, 'pending', ?,?,?,?,?,?,?)`
+        ).bind(b.name, b.kind || "individual", b.contact_name || "", email, b.phone,
+               b.postal, b.pref, b.city, b.addr1, b.addr2 || "", address,
+               b.birthday || "", b.corp_no || "",
+               b.id_doc_type, b.id_doc_front, b.id_doc_back || "", nowISO(),
                b.bank_name || "", b.bank_branch || "", b.bank_type || "", b.bank_number || "", b.bank_holder || "",
                1000, hash, salt,
                AGENT_TERMS_VERSION, nowISO(),
                req.headers.get("CF-Connecting-IP") || "", (req.headers.get("User-Agent") || "").slice(0, 300),
-               b.note || "", nowISO()).run();
+               b.note || "", nowISO(), nowISO()).run();
+
+        await sendMail(env, email, "紹介パートナー登録を受け付けました｜Next Innovation",
+          `${b.name} 様\n\n紹介パートナー登録のお申し込みを受け付けました。\n\nご登録内容とご提出いただいた本人確認書類を確認のうえ、審査結果をこのメールアドレスへご連絡します。通常3営業日ほどお時間をいただきます。\n\n承認後、あなた専用の紹介コードと紹介用リンクをお送りします。\n\n── ご登録内容 ──\nお名前・屋号：${b.name}\nご住所：〒${b.postal} ${address}\nお電話番号：${b.phone}\n\nお心当たりのない場合は、このメールへご返信ください。\n\n株式会社Next Innovation\ninfo@tamjump.com`);
+        await sendMail(env, env.ADMIN_EMAIL || "info@tamjump.com", "【要確認】紹介パートナー登録の申込",
+          `紹介パートナーの新規申込がありました。\n\nお名前：${b.name}\n区分：${b.kind}\nメール：${email}\n電話：${b.phone}\n住所：〒${b.postal} ${address}\n本人確認書類：${b.id_doc_type}\n\n管理コンソールで審査してください。\nhttps://nextinnovation.tamjump.com/order/admin.html`);
         return J({ ok: true });
       }
 
@@ -315,8 +395,11 @@ export default {
         const a = await env.DB.prepare("SELECT * FROM agents WHERE email=?").bind(b.email || "").first();
         if (!a || !(await verifyPw(b.pw || "", a.pw_hash, a.pw_salt)))
           return J({ error: "メールアドレスまたはパスワードが違います" }, 401);
-        if (a.status === "pending") return J({ error: "登録は審査中です。承認後にご利用いただけます" }, 403);
+        if (a.status === "pending") return J({ error: "ただいま審査中です。結果はメールでご連絡します" }, 403);
+        if (a.status === "closed") return J({ error: "このアカウントは解約済みです。再開をご希望の場合は info@tamjump.com までご連絡ください" }, 403);
+        if (a.status === "suspended") return J({ error: "このアカウントは現在ご利用いただけません。info@tamjump.com までご連絡ください" }, 403);
         if (a.status !== "active") return J({ error: "このアカウントはご利用いただけません" }, 403);
+        await env.DB.prepare("UPDATE agents SET last_activity_at=? WHERE id=?").bind(nowISO(), a.id).run();
         const token = await signToken({ sub: a.id, role: "agent", exp: Math.floor(Date.now() / 1000) + TOKEN_TTL }, env.SESSION_SECRET);
         return J({ token, name: a.name, agent_code: a.agent_code });
       }
@@ -335,6 +418,7 @@ export default {
       if (path === "/api/agent/summary" && m === "GET") {
         const a = await authAgent(req, env);
         if (!a) return J({ error: "unauthorized" }, 401);
+        const dormant = daysSince(a.last_activity_at);
         const tot = await env.DB.prepare(
           `SELECT COALESCE(SUM(units),0) units,
                   COALESCE(SUM(CASE WHEN status='pending'   THEN amount ELSE 0 END),0) pending,
@@ -349,7 +433,8 @@ export default {
            FROM rewards WHERE agent_id=? AND status<>'void'
            GROUP BY ym ORDER BY ym DESC LIMIT 12`).bind(a.id).all();
         return J({ summary: tot, referred_accounts: intro ? intro.c : 0, months: months || [],
-                   reward_per_unit: a.reward_per_unit });
+                   reward_per_unit: a.reward_per_unit,
+                   dormant_days_left: dormant === null ? null : Math.max(0, DORMANT_DAYS - dormant) });
       }
 
       /* 報酬明細 */
@@ -496,8 +581,10 @@ export default {
         /* 紹介パートナー: 一覧 */
         if (path === "/api/admin/agents" && m === "GET") {
           const st = url.searchParams.get("status");
-          const sql = `SELECT a.id,a.agent_code,a.name,a.kind,a.email,a.phone,a.address,a.status,
-                         a.reward_per_unit,a.agreed_version,a.agreed_at,a.created_at,
+          const sql = `SELECT a.id,a.agent_code,a.name,a.kind,a.email,a.phone,a.postal,a.address,a.status,
+                         a.reward_per_unit,a.agreed_version,a.agreed_at,a.created_at,a.birthday,a.corp_no,
+                         a.id_doc_type,a.id_doc_front,a.id_doc_back,a.id_doc_status,a.id_doc_at,
+                         a.last_activity_at,a.closed_at,a.close_reason,a.note,
                          a.bank_name,a.bank_branch,a.bank_type,a.bank_number,a.bank_holder,
                          (SELECT COALESCE(SUM(units),0) FROM rewards WHERE agent_id=a.id AND status<>'void') units,
                          (SELECT COALESCE(SUM(amount),0) FROM rewards WHERE agent_id=a.id AND status<>'void') amount,
@@ -507,24 +594,83 @@ export default {
           const { results } = await q.all();
           return J({ agents: results || [] });
         }
+        /* 紹介パートナー: 本人確認書類の閲覧（署名なしの直接配信） */
+        let mDoc = path.match(/^\/api\/admin\/agents\/(\d+)\/doc\/(front|back)$/);
+        if (mDoc && m === "GET") {
+          if (!env.DOCS) return J({ error: "R2 が未設定です" }, 503);
+          const a = await env.DB.prepare("SELECT id_doc_front,id_doc_back FROM agents WHERE id=?").bind(mDoc[1]).first();
+          const key = a && (mDoc[2] === "front" ? a.id_doc_front : a.id_doc_back);
+          if (!key) return J({ error: "書類がありません" }, 404);
+          const obj = await env.DOCS.get(key);
+          if (!obj) return J({ error: "書類が見つかりません" }, 404);
+          return new Response(obj.body, { headers: {
+            "Content-Type": obj.httpMetadata?.contentType || "application/octet-stream",
+            "Cache-Control": "private, no-store",
+            "Access-Control-Allow-Origin": origin,
+          }});
+        }
+        /* 紹介パートナー: 本人確認の可否 */
+        let mKyc = path.match(/^\/api\/admin\/agents\/(\d+)\/kyc$/);
+        if (mKyc && m === "POST") {
+          const b = await body();
+          if (!["verified", "rejected", "submitted"].includes(b.id_doc_status))
+            return J({ error: "invalid" }, 400);
+          await env.DB.prepare("UPDATE agents SET id_doc_status=? WHERE id=?").bind(b.id_doc_status, mKyc[1]).run();
+          return J({ ok: true });
+        }
+        /* 休眠パートナーの一括解約 */
+        if (path === "/api/admin/agents/close-dormant" && m === "POST") {
+          const r = await closeDormant(env);
+          return J({ ok: true, closed: r });
+        }
+        /* お問い合わせ: 一覧 */
+        if (path === "/api/admin/contacts" && m === "GET") {
+          const { results } = await env.DB.prepare(
+            "SELECT * FROM contacts ORDER BY id DESC LIMIT 300").all();
+          return J({ contacts: results || [] });
+        }
+        let mCt = path.match(/^\/api\/admin\/contacts\/(\d+)\/status$/);
+        if (mCt && m === "POST") {
+          const b = await body();
+          await env.DB.prepare("UPDATE contacts SET status=? WHERE id=?").bind(b.status || "done", mCt[1]).run();
+          return J({ ok: true });
+        }
+
         /* 紹介パートナー: 承認（コード発行） */
         let mAg = path.match(/^\/api\/admin\/agents\/(\d+)\/approve$/);
         if (mAg && m === "POST") {
           const a = await env.DB.prepare("SELECT * FROM agents WHERE id=?").bind(mAg[1]).first();
           if (!a) return J({ error: "not found" }, 404);
+          if (a.id_doc_status !== "verified")
+            return J({ error: "本人確認が未確認です。書類を確認して「本人確認OK」にしてから承認してください。" }, 400);
           const code = a.agent_code || ("AG-" + pad(await nextSeq(env, "agent"), 4));
-          await env.DB.prepare("UPDATE agents SET status='active', agent_code=?, approved_at=? WHERE id=?")
-            .bind(code, nowISO(), a.id).run();
+          await env.DB.prepare("UPDATE agents SET status='active', agent_code=?, approved_at=?, last_activity_at=? WHERE id=?")
+            .bind(code, nowISO(), nowISO(), a.id).run();
           const link = "https://nextinnovation.tamjump.com/order/register.html?ref=" + code;
           await sendMail(env, a.email, "紹介パートナー登録を承認しました｜Next Innovation",
             `${a.name} 様\n\n紹介パートナー登録を承認しました。\n\n紹介コード：${code}\n紹介用リンク：${link}\n\nご紹介先がこのリンクから取引申請し、ご発注されると報酬が計上されます。\nマイページで本数と報酬をご確認いただけます。\nhttps://nextinnovation.tamjump.com/order/agent.html\n\n株式会社Next Innovation`);
           return J({ ok: true, agent_code: code });
         }
         /* 紹介パートナー: 却下 / 停止 / 再開 */
-        let mAs = path.match(/^\/api\/admin\/agents\/(\d+)\/(reject|suspend|activate)$/);
+        let mAs = path.match(/^\/api\/admin\/agents\/(\d+)\/(reject|suspend|activate|close)$/);
         if (mAs && m === "POST") {
-          const st = mAs[2] === "reject" ? "rejected" : (mAs[2] === "suspend" ? "suspended" : "active");
-          await env.DB.prepare("UPDATE agents SET status=? WHERE id=?").bind(st, mAs[1]).run();
+          const b = await body().catch(() => ({}));
+          const map = { reject: "rejected", suspend: "suspended", activate: "active", close: "closed" };
+          const st = map[mAs[2]];
+          const a = await env.DB.prepare("SELECT * FROM agents WHERE id=?").bind(mAs[1]).first();
+          if (!a) return J({ error: "not found" }, 404);
+          await env.DB.prepare("UPDATE agents SET status=?, close_reason=?, closed_at=?, last_activity_at=? WHERE id=?")
+            .bind(st, b.reason || a.close_reason || "", (st === "closed" || st === "suspended") ? nowISO() : null,
+                  st === "active" ? nowISO() : a.last_activity_at, a.id).run();
+          if (st === "rejected")
+            await sendMail(env, a.email, "紹介パートナー登録について｜Next Innovation",
+              `${a.name} 様\n\nお申し込みいただいた紹介パートナー登録につきまして、今回は登録を見送らせていただくこととなりました。\n\n${b.reason ? "理由：" + b.reason + "\n\n" : ""}ご期待に沿えず申し訳ございません。ご不明な点は info@tamjump.com までご連絡ください。\n\n株式会社Next Innovation`);
+          if (st === "suspended")
+            await sendMail(env, a.email, "紹介パートナー資格の停止について｜Next Innovation",
+              `${a.name} 様\n\n紹介パートナー規約に基づき、ご登録を一時停止いたしました。\n\n${b.reason ? "理由：" + b.reason + "\n\n" : ""}お心当たりのない場合、またはご説明をご希望の場合は info@tamjump.com までご連絡ください。\n\n株式会社Next Innovation`);
+          if (st === "closed")
+            await sendMail(env, a.email, "紹介パートナー登録の解約について｜Next Innovation",
+              `${a.name} 様\n\nご登録を解約いたしました。\n\n${b.reason ? "理由：" + b.reason + "\n\n" : ""}確定済みで未払いの報酬がある場合は、規約に基づきお支払いいたします。\n再度のご登録をご希望の場合は info@tamjump.com までご連絡ください。\n\n株式会社Next Innovation`);
           return J({ ok: true });
         }
         /* 紹介パートナー: 単価変更 */
@@ -584,7 +730,33 @@ export default {
       return J({ error: "server error", detail: String(e && e.message || e) }, 500);
     }
   },
+
+  /* Cron トリガー：休眠パートナーの自動解約（日次） */
+  async scheduled(event, env, ctx) {
+    ctx.waitUntil(closeDormant(env));
+  },
 };
+
+/* 90日間、報酬の計上も紹介もないパートナーを解約する */
+async function closeDormant(env) {
+  const limit = new Date(Date.now() - DORMANT_DAYS * 86400000).toISOString();
+  const { results } = await env.DB.prepare(
+    `SELECT a.* FROM agents a
+     WHERE a.status='active'
+       AND COALESCE(a.last_activity_at, a.approved_at, a.created_at) < ?
+       AND NOT EXISTS (SELECT 1 FROM rewards r WHERE r.agent_id=a.id AND r.created_at >= ?)
+       AND NOT EXISTS (SELECT 1 FROM accounts c WHERE c.referred_by=a.agent_code AND c.created_at >= ?)`
+  ).bind(limit, limit, limit).all();
+  const list = results || [];
+  for (const a of list) {
+    await env.DB.prepare(
+      "UPDATE agents SET status='closed', closed_at=?, close_reason=? WHERE id=?"
+    ).bind(nowISO(), DORMANT_DAYS + "日間ご利用実績がないため自動解約", a.id).run();
+    await sendMail(env, a.email, "紹介パートナー登録の自動解約について｜Next Innovation",
+      `${a.name} 様\n\n紹介パートナー規約に基づき、${DORMANT_DAYS}日間ご紹介の実績がなかったため、ご登録を自動的に解約いたしました。\n紹介コード ${a.agent_code || ""} は無効となります。\n\n確定済みで未払いの報酬がある場合は、規約に基づきお支払いいたします。\n再度ご利用をご希望の場合は、あらためてご登録いただけます。\n\n株式会社Next Innovation\ninfo@tamjump.com`);
+  }
+  return list.length;
+}
 
 /* 連番（counters テーブル, アトミック更新） */
 async function nextSeq(env, name) {
