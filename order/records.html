@@ -391,9 +391,14 @@ function toCsv(){
      'infini_all_' + document.getElementById('from').value + '_' + document.getElementById('to').value + '.csv');
 }
 
-function toPublic(){
+async function toPublic(){
+  var base = null;
+  try{
+    var br = await fetch('../assets/reviews-base.json?t=' + Date.now());
+    if(br.ok) base = await br.json();
+  }catch(e){}
+  if(!base){ setMsg('assets/reviews-base.json を読み込めませんでした。合算できないため中止します。', 'err'); return; }
   var pub = rows.filter(isPublic);
-  if(!pub.length){ setMsg('承認済みの評価がありません。先に「お客様評価」タブで承認してください。', 'err'); return; }
   var sc = pub.map(function(x){ return Number(x.satisfaction) || 0; }).filter(function(v){ return v > 0; });
   var c = {1:0,2:0,3:0,4:0,5:0};
   sc.forEach(function(v){ c[v]++; });
@@ -407,17 +412,24 @@ function toPublic(){
               score: Number(x.satisfaction) || 0,
               from: typeOf(x) === 'home_customer' ? '自宅使用' : 'サロン施術'};
     });
+  var bd = base.dist || {};
+  var m = {};
+  [5,4,3,2,1].forEach(function(k){ m[k] = (Number(bd[k]) || 0) + c[k]; });
+  var total = m[5] + m[4] + m[3] + m[2] + m[1];
+  var sum = 5*m[5] + 4*m[4] + 3*m[3] + 2*m[2] + 1*m[1];
   var data = {
     updatedAt: new Date().toISOString().slice(0, 10),
-    n: pub.length,
-    avg: Math.round(avg(sc) * 100) / 100,
-    dist: {5:c[5], 4:c[4], 3:c[3], 2:c[2], 1:c[1]},
+    treated: (Number(base.treated) || 0) + rows.filter(function(x){ return typeOf(x) === 'staff'; }).length,
+    n: total,
+    avg: total ? Math.round(sum / total * 100) / 100 : 0,
+    dist: {5:m[5], 4:m[4], 3:m[3], 2:m[2], 1:m[1]},
     salonCount: Object.keys(salons).length,
     impressions: impRank(pub).slice(0, 6).map(function(o){ return {label:o.k, pct:o.p}; }),
-    comments: comments
+    comments: (base.comments || []).concat(comments).slice(0, 12)
   };
   dl(new Blob([JSON.stringify(data, null, 2)], {type:'application/json'}), 'reviews.json');
-  setMsg('reviews.json を書き出しました。GitHubの assets/ に上書きアップロードするとサイトトップに反映されます。', 'ok');
+  setMsg('紙アンケート ' + (base.n || 0) + '件 ＋ 新規 ' + pub.length + '件 ＝ ' + total
+    + '件で書き出しました。GitHubの assets/reviews.json に上書きしてください。', 'ok');
 }
 
 function dl(blob, name){

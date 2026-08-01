@@ -638,7 +638,7 @@
 
 
     <div class="vo-track reveal">
-      <div><span class="big">2,831</span><span class="unit">人</span></div>
+      <div><span class="big" id="voTreated">2,831</span><span class="unit">人</span></div>
       <div class="lb">これまでにサロンで施術を受けられた方の人数です。<br>
       サロン専売として、多くの現場でお使いいただいてきました。</div>
       <div class="as">※2026年7月末時点の累計施術人数。</div>
@@ -940,7 +940,9 @@
 <script>
 (function(){
   fetch('assets/reviews.json?t=' + Date.now()).then(function(r){ return r.ok ? r.json() : null; }).then(function(d){
-    if(!d || !d.n) return;
+    if(!d) return;
+    if(d.treated) document.getElementById('voTreated').textContent = d.treated.toLocaleString();
+    if(!d.n) return;
     document.getElementById('voStats').style.display = '';
     var soon = document.getElementById('voSoon'); if(soon) soon.style.display = 'none';
     document.getElementById('voAvg').textContent = d.avg.toFixed(2);
