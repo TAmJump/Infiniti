@@ -70,9 +70,27 @@ td.n{text-align:right;white-space:nowrap}
 .msg.ok{color:var(--ok);font-weight:700}
 .thumbs{display:flex;gap:4px;flex-wrap:wrap}
 .thumbs img{width:44px;height:44px;object-fit:cover;border:1px solid var(--line);border-radius:4px}
+
+.gate{position:fixed;inset:0;background:var(--cream);z-index:100;display:flex;align-items:center;justify-content:center;padding:20px}
+.gate .box{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:30px 26px;max-width:340px;width:100%;text-align:center}
+.gate h3{font-size:14px;margin:0 0 6px;letter-spacing:.06em}
+.gate p{font-size:12px;color:var(--sub);margin:0 0 18px;line-height:1.8}
+.gate input{width:100%;text-align:center;letter-spacing:.3em;font-size:18px;padding:12px;margin-bottom:12px}
+.gate button{width:100%}
+.gate .er{font-size:12px;color:var(--warn);min-height:20px;font-weight:700}
 </style>
 </head>
 <body>
+
+<div class="gate" id="gate">
+  <div class="box">
+    <h3>INFINI WORLD 管理画面</h3>
+    <p>合言葉を入力してください。</p>
+    <input type="password" id="pw" inputmode="text" autocomplete="off" placeholder="••••••••">
+    <button class="go" id="pwGo">開く</button>
+    <div class="er" id="pwEr"></div>
+  </div>
+</div>
 
 <header>
   <div class="t">INFINI WORLD ／ 施術記録・お客様評価</div>
@@ -157,6 +175,27 @@ td.n{text-align:right;white-space:nowrap}
 </div>
 
 <script>
+
+/* ===== 合言葉ゲート（変更する場合は PASSCODE の値を書き換える） ===== */
+var PASSCODE = 'INFINI2026';
+(function(){
+  var gate = document.getElementById('gate');
+  function open_(){ gate.style.display = 'none'; }
+  try{ if(sessionStorage.getItem('infini_gate') === PASSCODE) open_(); }catch(e){}
+  function check(){
+    var v = document.getElementById('pw').value;
+    if(v === PASSCODE){
+      try{ sessionStorage.setItem('infini_gate', PASSCODE); }catch(e){}
+      open_();
+    }else{
+      document.getElementById('pwEr').textContent = '合言葉が違います。';
+      document.getElementById('pw').value = '';
+    }
+  }
+  document.getElementById('pwGo').addEventListener('click', check);
+  document.getElementById('pw').addEventListener('keydown', function(e){ if(e.key === 'Enter') check(); });
+})();
+
 var API = 'https://zgrp36rmn0.execute-api.ap-northeast-1.amazonaws.com/prod/records';
 var rows = [];
 

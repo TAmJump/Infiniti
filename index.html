@@ -347,6 +347,19 @@
   .vo-card p{font-family:var(--jp-serif);font-size:14.5px;line-height:1.95;color:var(--ink)}
   .vo-card .wh{margin-top:12px;font-size:11.5px;color:var(--muted);letter-spacing:.06em}
   .vo-note{margin-top:32px;font-size:11px;color:var(--muted);line-height:1.9}
+
+  .vo-cta{margin-top:44px;display:grid;grid-template-columns:1fr auto;gap:34px;align-items:center;
+    background:var(--white);border:1px solid var(--line);border-radius:3px;padding:30px 32px}
+  @media(max-width:700px){.vo-cta{grid-template-columns:1fr;gap:24px;text-align:center}}
+  .vo-cta h3{font-family:var(--jp-serif);font-size:18px;font-weight:400;margin-bottom:8px}
+  .vo-cta p{font-size:13px;color:var(--ink-soft);line-height:1.9}
+  .vo-cta .btns{margin-top:18px;display:flex;gap:12px;flex-wrap:wrap}
+  @media(max-width:700px){.vo-cta .btns{justify-content:center}}
+  .vo-qr{text-align:center}
+  .vo-qr img{width:132px;height:132px;border:1px solid var(--line);border-radius:3px;display:block}
+  .vo-qr span{display:block;margin-top:8px;font-size:10.5px;color:var(--muted);letter-spacing:.06em}
+  .ig{display:inline-flex;align-items:center;gap:8px}
+  .ig svg{width:15px;height:15px}
 </style>
 </head>
 <body>
@@ -605,7 +618,7 @@
 
 
 <!-- VOICES -->
-<section class="block alt" id="voices" style="max-width:none;display:none">
+<section class="block alt" id="voices" style="max-width:none">
   <div class="inner">
     <div class="sec-head reveal"><span class="sec-num">V</span><span class="sec-label">Voices</span><span class="sec-line"></span></div>
     <div class="salon-top reveal">
@@ -614,7 +627,7 @@
       <p>サロンで施術を受けられた方、ご自宅でお使いいただいた方からお寄せいただいたアンケートの集計です。掲載の同意をいただいたものだけを掲載しています。</p>
     </div>
 
-    <div class="vo-wrap reveal">
+    <div class="vo-wrap reveal" id="voStats" style="display:none">
       <div>
         <div class="vo-score">
           <span class="vo-stars"><span class="bg">★★★★★</span><span class="fg" id="voFg">★★★★★</span></span>
@@ -625,6 +638,23 @@
         <div class="vo-imp" id="voImp"></div>
       </div>
       <div class="vo-cards" id="voCards"></div>
+    </div>
+
+
+    <div class="vo-cta reveal">
+      <div>
+        <h3>お使いになった感想を、お聞かせください。</h3>
+        <p>ご自宅でお使いいただいた方向けのアンケートです。2分ほどで終わります。お名前の記入は必要ありません。<br>
+        サロンで施術を受けられた方は、サロンでお渡しするQRからご記入ください。</p>
+        <div class="btns">
+          <a href="order/review-home.html" class="btn-rose">感想を書く <span>&rarr;</span></a>
+          <a href="https://www.instagram.com/infiniworld_crowdfunding?igsh=c2xrdGkwZHJhc3Jz&amp;utm_source=qr" target="_blank" rel="noopener" class="btn-line ig"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none"/></svg>Instagram</a>
+        </div>
+      </div>
+      <div class="vo-qr">
+        <img src="assets/qr-review.svg" alt="ご感想フォームのQRコード">
+        <span>スマートフォンで読み取る</span>
+      </div>
     </div>
 
     <div class="vo-note" id="voNote"></div>
@@ -850,7 +880,7 @@
       <div class="f-meta">株式会社Next Innovation<br>埼玉県上尾市仲町1-7-8</div>
     </div>
     <div class="f-links">
-      <a href="#product">Products</a><a href="#salon">For Salon</a><a href="#company">Company</a><a href="order/login.html">取引先ログイン</a><a href="order/agent-register.html">紹介パートナー</a>
+      <a href="#product">Products</a><a href="#salon">For Salon</a><a href="#company">Company</a><a href="order/login.html">取引先ログイン</a><a href="order/agent-register.html">紹介パートナー</a><a href="https://www.instagram.com/infiniworld_crowdfunding?igsh=c2xrdGkwZHJhc3Jz&amp;utm_source=qr" target="_blank" rel="noopener">Instagram</a>
     </div>
   </div>
   <div class="f-copy">© 2026 Next Innovation Inc. All rights reserved.</div>
@@ -893,8 +923,7 @@
 (function(){
   fetch('assets/reviews.json?t=' + Date.now()).then(function(r){ return r.ok ? r.json() : null; }).then(function(d){
     if(!d || !d.n) return;
-    var sec = document.getElementById('voices');
-    sec.style.display = '';
+    document.getElementById('voStats').style.display = '';
     document.getElementById('voAvg').textContent = d.avg.toFixed(2);
     document.getElementById('voFg').parentNode.querySelector('.fg').style.width = (d.avg / 5 * 100) + '%';
     document.getElementById('voMeta').textContent =
