@@ -115,7 +115,7 @@ button.ghost{padding:15px 16px;font-size:14px;color:var(--sub);background:var(--
     <h2>施術の基本情報</h2>
     <div class="row">
       <div><label class="f">日付<span class="req">必須</span></label><input type="date" id="date"></div>
-      <div><label class="f">開始時間</label><input type="time" id="time"></div>
+      <div><label class="f">開始時間</label><input type="text" id="time" inputmode="numeric" maxlength="5" placeholder="15:41" autocomplete="off"></div>
     </div>
     <label class="f">施術時間（分）</label>
     <div class="chips" data-single="durationMin">
@@ -331,6 +331,24 @@ document.querySelectorAll('.chips').forEach(function(box){
     });
   });
 });
+
+/* ===== 開始時間の入力補助 ===== */
+(function(){
+  var el = document.getElementById('time');
+  el.addEventListener('input', function(){
+    var d = el.value.replace(/[^0-9]/g, '').slice(0, 4);
+    el.value = d.length > 2 ? d.slice(0,2) + ':' + d.slice(2) : d;
+  });
+  el.addEventListener('blur', function(){
+    var d = el.value.replace(/[^0-9]/g, '');
+    if(!d){ el.value = ''; return; }
+    if(d.length <= 2) d = pad(d, 2) + '00';
+    d = pad(d, 4);
+    var h = Math.min(23, Number(d.slice(0,2))), m = Math.min(59, Number(d.slice(2,4)));
+    el.value = pad(h,2) + ':' + pad(m,2);
+    saveDraft();
+  });
+})();
 
 /* ===== 星評価 ===== */
 var STAR_LABEL = {1:'1（低い）', 2:'2', 3:'3', 4:'4', 5:'5（高い）'};
