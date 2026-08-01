@@ -25,6 +25,10 @@ header{
 }
 header .t{font-size:15px;font-weight:700;letter-spacing:.06em}
 header .s{font-size:12px;color:var(--sub);margin-top:2px}
+header .nav{margin-top:10px;display:flex;gap:8px}
+header .nav a{font-size:12px;color:var(--sub);text-decoration:none;border:1px solid var(--line);
+  border-radius:16px;padding:5px 12px;background:var(--cream)}
+header .nav a:active{background:var(--rose-soft);border-color:var(--rose);color:var(--rose)}
 header .no{float:right;font-size:12px;color:var(--rose);font-weight:700;border:1px solid var(--rose);border-radius:4px;padding:2px 8px}
 .wrap{max-width:720px;margin:0 auto;padding:16px}
 section{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:14px}
@@ -94,6 +98,10 @@ button.ghost{padding:15px 16px;font-size:14px;color:var(--sub);background:var(--
   <span class="no" id="hdNo">—</span>
   <div class="t">INFINI WORLD ／ サンプル施術 記録</div>
   <div class="s">記録シート・撮影同意 兼用フォーム</div>
+  <div class="nav">
+    <a href="mypage.html">マイページ</a>
+    <a href="../index.html">サイトトップ</a>
+  </div>
 </header>
 
 <div class="wrap" id="form">
@@ -269,6 +277,10 @@ button.ghost{padding:15px 16px;font-size:14px;color:var(--sub);background:var(--
   <div>記録No.</div>
   <div class="no2" id="doneNo">—</div>
   <button class="primary" style="max-width:280px;margin:0 auto" onclick="resetForm()">次の記録を入力する</button>
+  <div style="margin-top:18px;font-size:13px">
+    <a href="mypage.html" style="color:var(--sub);margin:0 10px">マイページへ戻る</a>
+    <a href="../index.html" style="color:var(--sub);margin:0 10px">サイトトップへ</a>
+  </div>
 </div>
 
 <div class="bar" id="bar">
