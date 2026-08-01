@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
 <title>INFINI WORLD サンプル施術 記録</title>
 <style>
 :root{
@@ -60,6 +61,10 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--rose);ba
 .thumb .tag{position:absolute;bottom:0;left:0;right:0;background:rgba(255,255,255,.9);font-size:10px;text-align:center;color:var(--sub)}
 .addbtn{width:88px;height:88px;border:1px dashed var(--rose);border-radius:8px;background:var(--rose-soft);
   color:var(--rose);font-size:12px;display:flex;align-items:center;justify-content:center;text-align:center;cursor:pointer;padding:6px}
+.stars{display:flex;gap:4px;align-items:center;margin-top:2px}
+.stars .st{font-size:30px;line-height:1;color:#DCD2C7;cursor:pointer;user-select:none;padding:2px 2px}
+.stars .st.on{color:var(--gold)}
+.stars .lb{font-size:13px;color:var(--sub);margin-left:8px}
 canvas#sig{width:100%;height:150px;background:var(--cream);border:1px solid var(--line);border-radius:8px;touch-action:none;display:block}
 .bar{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);
   padding:12px 16px calc(12px + env(safe-area-inset-bottom,0));z-index:30}
@@ -206,6 +211,31 @@ button.ghost{padding:15px 16px;font-size:14px;color:var(--sub);background:var(--
 
   <section>
     <h2>感想・掲載可否</h2>
+    <label class="f">お客様の満足度<span class="req">必須</span></label>
+    <div class="stars" data-k="satisfaction">
+      <span class="st" data-v="1">★</span><span class="st" data-v="2">★</span><span class="st" data-v="3">★</span>
+      <span class="st" data-v="4">★</span><span class="st" data-v="5">★</span>
+      <span class="lb">—</span>
+    </div>
+    <label class="f">仕上がり（施術者からの評価）</label>
+    <div class="stars" data-k="finish">
+      <span class="st" data-v="1">★</span><span class="st" data-v="2">★</span><span class="st" data-v="3">★</span>
+      <span class="st" data-v="4">★</span><span class="st" data-v="5">★</span>
+      <span class="lb">—</span>
+    </div>
+    <label class="f">使いやすさ（伸び・すすぎ・扱いやすさ）</label>
+    <div class="stars" data-k="usability">
+      <span class="st" data-v="1">★</span><span class="st" data-v="2">★</span><span class="st" data-v="3">★</span>
+      <span class="st" data-v="4">★</span><span class="st" data-v="5">★</span>
+      <span class="lb">—</span>
+    </div>
+    <label class="f">また使いたいか（お客様）</label>
+    <div class="chips" data-single="reuse">
+      <span class="chip" data-v="ぜひ使いたい">ぜひ使いたい</span>
+      <span class="chip" data-v="使いたい">使いたい</span>
+      <span class="chip" data-v="どちらとも言えない">どちらとも</span>
+      <span class="chip" data-v="使わないと思う">使わないと思う</span>
+    </div>
     <label class="f">お客様の感想（そのままの言葉で）</label>
     <textarea id="comment" placeholder="例：いつもより乾かした後のまとまりが違いました"></textarea>
     <label class="f">施術者コメント</label>
@@ -302,6 +332,25 @@ document.querySelectorAll('.chips').forEach(function(box){
   });
 });
 
+/* ===== 星評価 ===== */
+var STAR_LABEL = {1:'1（低い）', 2:'2', 3:'3', 4:'4', 5:'5（高い）'};
+function paintStars(box, n){
+  box.querySelectorAll('.st').forEach(function(s){
+    s.classList.toggle('on', Number(s.getAttribute('data-v')) <= n);
+  });
+  box.querySelector('.lb').textContent = n ? STAR_LABEL[n] : '—';
+}
+document.querySelectorAll('.stars').forEach(function(box){
+  var k = box.getAttribute('data-k');
+  box.querySelectorAll('.st').forEach(function(s){
+    s.addEventListener('click', function(){
+      var v = Number(s.getAttribute('data-v'));
+      if(state[k] === v) v = 0;
+      state[k] = v; paintStars(box, v); saveDraft();
+    });
+  });
+});
+
 /* ===== 署名 ===== */
 var cv = document.getElementById('sig'), cx = cv.getContext('2d'), drawing = false, signed = false;
 function fitSig(){
@@ -377,6 +426,9 @@ function loadDraft(){
     var d = JSON.parse(raw);
     TEXT_IDS.forEach(function(i){ if(d[i]) document.getElementById(i).value = d[i]; });
     state = d.state || {};
+    document.querySelectorAll('.stars').forEach(function(box){
+      paintStars(box, state[box.getAttribute('data-k')] || 0);
+    });
     document.querySelectorAll('.chips').forEach(function(box){
       var s = box.getAttribute('data-single'), m = box.getAttribute('data-multi');
       box.querySelectorAll('.chip').forEach(function(c){
@@ -405,6 +457,10 @@ function collect(){
     amount: state.amount || '',
     menu: state.menu || [],
     changes: state.changes || [],
+    satisfaction: state.satisfaction || 0,
+    finish: state.finish || 0,
+    usability: state.usability || 0,
+    reuse: state.reuse || '',
     comment: document.getElementById('comment').value,
     opComment: document.getElementById('opComment').value,
     snsOk: state.snsOk || '',
@@ -423,6 +479,7 @@ function validate(){
     return '同意の確認2項目にチェックしてください。';
   if(!document.getElementById('date').value) return '日付を入力してください。';
   if(!document.getElementById('operator').value.trim()) return '施術者を入力してください。';
+  if(!state.satisfaction) return 'お客様の満足度を選択してください。';
   if(!state.snsOk) return '掲載可否を選択してください。';
   return '';
 }
@@ -471,7 +528,11 @@ async function submit(){
     rec.media = uploaded;
     setStatus('記録を送信中');
     var r = await fetch(REC_URL, {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(rec)});
-    if(!r.ok) throw new Error('records ' + r.status);
+    if(!r.ok){
+      var t = '';
+      try{ t = await r.text(); }catch(e2){}
+      throw new Error('records HTTP ' + r.status + ' ' + t.slice(0,300));
+    }
     finishOk(rec.recordNo);
   }catch(e){
     rec.media = media.map(function(m){
@@ -479,7 +540,7 @@ async function submit(){
     });
     pushQueue(rec);
     document.getElementById('send').disabled = false;
-    setStatus('送信できませんでした。端末に保存しました。電波の良い場所で「今すぐ送信する」を押してください。', 'err');
+    setStatus('送信できませんでした（' + e.message + '）。端末に保存しました。', 'err');
     renderQueue();
   }
 }
@@ -528,7 +589,8 @@ async function testApi(){
   try{
     var r = await fetch(REC_URL, {method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({recordNo:'TEST-' + Date.now(), test:true, operator:'接続テスト', date: new Date().toISOString().slice(0,10)})});
-    setStatus('接続テスト：HTTP ' + r.status + (r.ok ? '（正常）' : '（エラー）'), r.ok ? 'ok' : 'err');
+    var t = ''; try{ t = await r.text(); }catch(e){}
+    setStatus('接続テスト：HTTP ' + r.status + (r.ok ? '（正常）' : '（エラー）') + ' ' + t.slice(0,300), r.ok ? 'ok' : 'err');
   }catch(e){ setStatus('接続テスト：通信できません（' + e.message + '）', 'err'); }
 }
 function resetForm(){
