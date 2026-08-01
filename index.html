@@ -360,6 +360,15 @@
   .vo-qr span{display:block;margin-top:8px;font-size:10.5px;color:var(--muted);letter-spacing:.06em}
   .ig{display:inline-flex;align-items:center;gap:8px}
   .ig svg{width:15px;height:15px}
+
+  .vo-track{display:flex;align-items:baseline;gap:18px;flex-wrap:wrap;margin-top:38px;
+    padding:26px 30px;background:var(--white);border:1px solid var(--line);border-radius:3px}
+  .vo-track .big{font-family:var(--serif);font-size:52px;line-height:.9;color:var(--rose)}
+  .vo-track .unit{font-size:15px;color:var(--ink-soft);margin-left:-8px}
+  .vo-track .lb{font-size:12.5px;color:var(--ink-soft);letter-spacing:.06em;line-height:1.9}
+  .vo-track .as{width:100%;font-size:11px;color:var(--muted);letter-spacing:.05em;margin-top:6px}
+  .vo-soon{margin-top:26px;padding:20px 24px;border:1px dashed var(--line);border-radius:3px;
+    font-size:12.5px;color:var(--muted);line-height:1.9;background:var(--white)}
 </style>
 </head>
 <body>
@@ -625,6 +634,19 @@
       <div class="eyebrow">Customer Reviews</div>
       <h2>お使いいただいた方の声<em>。</em></h2>
       <p>サロンで施術を受けられた方、ご自宅でお使いいただいた方からお寄せいただいたアンケートの集計です。掲載の同意をいただいたものだけを掲載しています。</p>
+    </div>
+
+
+    <div class="vo-track reveal">
+      <div><span class="big">2,831</span><span class="unit">人</span></div>
+      <div class="lb">これまでにサロンで施術を受けられた方の人数です。<br>
+      サロン専売として、多くの現場でお使いいただいてきました。</div>
+      <div class="as">※2026年7月末時点の累計施術人数。</div>
+    </div>
+
+    <div class="vo-soon reveal" id="voSoon">
+      お使いいただいた方へのアンケートを、2026年8月より開始しました。<br>
+      いただいたご感想は、集計がまとまり次第このページに掲載します。
     </div>
 
     <div class="vo-wrap reveal" id="voStats" style="display:none">
@@ -924,6 +946,7 @@
   fetch('assets/reviews.json?t=' + Date.now()).then(function(r){ return r.ok ? r.json() : null; }).then(function(d){
     if(!d || !d.n) return;
     document.getElementById('voStats').style.display = '';
+    var soon = document.getElementById('voSoon'); if(soon) soon.style.display = 'none';
     document.getElementById('voAvg').textContent = d.avg.toFixed(2);
     document.getElementById('voFg').parentNode.querySelector('.fg').style.width = (d.avg / 5 * 100) + '%';
     document.getElementById('voMeta').textContent =
