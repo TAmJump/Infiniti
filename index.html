@@ -147,6 +147,17 @@
   .feat h4{font-family:var(--jp-sans);font-weight:700;font-size:15px;color:var(--ink);margin-bottom:8px;display:flex;align-items:center;gap:10px}
   .feat h4::before{content:"";width:7px;height:7px;background:var(--rose);border-radius:50%;flex:0 0 auto}
   .feat p{font-family:var(--jp-serif);font-weight:300;font-size:13px;line-height:1.9;color:var(--ink-soft)}
+  .rev-share{border:1px solid var(--line);background:var(--white);border-radius:3px;padding:clamp(26px,3.2vw,42px);margin-bottom:46px}
+  .rs-eyebrow{font-family:var(--sans);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--rose);margin-bottom:8px}
+  .rs-head h3{font-family:var(--jp-sans);font-weight:700;font-size:17px;color:var(--ink);margin-bottom:18px}
+  .rs-body p{font-family:var(--jp-serif);font-weight:300;font-size:13.5px;line-height:2;color:var(--ink-soft)}
+  .rs-body p b{font-weight:500;color:var(--ink)}
+  .rs-tbl{width:100%;border-collapse:collapse;margin:20px 0 16px}
+  .rs-tbl th,.rs-tbl td{border-top:1px solid var(--line);padding:13px 4px;text-align:left;vertical-align:top;font-size:13px;line-height:1.85}
+  .rs-tbl th{width:210px;font-family:var(--jp-sans);font-weight:500;color:var(--ink);white-space:nowrap}
+  .rs-tbl td{font-family:var(--jp-serif);font-weight:300;color:var(--ink-soft)}
+  .rs-tbl tr:last-child th,.rs-tbl tr:last-child td{border-bottom:1px solid var(--line)}
+  .rs-note{font-size:12px !important;color:var(--muted) !important;line-height:1.95 !important}
   .salon-cta{text-align:center}
   .salon-cta .btns{display:flex;flex-wrap:wrap;gap:14px;justify-content:center}
   .salon-cta .note{margin-top:18px;font-size:12px;color:var(--muted);font-family:var(--jp-serif)}
@@ -277,6 +288,9 @@
     .nav-toggle{display:block}
     .message-grid,.prod-feature,.profile-grid{grid-template-columns:1fr}
     .biz-grid,.salon-steps,.salon-feat{grid-template-columns:1fr}
+    .rs-tbl th{width:auto;display:block;white-space:normal;border-bottom:none;padding-bottom:2px}
+    .rs-tbl td{display:block;border-top:none;padding-top:0}
+    .rs-tbl tr:last-child td{border-bottom:none}
     .biz-row{grid-template-columns:1fr;gap:22px}
     .biz-row:nth-child(even) .biz-visual{order:0}
     .biz-visual::before{display:none}
@@ -590,7 +604,7 @@
   <div class="inner">
     <div class="salon-top reveal">
       <div class="eyebrow">Referral Partner — 紹介パートナー制度</div>
-      <h2>ご紹介で、報酬を<em>。</em></h2>
+      <h2>いいと思ったら、伝えてほしい<em>。</em></h2>
       <p>ご紹介いただいたサロン・販売店が当社と取引を開始し、ご発注いただいた本数に応じて紹介報酬をお支払いする制度です。登録は無料で、商品のご購入や登録料は一切必要ありません。美容師の方も、そうでない方もご登録いただけます。</p>
     </div>
 
@@ -604,6 +618,28 @@
       <div class="feat"><h4>1本あたり1,000円</h4><p>ご紹介先が発注された本数に応じて計上します。ご紹介の人数に上限はありません。</p></div>
       <div class="feat"><h4>本数と報酬をいつでも確認</h4><p>専用マイページで、累計本数・確定報酬・未確定分・お支払い済みを確認できます。</p></div>
       <div class="feat"><h4>登録も継続も無料</h4><p>登録料・保証金・商品の購入は不要です。ご都合に合わせていつでも解除できます。</p></div>
+    </div>
+
+    <div class="rev-share reveal">
+      <div class="rs-head">
+        <div class="rs-eyebrow">How the reward works</div>
+        <h3>報酬の考え方について</h3>
+      </div>
+      <div class="rs-body">
+        <p>本制度は、売上の一定割合を継続的に分配する、いわゆるレベニューシェア契約ではありません。ご紹介先が発注された<b>1本につき1,000円</b>という定額の紹介報酬をお支払いする仕組みです。売上や利益の変動によって金額が上下することはなく、本数だけで決まります。</p>
+        <table class="rs-tbl">
+          <tbody>
+            <tr><th>報酬の単位</th><td>ご紹介先が発注した対象商品 1本ごと</td></tr>
+            <tr><th>報酬額</th><td>1,000円（税込）／本　※本数に上限はありません</td></tr>
+            <tr><th>ご紹介先の判定</th><td>取引申請時に使用された紹介コード・紹介用リンク。申請後の変更や遡っての登録はできません</td></tr>
+            <tr><th>報酬が確定する時点</th><td>出荷および代金の入金を当社が確認した時点</td></tr>
+            <tr><th>お支払い</th><td>当月末締め・翌月末までにご指定口座へお振込み（振込手数料は当社負担）</td></tr>
+            <tr><th>発生しない場合</th><td>返品、注文の取消し、代金の不払いにより売買が成立しなかったとき</td></tr>
+          </tbody>
+        </table>
+        <p class="rs-note">ご紹介先が継続してご発注される限り、そのつど本数に応じて報酬が計上されます。初回のご発注のみが対象という制度ではありません。<br>
+        パートナーは当社の従業員・代理人・販売代理店ではなく、当社を代理して契約を結ぶ権限は有しません。報酬に係る税務の申告は、パートナーご自身で行っていただきます。</p>
+      </div>
     </div>
 
     <div class="salon-cta reveal">
