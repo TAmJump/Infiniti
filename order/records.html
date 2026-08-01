@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>施術記録・評価集計｜INFINI WORLD</title>
+<style>
+:root{
+  --cream:#FAF6F0; --card:#FFFFFF; --ink:#2B2622; --sub:#6E645C;
+  --line:#E3D9CE; --rose:#C4506B; --rose-soft:#F6E7EB;
+  --gold:#B9924A; --teal:#2E7D7B; --ok:#2E7D5B; --warn:#B4552E;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--cream);color:var(--ink);font-size:15px;line-height:1.7;
+  font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP","Yu Gothic",sans-serif}
+header{background:var(--card);border-bottom:2px solid var(--rose);padding:14px 20px}
+header .t{font-size:15px;font-weight:700;letter-spacing:.06em}
+header .s{font-size:12px;color:var(--sub)}
+header .nav{margin-top:10px;display:flex;gap:8px}
+header .nav a{font-size:12px;color:var(--sub);text-decoration:none;border:1px solid var(--line);
+  border-radius:16px;padding:5px 12px;background:var(--cream)}
+.wrap{max-width:1080px;margin:0 auto;padding:20px}
+section{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px;margin-bottom:16px}
+h2{font-size:14px;margin:0 0 14px;padding-left:10px;border-left:4px solid var(--rose);letter-spacing:.04em}
+label{font-size:12px;color:var(--sub);display:block;margin-bottom:4px}
+input[type=date],input[type=text]{padding:9px 11px;font-size:15px;font-family:inherit;background:var(--cream);
+  border:1px solid var(--line);border-radius:8px;color:var(--ink)}
+button{padding:10px 18px;font-size:14px;font-family:inherit;border-radius:8px;cursor:pointer;border:1px solid var(--line);
+  background:var(--cream);color:var(--sub)}
+button.go{background:var(--rose);color:#fff;border-color:var(--rose);font-weight:700}
+.ctl{display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap}
+.kpis{display:flex;gap:14px;flex-wrap:wrap}
+.kpi{flex:1;min-width:150px;border:1px solid var(--line);border-radius:10px;padding:14px;background:var(--cream)}
+.kpi .n{font-size:26px;font-weight:700;line-height:1.2}
+.kpi .l{font-size:12px;color:var(--sub)}
+.stars{display:inline-block;position:relative;font-size:19px;line-height:1;letter-spacing:1px;vertical-align:-2px}
+.stars .bg{color:#E0D6CB}
+.stars .fg{color:var(--gold);position:absolute;left:0;top:0;overflow:hidden;white-space:nowrap}
+.score{font-size:20px;font-weight:700;color:var(--rose);margin-left:8px;vertical-align:-1px}
+.cnt{font-size:12px;color:var(--sub);margin-left:8px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{font-size:12px;color:var(--sub);font-weight:600;white-space:nowrap}
+td.n{text-align:right;white-space:nowrap}
+tr.rank td{border-bottom:1px solid var(--line)}
+.rk{display:inline-block;width:22px;height:22px;line-height:22px;text-align:center;border-radius:11px;
+  background:var(--rose-soft);color:var(--rose);font-size:12px;font-weight:700;margin-right:8px}
+.rk.g1{background:#F6EBD6;color:var(--gold)}
+.tag{display:inline-block;font-size:11px;border:1px solid var(--line);border-radius:12px;padding:1px 8px;
+  margin:0 4px 4px 0;color:var(--sub)}
+.tag.ok{border-color:var(--teal);color:var(--teal)}
+.msg{font-size:13px;color:var(--sub);padding:8px 0}
+.msg.err{color:var(--warn);font-weight:700}
+.thumbs{display:flex;gap:4px;flex-wrap:wrap}
+.thumbs img{width:44px;height:44px;object-fit:cover;border:1px solid var(--line);border-radius:4px}
+.bar{height:6px;background:#EDE4DA;border-radius:3px;overflow:hidden;margin-top:4px}
+.bar i{display:block;height:100%;background:var(--gold)}
+.right{float:right}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="t">INFINI WORLD ／ 施術記録・評価集計</div>
+  <div class="s">管理用。取引先には公開していません。</div>
+  <div class="nav">
+    <a href="admin.html">管理コンソール</a>
+    <a href="record.html">記録フォーム</a>
+    <a href="../index.html">サイトトップ</a>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <section>
+    <h2>期間の指定</h2>
+    <div class="ctl">
+      <div><label>開始日</label><input type="date" id="from"></div>
+      <div><label>終了日</label><input type="date" id="to"></div>
+      <div><label>サロン名で絞り込み</label><input type="text" id="q" placeholder="部分一致（空欄で全件）"></div>
+      <button class="go" id="load">読み込む</button>
+      <button id="csv">CSV書き出し</button>
+    </div>
+    <div class="msg" id="msg"></div>
+  </section>
+
+  <section id="sumWrap" style="display:none">
+    <h2>全体の集計</h2>
+    <div class="kpis" id="kpis"></div>
+  </section>
+
+  <section id="rankWrap" style="display:none">
+    <h2>サロン別 集計</h2>
+    <table>
+      <thead><tr>
+        <th>サロン</th><th>件数</th><th>満足度</th><th>仕上がり</th><th>使いやすさ</th><th>また使いたい</th>
+      </tr></thead>
+      <tbody id="rank"></tbody>
+    </table>
+    <div class="msg">件数が少ないうちは順位が動きやすいため、目安として見てください。</div>
+  </section>
+
+  <section id="listWrap" style="display:none">
+    <h2>記録一覧</h2>
+    <table>
+      <thead><tr>
+        <th>記録No.</th><th>日付</th><th>サロン／施術者</th><th>お客様</th>
+        <th>満足度</th><th>感想</th><th>掲載</th><th>写真</th>
+      </tr></thead>
+      <tbody id="list"></tbody>
+    </table>
+  </section>
+
+</div>
+
+<script>
+var API = 'https://zgrp36rmn0.execute-api.ap-northeast-1.amazonaws.com/prod';
+var rows = [];
+
+function pad(n,l){ n = String(n); while(n.length < l) n = '0' + n; return n; }
+function ymd(d){ return d.getFullYear() + '-' + pad(d.getMonth()+1,2) + '-' + pad(d.getDate(),2); }
+function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){
+  return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+function stars(v){
+  var p = Math.max(0, Math.min(5, Number(v) || 0)) / 5 * 100;
+  return '<span class="stars"><span class="bg">★★★★★</span>'
+       + '<span class="fg" style="width:' + p + '%">★★★★★</span></span>';
+}
+function avg(a){ return a.length ? a.reduce(function(x,y){ return x + y; }, 0) / a.length : 0; }
+function f2(v){ return (Math.round(v * 100) / 100).toFixed(2); }
+
+function setMsg(t, cls){ var m = document.getElementById('msg'); m.textContent = t || ''; m.className = 'msg' + (cls ? ' ' + cls : ''); }
+
+function pickItems(j){
+  if(Array.isArray(j)) return j;
+  return j.items || j.records || j.Items || j.data || [];
+}
+
+async function load(){
+  var f = document.getElementById('from').value, t = document.getElementById('to').value;
+  if(!f || !t){ setMsg('期間を指定してください。', 'err'); return; }
+  var d0 = new Date(f + 'T00:00:00'), d1 = new Date(t + 'T00:00:00');
+  if(d0 > d1){ setMsg('開始日が終了日より後になっています。', 'err'); return; }
+  var days = Math.round((d1 - d0) / 86400000) + 1;
+  if(days > 120){ setMsg('期間が長すぎます。120日以内にしてください。', 'err'); return; }
+
+  rows = []; var fail = 0;
+  for(var i = 0; i < days; i++){
+    var d = new Date(d0.getTime() + i * 86400000), key = ymd(d);
+    setMsg('読み込み中（' + (i+1) + '/' + days + '） ' + key);
+    try{
+      var r = await fetch(API + '/records?date=' + key);
+      if(r.ok){
+        var j = await r.json();
+        pickItems(j).forEach(function(x){ rows.push(x); });
+      }else{ fail++; }
+    }catch(e){ fail++; }
+  }
+  var q = document.getElementById('q').value.trim();
+  if(q) rows = rows.filter(function(x){ return String(x.place || '').indexOf(q) >= 0; });
+
+  setMsg(rows.length + '件を読み込みました。' + (fail ? '（' + fail + '日分は取得できませんでした）' : ''),
+         rows.length ? '' : 'err');
+  render();
+}
+
+function render(){
+  var sat = rows.map(function(x){ return Number(x.satisfaction) || 0; }).filter(function(v){ return v > 0; });
+  var fin = rows.map(function(x){ return Number(x.finish) || 0; }).filter(function(v){ return v > 0; });
+  var usa = rows.map(function(x){ return Number(x.usability) || 0; }).filter(function(v){ return v > 0; });
+  var re  = rows.filter(function(x){ return /使いたい/.test(x.reuse || ''); }).length;
+
+  document.getElementById('kpis').innerHTML =
+    kpi('記録件数', rows.length + '<span class="cnt">件</span>', '')
+  + kpi('満足度', stars(avg(sat)) + '<span class="score">' + f2(avg(sat)) + '</span>', sat.length + '件の評価')
+  + kpi('仕上がり', stars(avg(fin)) + '<span class="score">' + f2(avg(fin)) + '</span>', fin.length + '件の評価')
+  + kpi('使いやすさ', stars(avg(usa)) + '<span class="score">' + f2(avg(usa)) + '</span>', usa.length + '件の評価')
+  + kpi('また使いたい', (rows.length ? Math.round(re / rows.length * 100) : 0) + '<span class="cnt">%</span>', re + '件');
+  document.getElementById('sumWrap').style.display = rows.length ? 'block' : 'none';
+
+  var by = {};
+  rows.forEach(function(x){
+    var k = (x.place || '（未記入）').trim();
+    if(!by[k]) by[k] = {n:0, sat:[], fin:[], usa:[], re:0};
+    by[k].n++;
+    if(Number(x.satisfaction)) by[k].sat.push(Number(x.satisfaction));
+    if(Number(x.finish)) by[k].fin.push(Number(x.finish));
+    if(Number(x.usability)) by[k].usa.push(Number(x.usability));
+    if(/使いたい/.test(x.reuse || '')) by[k].re++;
+  });
+  var list = Object.keys(by).map(function(k){
+    var v = by[k]; return {name:k, n:v.n, sat:avg(v.sat), fin:avg(v.fin), usa:avg(v.usa),
+      re: v.n ? Math.round(v.re / v.n * 100) : 0, satN:v.sat.length};
+  }).sort(function(a,b){ return b.sat - a.sat || b.n - a.n; });
+
+  document.getElementById('rank').innerHTML = list.map(function(s, i){
+    return '<tr class="rank"><td><span class="rk' + (i === 0 ? ' g1' : '') + '">' + (i+1) + '</span>'
+      + esc(s.name) + '</td>'
+      + '<td class="n">' + s.n + '</td>'
+      + '<td>' + stars(s.sat) + '<span class="score">' + f2(s.sat) + '</span>'
+      + '<div class="bar"><i style="width:' + (s.sat/5*100) + '%"></i></div></td>'
+      + '<td>' + f2(s.fin) + '</td><td>' + f2(s.usa) + '</td><td class="n">' + s.re + '%</td></tr>';
+  }).join('');
+  document.getElementById('rankWrap').style.display = rows.length ? 'block' : 'none';
+
+  var sorted = rows.slice().sort(function(a,b){ return String(b.recNo||'').localeCompare(String(a.recNo||'')); });
+  document.getElementById('list').innerHTML = sorted.map(function(x){
+    var who = [x.gender, x.ageGroup, x.hairLength].filter(Boolean).join('／');
+    var ch = (x.changes || []).map(function(c){ return '<span class="tag ok">' + esc(c) + '</span>'; }).join('');
+    var th = (x.media || []).filter(function(m){ return m && m.dataUrl; })
+      .map(function(m){ return '<img src="' + m.dataUrl + '">'; }).join('');
+    var n = (x.media || []).length;
+    return '<tr><td>' + esc(x.recNo || x.recordNo) + '</td>'
+      + '<td>' + esc(x.date) + '<br><span class="cnt">' + esc(x.time || '') + '</span></td>'
+      + '<td>' + esc(x.place || '') + '<br><span class="cnt">' + esc(x.operator || '') + '</span></td>'
+      + '<td>' + esc(who) + '</td>'
+      + '<td>' + stars(x.satisfaction) + '<br><span class="cnt">' + (x.satisfaction || '—') + '</span></td>'
+      + '<td style="max-width:280px">' + esc(x.comment || '') + '<div>' + ch + '</div></td>'
+      + '<td>' + esc(x.snsOk || '') + '<br><span class="cnt">' + esc(x.displayName || '') + '</span></td>'
+      + '<td><div class="thumbs">' + th + '</div><span class="cnt">' + (n ? n + '点' : '') + '</span></td></tr>';
+  }).join('');
+  document.getElementById('listWrap').style.display = rows.length ? 'block' : 'none';
+}
+
+function kpi(l, n, s){
+  return '<div class="kpi"><div class="l">' + l + '</div><div class="n">' + n + '</div>'
+       + '<div class="l">' + (s || '') + '</div></div>';
+}
+
+function toCsv(){
+  if(!rows.length){ setMsg('先に読み込んでください。', 'err'); return; }
+  var cols = ['recNo','date','time','durationMin','place','operator','gender','ageGroup','hairLength',
+    'hairType','concerns','amount','menu','changes','satisfaction','finish','usability','reuse',
+    'comment','opComment','snsOk','displayName'];
+  var out = [cols.join(',')];
+  rows.forEach(function(x){
+    out.push(cols.map(function(c){
+      var v = x[c]; if(Array.isArray(v)) v = v.join('｜');
+      return '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"';
+    }).join(','));
+  });
+  var blob = new Blob(['\uFEFF' + out.join('\n')], {type:'text/csv'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'infini_records_' + document.getElementById('from').value + '_' + document.getElementById('to').value + '.csv';
+  a.click();
+}
+
+document.getElementById('load').addEventListener('click', load);
+document.getElementById('csv').addEventListener('click', toCsv);
+(function(){
+  var t = new Date(), f = new Date(t.getTime() - 29 * 86400000);
+  document.getElementById('to').value = ymd(t);
+  document.getElementById('from').value = ymd(f);
+})();
+</script>
+</body>
+</html>
