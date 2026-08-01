@@ -3,7 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>施術記録・評価集計｜INFINI WORLD</title>
+<meta name="robots" content="noindex">
+<title>施術記録・お客様評価｜INFINI WORLD</title>
 <style>
 :root{
   --cream:#FAF6F0; --card:#FFFFFF; --ink:#2B2622; --sub:#6E645C;
@@ -16,56 +17,71 @@ body{margin:0;background:var(--cream);color:var(--ink);font-size:15px;line-heigh
 header{background:var(--card);border-bottom:2px solid var(--rose);padding:14px 20px}
 header .t{font-size:15px;font-weight:700;letter-spacing:.06em}
 header .s{font-size:12px;color:var(--sub)}
-header .nav{margin-top:10px;display:flex;gap:8px}
+header .nav{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
 header .nav a{font-size:12px;color:var(--sub);text-decoration:none;border:1px solid var(--line);
   border-radius:16px;padding:5px 12px;background:var(--cream)}
-.wrap{max-width:1080px;margin:0 auto;padding:20px}
+.wrap{max-width:1120px;margin:0 auto;padding:20px}
 section{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px;margin-bottom:16px}
 h2{font-size:14px;margin:0 0 14px;padding-left:10px;border-left:4px solid var(--rose);letter-spacing:.04em}
 label{font-size:12px;color:var(--sub);display:block;margin-bottom:4px}
 input[type=date],input[type=text]{padding:9px 11px;font-size:15px;font-family:inherit;background:var(--cream);
   border:1px solid var(--line);border-radius:8px;color:var(--ink)}
-button{padding:10px 18px;font-size:14px;font-family:inherit;border-radius:8px;cursor:pointer;border:1px solid var(--line);
-  background:var(--cream);color:var(--sub)}
+button{padding:10px 18px;font-size:14px;font-family:inherit;border-radius:8px;cursor:pointer;
+  border:1px solid var(--line);background:var(--cream);color:var(--sub)}
 button.go{background:var(--rose);color:#fff;border-color:var(--rose);font-weight:700}
+button.sm{padding:5px 12px;font-size:12px;border-radius:14px}
+button.appr{border-color:var(--ok);color:var(--ok)}
+button.appr.on{background:var(--ok);color:#fff}
 .ctl{display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap}
+.tabs{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.tab{padding:9px 18px;font-size:13px;border:1px solid var(--line);border-radius:20px;background:var(--card);
+  color:var(--sub);cursor:pointer}
+.tab.on{background:var(--rose-soft);border-color:var(--rose);color:var(--rose);font-weight:700}
+.pane{display:none}
+.pane.on{display:block}
 .kpis{display:flex;gap:14px;flex-wrap:wrap}
-.kpi{flex:1;min-width:150px;border:1px solid var(--line);border-radius:10px;padding:14px;background:var(--cream)}
+.kpi{flex:1;min-width:160px;border:1px solid var(--line);border-radius:10px;padding:14px;background:var(--cream)}
 .kpi .n{font-size:26px;font-weight:700;line-height:1.2}
 .kpi .l{font-size:12px;color:var(--sub)}
 .stars{display:inline-block;position:relative;font-size:19px;line-height:1;letter-spacing:1px;vertical-align:-2px}
 .stars .bg{color:#E0D6CB}
 .stars .fg{color:var(--gold);position:absolute;left:0;top:0;overflow:hidden;white-space:nowrap}
-.score{font-size:20px;font-weight:700;color:var(--rose);margin-left:8px;vertical-align:-1px}
-.cnt{font-size:12px;color:var(--sub);margin-left:8px}
+.big .stars{font-size:30px}
+.score{font-size:20px;font-weight:700;color:var(--rose);margin-left:8px}
+.big .score{font-size:34px}
+.cnt{font-size:12px;color:var(--sub);margin-left:6px}
+.dist{margin-top:12px;max-width:420px}
+.dist .r{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--sub);margin-bottom:4px}
+.dist .lb{width:26px}
+.dist .bar{flex:1;height:9px;background:#EDE4DA;border-radius:5px;overflow:hidden}
+.dist .bar i{display:block;height:100%;background:var(--gold)}
+.dist .pc{width:44px;text-align:right}
 table{width:100%;border-collapse:collapse;font-size:13px}
 th,td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
 th{font-size:12px;color:var(--sub);font-weight:600;white-space:nowrap}
 td.n{text-align:right;white-space:nowrap}
-tr.rank td{border-bottom:1px solid var(--line)}
-.rk{display:inline-block;width:22px;height:22px;line-height:22px;text-align:center;border-radius:11px;
-  background:var(--rose-soft);color:var(--rose);font-size:12px;font-weight:700;margin-right:8px}
-.rk.g1{background:#F6EBD6;color:var(--gold)}
 .tag{display:inline-block;font-size:11px;border:1px solid var(--line);border-radius:12px;padding:1px 8px;
   margin:0 4px 4px 0;color:var(--sub)}
 .tag.ok{border-color:var(--teal);color:var(--teal)}
+.tag.ty{border-color:var(--rose);color:var(--rose)}
+.tag.no{border-color:var(--warn);color:var(--warn)}
 .msg{font-size:13px;color:var(--sub);padding:8px 0}
 .msg.err{color:var(--warn);font-weight:700}
+.msg.ok{color:var(--ok);font-weight:700}
 .thumbs{display:flex;gap:4px;flex-wrap:wrap}
 .thumbs img{width:44px;height:44px;object-fit:cover;border:1px solid var(--line);border-radius:4px}
-.bar{height:6px;background:#EDE4DA;border-radius:3px;overflow:hidden;margin-top:4px}
-.bar i{display:block;height:100%;background:var(--gold)}
-.right{float:right}
 </style>
 </head>
 <body>
 
 <header>
-  <div class="t">INFINI WORLD ／ 施術記録・評価集計</div>
-  <div class="s">管理用。取引先には公開していません。</div>
+  <div class="t">INFINI WORLD ／ 施術記録・お客様評価</div>
+  <div class="s">管理用。取引先・お客様には公開していません。</div>
   <div class="nav">
     <a href="admin.html">管理コンソール</a>
     <a href="record.html">記録フォーム</a>
+    <a href="review-salon.html">サロン評価フォーム</a>
+    <a href="review-home.html">自宅使用フォーム</a>
     <a href="../index.html">サイトトップ</a>
   </div>
 </header>
@@ -80,41 +96,68 @@ tr.rank td{border-bottom:1px solid var(--line)}
       <div><label>サロン名で絞り込み</label><input type="text" id="q" placeholder="部分一致（空欄で全件）"></div>
       <button class="go" id="load">読み込む</button>
       <button id="csv">CSV書き出し</button>
+      <button id="pub">公開用データを書き出す</button>
     </div>
     <div class="msg" id="msg"></div>
   </section>
 
-  <section id="sumWrap" style="display:none">
-    <h2>全体の集計</h2>
-    <div class="kpis" id="kpis"></div>
-  </section>
+  <div class="tabs">
+    <div class="tab on" data-p="sum">概要</div>
+    <div class="tab" data-p="rev">お客様評価</div>
+    <div class="tab" data-p="rec">施術記録</div>
+    <div class="tab" data-p="salon">サロン別</div>
+  </div>
 
-  <section id="rankWrap" style="display:none">
-    <h2>サロン別 集計</h2>
-    <table>
-      <thead><tr>
-        <th>サロン</th><th>件数</th><th>満足度</th><th>仕上がり</th><th>使いやすさ</th><th>また使いたい</th>
-      </tr></thead>
-      <tbody id="rank"></tbody>
-    </table>
-    <div class="msg">件数が少ないうちは順位が動きやすいため、目安として見てください。</div>
-  </section>
+  <div class="pane on" id="p-sum">
+    <section>
+      <h2>お客様評価（公開対象）</h2>
+      <div class="msg">承認済み かつ 掲載可の評価だけを集計しています。この数字がサイトトップに出ます。</div>
+      <div id="pubSum"></div>
+    </section>
+    <section>
+      <h2>全データ（承認前を含む）</h2>
+      <div class="kpis" id="kpis"></div>
+    </section>
+  </div>
 
-  <section id="listWrap" style="display:none">
-    <h2>記録一覧</h2>
-    <table>
-      <thead><tr>
-        <th>記録No.</th><th>日付</th><th>サロン／施術者</th><th>お客様</th>
-        <th>満足度</th><th>感想</th><th>掲載</th><th>写真</th>
-      </tr></thead>
-      <tbody id="list"></tbody>
-    </table>
-  </section>
+  <div class="pane" id="p-rev">
+    <section>
+      <h2>お客様評価の一覧・承認</h2>
+      <div class="msg">「承認」を押したものだけが公開対象になります。もう一度押すと取り消せます。</div>
+      <table>
+        <thead><tr><th>承認</th><th>記録No.</th><th>種別</th><th>日付</th><th>サロン</th>
+          <th>満足度</th><th>感想</th><th>掲載可否</th><th>属性</th></tr></thead>
+        <tbody id="revList"></tbody>
+      </table>
+    </section>
+  </div>
+
+  <div class="pane" id="p-rec">
+    <section>
+      <h2>施術記録の一覧</h2>
+      <table>
+        <thead><tr><th>記録No.</th><th>日付</th><th>サロン／施術者</th><th>お客様</th>
+          <th>満足度</th><th>感想</th><th>掲載</th><th>写真</th></tr></thead>
+        <tbody id="recList"></tbody>
+      </table>
+    </section>
+  </div>
+
+  <div class="pane" id="p-salon">
+    <section>
+      <h2>サロン別 集計</h2>
+      <div class="msg">社内での状況把握用です。サイトには店舗別の点数を出しません。</div>
+      <table>
+        <thead><tr><th>サロン</th><th>施術記録</th><th>お客様評価</th><th>お客様満足度</th><th>施術者満足度</th></tr></thead>
+        <tbody id="salonList"></tbody>
+      </table>
+    </section>
+  </div>
 
 </div>
 
 <script>
-var API = 'https://zgrp36rmn0.execute-api.ap-northeast-1.amazonaws.com/prod';
+var API = 'https://zgrp36rmn0.execute-api.ap-northeast-1.amazonaws.com/prod/records';
 var rows = [];
 
 function pad(n,l){ n = String(n); while(n.length < l) n = '0' + n; return n; }
@@ -123,18 +166,31 @@ function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c
   return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
 function stars(v){
   var p = Math.max(0, Math.min(5, Number(v) || 0)) / 5 * 100;
-  return '<span class="stars"><span class="bg">★★★★★</span>'
-       + '<span class="fg" style="width:' + p + '%">★★★★★</span></span>';
+  return '<span class="stars"><span class="bg">★★★★★</span><span class="fg" style="width:'
+    + p + '%">★★★★★</span></span>';
 }
 function avg(a){ return a.length ? a.reduce(function(x,y){ return x + y; }, 0) / a.length : 0; }
 function f2(v){ return (Math.round(v * 100) / 100).toFixed(2); }
-
 function setMsg(t, cls){ var m = document.getElementById('msg'); m.textContent = t || ''; m.className = 'msg' + (cls ? ' ' + cls : ''); }
-
-function pickItems(j){
-  if(Array.isArray(j)) return j;
-  return j.items || j.records || j.Items || j.data || [];
+function typeOf(x){
+  if(x.type) return x.type;
+  var n = String(x.recNo || '');
+  if(n.indexOf('CUS-') === 0) return 'salon_customer';
+  if(n.indexOf('HOM-') === 0) return 'home_customer';
+  return 'staff';
 }
+function isCustomer(x){ var t = typeOf(x); return t === 'salon_customer' || t === 'home_customer'; }
+function isPublic(x){ return isCustomer(x) && x.approved === true && x.snsOk !== '掲載不可'; }
+function pickItems(j){ return Array.isArray(j) ? j : (j.items || j.records || j.Items || j.data || []); }
+
+document.querySelectorAll('.tab').forEach(function(t){
+  t.addEventListener('click', function(){
+    document.querySelectorAll('.tab').forEach(function(o){ o.classList.remove('on'); });
+    document.querySelectorAll('.pane').forEach(function(o){ o.classList.remove('on'); });
+    t.classList.add('on');
+    document.getElementById('p-' + t.getAttribute('data-p')).classList.add('on');
+  });
+});
 
 async function load(){
   var f = document.getElementById('from').value, t = document.getElementById('to').value;
@@ -142,112 +198,196 @@ async function load(){
   var d0 = new Date(f + 'T00:00:00'), d1 = new Date(t + 'T00:00:00');
   if(d0 > d1){ setMsg('開始日が終了日より後になっています。', 'err'); return; }
   var days = Math.round((d1 - d0) / 86400000) + 1;
-  if(days > 120){ setMsg('期間が長すぎます。120日以内にしてください。', 'err'); return; }
-
+  if(days > 180){ setMsg('期間が長すぎます。180日以内にしてください。', 'err'); return; }
   rows = []; var fail = 0;
   for(var i = 0; i < days; i++){
-    var d = new Date(d0.getTime() + i * 86400000), key = ymd(d);
+    var key = ymd(new Date(d0.getTime() + i * 86400000));
     setMsg('読み込み中（' + (i+1) + '/' + days + '） ' + key);
     try{
-      var r = await fetch(API + '/records?date=' + key);
-      if(r.ok){
-        var j = await r.json();
-        pickItems(j).forEach(function(x){ rows.push(x); });
-      }else{ fail++; }
+      var r = await fetch(API + '?date=' + key);
+      if(r.ok){ pickItems(await r.json()).forEach(function(x){ rows.push(x); }); }
+      else fail++;
     }catch(e){ fail++; }
   }
   var q = document.getElementById('q').value.trim();
   if(q) rows = rows.filter(function(x){ return String(x.place || '').indexOf(q) >= 0; });
-
   setMsg(rows.length + '件を読み込みました。' + (fail ? '（' + fail + '日分は取得できませんでした）' : ''),
          rows.length ? '' : 'err');
   render();
 }
 
-function render(){
-  var sat = rows.map(function(x){ return Number(x.satisfaction) || 0; }).filter(function(v){ return v > 0; });
-  var fin = rows.map(function(x){ return Number(x.finish) || 0; }).filter(function(v){ return v > 0; });
-  var usa = rows.map(function(x){ return Number(x.usability) || 0; }).filter(function(v){ return v > 0; });
-  var re  = rows.filter(function(x){ return /使いたい/.test(x.reuse || ''); }).length;
-
-  document.getElementById('kpis').innerHTML =
-    kpi('記録件数', rows.length + '<span class="cnt">件</span>', '')
-  + kpi('満足度', stars(avg(sat)) + '<span class="score">' + f2(avg(sat)) + '</span>', sat.length + '件の評価')
-  + kpi('仕上がり', stars(avg(fin)) + '<span class="score">' + f2(avg(fin)) + '</span>', fin.length + '件の評価')
-  + kpi('使いやすさ', stars(avg(usa)) + '<span class="score">' + f2(avg(usa)) + '</span>', usa.length + '件の評価')
-  + kpi('また使いたい', (rows.length ? Math.round(re / rows.length * 100) : 0) + '<span class="cnt">%</span>', re + '件');
-  document.getElementById('sumWrap').style.display = rows.length ? 'block' : 'none';
-
-  var by = {};
-  rows.forEach(function(x){
-    var k = (x.place || '（未記入）').trim();
-    if(!by[k]) by[k] = {n:0, sat:[], fin:[], usa:[], re:0};
-    by[k].n++;
-    if(Number(x.satisfaction)) by[k].sat.push(Number(x.satisfaction));
-    if(Number(x.finish)) by[k].fin.push(Number(x.finish));
-    if(Number(x.usability)) by[k].usa.push(Number(x.usability));
-    if(/使いたい/.test(x.reuse || '')) by[k].re++;
+function dist(list){
+  var c = {1:0,2:0,3:0,4:0,5:0}, n = 0;
+  list.forEach(function(v){ if(c[v] !== undefined){ c[v]++; n++; } });
+  var out = '<div class="dist">';
+  [5,4,3,2,1].forEach(function(k){
+    var p = n ? Math.round(c[k] / n * 100) : 0;
+    out += '<div class="r"><span class="lb">★' + k + '</span><span class="bar"><i style="width:'
+      + p + '%"></i></span><span class="pc">' + p + '%</span></div>';
   });
-  var list = Object.keys(by).map(function(k){
-    var v = by[k]; return {name:k, n:v.n, sat:avg(v.sat), fin:avg(v.fin), usa:avg(v.usa),
-      re: v.n ? Math.round(v.re / v.n * 100) : 0, satN:v.sat.length};
-  }).sort(function(a,b){ return b.sat - a.sat || b.n - a.n; });
+  return out + '</div>';
+}
 
-  document.getElementById('rank').innerHTML = list.map(function(s, i){
-    return '<tr class="rank"><td><span class="rk' + (i === 0 ? ' g1' : '') + '">' + (i+1) + '</span>'
-      + esc(s.name) + '</td>'
-      + '<td class="n">' + s.n + '</td>'
-      + '<td>' + stars(s.sat) + '<span class="score">' + f2(s.sat) + '</span>'
-      + '<div class="bar"><i style="width:' + (s.sat/5*100) + '%"></i></div></td>'
-      + '<td>' + f2(s.fin) + '</td><td>' + f2(s.usa) + '</td><td class="n">' + s.re + '%</td></tr>';
+function impRank(recs){
+  var c = {}, n = recs.length;
+  recs.forEach(function(x){ (x.impressions || []).forEach(function(v){ c[v] = (c[v] || 0) + 1; }); });
+  return Object.keys(c).map(function(k){ return {k:k, p: n ? Math.round(c[k]/n*100) : 0, c:c[k]}; })
+    .sort(function(a,b){ return b.c - a.c; });
+}
+
+function render(){
+  var pub = rows.filter(isPublic);
+  var sc = pub.map(function(x){ return Number(x.satisfaction) || 0; }).filter(function(v){ return v > 0; });
+  var salons = {};
+  pub.forEach(function(x){ if(x.place) salons[x.place] = 1; });
+  var imps = impRank(pub).slice(0, 5).map(function(o){
+    return '<span class="tag ok">' + esc(o.k) + ' ' + o.p + '%</span>'; }).join('');
+  document.getElementById('pubSum').innerHTML =
+    '<div class="big">' + stars(avg(sc)) + '<span class="score">' + f2(avg(sc)) + '</span>'
+    + '<span class="cnt">評価 ' + pub.length + '件 ／ サロン ' + Object.keys(salons).length + '店舗</span></div>'
+    + dist(sc) + '<div style="margin-top:12px">' + (imps || '<span class="cnt">まだ承認済みの評価がありません。</span>') + '</div>';
+
+  var cust = rows.filter(isCustomer), staff = rows.filter(function(x){ return typeOf(x) === 'staff'; });
+  var cs = cust.map(function(x){ return Number(x.satisfaction) || 0; }).filter(function(v){ return v > 0; });
+  var ss = staff.map(function(x){ return Number(x.satisfaction) || 0; }).filter(function(v){ return v > 0; });
+  document.getElementById('kpis').innerHTML =
+    kpi('施術記録', staff.length + '<span class="cnt">件</span>', '')
+  + kpi('お客様評価', cust.length + '<span class="cnt">件</span>', '承認済み ' + pub.length + '件')
+  + kpi('お客様満足度', stars(avg(cs)) + '<span class="score">' + f2(avg(cs)) + '</span>', cs.length + '件')
+  + kpi('施術者評価', stars(avg(ss)) + '<span class="score">' + f2(avg(ss)) + '</span>', ss.length + '件');
+
+  document.getElementById('revList').innerHTML = cust.slice().sort(function(a,b){
+    return String(b.recNo || '').localeCompare(String(a.recNo || '')); }).map(function(x){
+    var t = typeOf(x);
+    var who = [x.ageGroup, x.hairLength].filter(Boolean).join('／');
+    var im = (x.impressions || []).map(function(c){ return '<span class="tag ok">' + esc(c) + '</span>'; }).join('');
+    var blocked = x.snsOk === '掲載不可';
+    return '<tr><td>' + (blocked ? '<span class="tag no">掲載不可</span>'
+        : '<button class="sm appr' + (x.approved ? ' on' : '') + '" data-no="' + esc(x.recNo) + '">'
+          + (x.approved ? '承認済み' : '承認') + '</button>') + '</td>'
+      + '<td>' + esc(x.recNo) + '</td>'
+      + '<td><span class="tag ty">' + (t === 'home_customer' ? '自宅' : 'サロン') + '</span></td>'
+      + '<td>' + esc(x.date) + '</td>'
+      + '<td>' + esc(x.place || '—') + '</td>'
+      + '<td>' + stars(x.satisfaction) + '<br><span class="cnt">' + (x.satisfaction || '—') + '</span></td>'
+      + '<td style="max-width:300px">' + esc(x.comment || '') + '<div>' + im + '</div></td>'
+      + '<td>' + esc(x.snsOk || '') + '<br><span class="cnt">' + esc(x.displayName || '') + '</span></td>'
+      + '<td>' + esc(who) + '</td></tr>';
   }).join('');
-  document.getElementById('rankWrap').style.display = rows.length ? 'block' : 'none';
+  document.querySelectorAll('button.appr').forEach(function(b){
+    b.addEventListener('click', function(){ approve(b.getAttribute('data-no'), b); });
+  });
 
-  var sorted = rows.slice().sort(function(a,b){ return String(b.recNo||'').localeCompare(String(a.recNo||'')); });
-  document.getElementById('list').innerHTML = sorted.map(function(x){
+  document.getElementById('recList').innerHTML = staff.slice().sort(function(a,b){
+    return String(b.recNo || '').localeCompare(String(a.recNo || '')); }).map(function(x){
     var who = [x.gender, x.ageGroup, x.hairLength].filter(Boolean).join('／');
     var ch = (x.changes || []).map(function(c){ return '<span class="tag ok">' + esc(c) + '</span>'; }).join('');
     var th = (x.media || []).filter(function(m){ return m && m.dataUrl; })
       .map(function(m){ return '<img src="' + m.dataUrl + '">'; }).join('');
-    var n = (x.media || []).length;
-    return '<tr><td>' + esc(x.recNo || x.recordNo) + '</td>'
+    return '<tr><td>' + esc(x.recNo) + '</td>'
       + '<td>' + esc(x.date) + '<br><span class="cnt">' + esc(x.time || '') + '</span></td>'
       + '<td>' + esc(x.place || '') + '<br><span class="cnt">' + esc(x.operator || '') + '</span></td>'
       + '<td>' + esc(who) + '</td>'
       + '<td>' + stars(x.satisfaction) + '<br><span class="cnt">' + (x.satisfaction || '—') + '</span></td>'
-      + '<td style="max-width:280px">' + esc(x.comment || '') + '<div>' + ch + '</div></td>'
-      + '<td>' + esc(x.snsOk || '') + '<br><span class="cnt">' + esc(x.displayName || '') + '</span></td>'
-      + '<td><div class="thumbs">' + th + '</div><span class="cnt">' + (n ? n + '点' : '') + '</span></td></tr>';
+      + '<td style="max-width:260px">' + esc(x.comment || '') + '<div>' + ch + '</div></td>'
+      + '<td>' + esc(x.snsOk || '') + '</td>'
+      + '<td><div class="thumbs">' + th + '</div></td></tr>';
   }).join('');
-  document.getElementById('listWrap').style.display = rows.length ? 'block' : 'none';
+
+  var by = {};
+  rows.forEach(function(x){
+    var k = (x.place || '（未記入）').trim();
+    if(!by[k]) by[k] = {rec:0, cus:0, cs:[], ss:[]};
+    if(isCustomer(x)){ by[k].cus++; if(Number(x.satisfaction)) by[k].cs.push(Number(x.satisfaction)); }
+    else { by[k].rec++; if(Number(x.satisfaction)) by[k].ss.push(Number(x.satisfaction)); }
+  });
+  document.getElementById('salonList').innerHTML = Object.keys(by).sort().map(function(k){
+    var v = by[k];
+    return '<tr><td>' + esc(k) + '</td><td class="n">' + v.rec + '</td><td class="n">' + v.cus + '</td>'
+      + '<td>' + (v.cs.length ? stars(avg(v.cs)) + ' ' + f2(avg(v.cs)) : '—') + '</td>'
+      + '<td>' + (v.ss.length ? f2(avg(v.ss)) : '—') + '</td></tr>';
+  }).join('');
 }
 
 function kpi(l, n, s){
-  return '<div class="kpi"><div class="l">' + l + '</div><div class="n">' + n + '</div>'
-       + '<div class="l">' + (s || '') + '</div></div>';
+  return '<div class="kpi"><div class="l">' + l + '</div><div class="n">' + n + '</div><div class="l">' + (s || '') + '</div></div>';
+}
+
+async function approve(no, btn){
+  var rec = rows.filter(function(x){ return x.recNo === no; })[0];
+  if(!rec) return;
+  var next = !rec.approved;
+  btn.disabled = true;
+  var body = JSON.parse(JSON.stringify(rec));
+  body.approved = next;
+  body.approvedAt = next ? new Date().toISOString() : '';
+  try{
+    var r = await fetch(API, {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)});
+    if(!r.ok){ var t = ''; try{ t = await r.text(); }catch(e){} throw new Error('HTTP ' + r.status + ' ' + t.slice(0,160)); }
+    rec.approved = next; rec.approvedAt = body.approvedAt;
+    setMsg(no + ' を' + (next ? '承認しました。' : '未承認に戻しました。'), 'ok');
+    render();
+  }catch(e){
+    btn.disabled = false;
+    setMsg('更新できませんでした（' + e.message + '）', 'err');
+  }
 }
 
 function toCsv(){
   if(!rows.length){ setMsg('先に読み込んでください。', 'err'); return; }
-  var cols = ['recNo','date','time','durationMin','place','operator','gender','ageGroup','hairLength',
-    'hairType','concerns','amount','menu','changes','satisfaction','finish','usability','reuse',
-    'comment','opComment','snsOk','displayName'];
+  var cols = ['recNo','type','date','time','place','operator','gender','ageGroup','hairLength','hairType',
+    'concerns','amount','menu','changes','impressions','satisfaction','finish','usability','scent','scentScore',
+    'continueScore','reuse','recommend','useCount','usePeriod','channel','comment','opComment','snsOk',
+    'displayName','approved','parentRecNo'];
   var out = [cols.join(',')];
   rows.forEach(function(x){
     out.push(cols.map(function(c){
-      var v = x[c]; if(Array.isArray(v)) v = v.join('｜');
+      var v = c === 'type' ? typeOf(x) : x[c];
+      if(Array.isArray(v)) v = v.join('｜');
       return '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"';
     }).join(','));
   });
-  var blob = new Blob(['\uFEFF' + out.join('\n')], {type:'text/csv'});
+  dl(new Blob(['\uFEFF' + out.join('\n')], {type:'text/csv'}),
+     'infini_all_' + document.getElementById('from').value + '_' + document.getElementById('to').value + '.csv');
+}
+
+function toPublic(){
+  var pub = rows.filter(isPublic);
+  if(!pub.length){ setMsg('承認済みの評価がありません。先に「お客様評価」タブで承認してください。', 'err'); return; }
+  var sc = pub.map(function(x){ return Number(x.satisfaction) || 0; }).filter(function(v){ return v > 0; });
+  var c = {1:0,2:0,3:0,4:0,5:0};
+  sc.forEach(function(v){ c[v]++; });
+  var salons = {};
+  pub.forEach(function(x){ if(x.place) salons[x.place] = 1; });
+  var comments = pub.filter(function(x){ return (x.comment || '').trim().length > 6; })
+    .sort(function(a,b){ return (Number(b.satisfaction)||0) - (Number(a.satisfaction)||0); })
+    .slice(0, 12).map(function(x){
+      return {text: String(x.comment).trim().slice(0, 120),
+              who: x.displayName || [x.ageGroup, x.hairLength].filter(Boolean).join('・') || 'お客様',
+              score: Number(x.satisfaction) || 0,
+              from: typeOf(x) === 'home_customer' ? '自宅使用' : 'サロン施術'};
+    });
+  var data = {
+    updatedAt: new Date().toISOString().slice(0, 10),
+    n: pub.length,
+    avg: Math.round(avg(sc) * 100) / 100,
+    dist: {5:c[5], 4:c[4], 3:c[3], 2:c[2], 1:c[1]},
+    salonCount: Object.keys(salons).length,
+    impressions: impRank(pub).slice(0, 6).map(function(o){ return {label:o.k, pct:o.p}; }),
+    comments: comments
+  };
+  dl(new Blob([JSON.stringify(data, null, 2)], {type:'application/json'}), 'reviews.json');
+  setMsg('reviews.json を書き出しました。GitHubの assets/ に上書きアップロードするとサイトトップに反映されます。', 'ok');
+}
+
+function dl(blob, name){
   var a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'infini_records_' + document.getElementById('from').value + '_' + document.getElementById('to').value + '.csv';
-  a.click();
+  a.href = URL.createObjectURL(blob); a.download = name; a.click();
 }
 
 document.getElementById('load').addEventListener('click', load);
 document.getElementById('csv').addEventListener('click', toCsv);
+document.getElementById('pub').addEventListener('click', toPublic);
 (function(){
   var t = new Date(), f = new Date(t.getTime() - 29 * 86400000);
   document.getElementById('to').value = ymd(t);

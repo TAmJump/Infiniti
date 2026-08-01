@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="robots" content="noindex">
+<title>INFINI WORLD 使用後のご感想｜Next Innovation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400&family=Noto+Serif+JP:wght@300;400;500&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --white:#ffffff; --cream:#fff7f5; --panel:#fdeef0; --blush:#f9e3e7;
+  --line:#f1dbe0; --rose:#d56b82; --rose-deep:#bb5570;
+  --ink:#33272b; --ink-soft:#5e4d53; --muted:#9b8990; --gold:#c9963f;
+  --serif:'Fraunces',serif; --jp-serif:'Noto Serif JP',serif; --jp-sans:'Zen Kaku Gothic New',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{background:var(--cream);color:var(--ink);font-family:var(--jp-sans);font-size:16px;line-height:1.85;padding-bottom:104px}
+.top{background:var(--white);border-bottom:1px solid var(--line);padding:22px 20px calc(18px + env(safe-area-inset-top,0));text-align:center}
+.top .bm{font-family:var(--serif);font-size:19px;letter-spacing:-.01em}
+.top .bm em{font-style:italic;color:var(--rose)}
+.top .pn{font-family:var(--serif);font-size:13px;letter-spacing:.22em;color:var(--rose);margin-top:10px}
+.top .sub{font-size:12px;color:var(--muted);letter-spacing:.04em}
+.wrap{max-width:640px;margin:0 auto;padding:20px 16px}
+.lead{background:var(--white);border:1px solid var(--line);border-radius:3px;padding:20px;margin-bottom:16px}
+.lead h1{font-family:var(--jp-serif);font-size:19px;font-weight:400;line-height:1.7;margin-bottom:10px}
+.lead p{font-size:13.5px;color:var(--ink-soft);line-height:1.9}
+.lead .at{margin-top:12px;padding-top:12px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
+.lead .at b{color:var(--rose);font-weight:500}
+section{background:var(--white);border:1px solid var(--line);border-radius:3px;padding:20px;margin-bottom:14px}
+h2{font-family:var(--serif);font-size:11px;letter-spacing:.2em;color:var(--rose);text-transform:uppercase;margin-bottom:4px}
+h2+.h{font-family:var(--jp-serif);font-size:16px;font-weight:400;margin-bottom:16px}
+label.f{display:block;font-size:13px;color:var(--ink-soft);margin:18px 0 8px;font-weight:500}
+label.f:first-of-type{margin-top:0}
+.req{color:var(--rose);font-size:11px;margin-left:6px}
+input[type=text],textarea{width:100%;padding:12px 13px;font-size:16px;font-family:inherit;color:var(--ink);
+  background:var(--cream);border:1px solid var(--line);border-radius:2px}
+textarea{min-height:110px;resize:vertical;line-height:1.8}
+input:focus,textarea:focus{outline:none;border-color:var(--rose);background:var(--white)}
+.stars{display:flex;gap:6px;align-items:center;justify-content:center;padding:6px 0}
+.stars .st{font-size:40px;line-height:1;color:#ecdfe2;cursor:pointer;user-select:none}
+.stars .st.on{color:var(--gold)}
+.stars-lb{text-align:center;font-size:13px;color:var(--muted);min-height:20px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{display:inline-block;padding:9px 15px;font-size:14px;border-radius:22px;border:1px solid var(--line);
+  background:var(--cream);color:var(--ink-soft);cursor:pointer;user-select:none}
+.chip.on{background:var(--panel);border-color:var(--rose);color:var(--rose-deep);font-weight:500}
+.note{font-size:11.5px;color:var(--muted);margin-top:8px;line-height:1.8}
+.consent{background:var(--panel);border:1px solid var(--blush);border-radius:3px;padding:16px;margin-top:16px}
+.consent p{font-size:12.5px;color:var(--ink-soft);line-height:1.9}
+.bar{position:fixed;left:0;right:0;bottom:0;background:var(--white);border-top:1px solid var(--line);
+  padding:14px 16px calc(14px + env(safe-area-inset-bottom,0));z-index:30}
+.bar .in{max-width:640px;margin:0 auto}
+.st-msg{font-size:12px;text-align:center;color:var(--muted);padding-bottom:8px}
+.st-msg.err{color:var(--rose-deep);font-weight:700}
+button.go{width:100%;padding:16px;font-size:16px;font-weight:700;color:#fff;background:var(--rose);
+  border:none;border-radius:2px;font-family:inherit;cursor:pointer;letter-spacing:.04em}
+button.go:disabled{background:#e3c9cf}
+.done{display:none;text-align:center;padding:70px 24px}
+.done .mk{font-family:var(--serif);font-size:12px;letter-spacing:.22em;color:var(--rose)}
+.done h1{font-family:var(--jp-serif);font-size:22px;font-weight:400;margin:16px 0 14px}
+.done p{font-size:14px;color:var(--ink-soft);line-height:1.9}
+.done a{display:inline-block;margin-top:26px;font-size:13px;color:var(--rose);border-bottom:1px solid var(--rose);text-decoration:none}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="bm">Next <em>Innovation</em></div>
+  <div class="pn">INFINI WORLD</div>
+  <div class="sub">ご自宅で使われた方のご感想</div>
+</div>
+
+<div class="wrap" id="form">
+
+  <div class="lead">
+    <h1>お使いになった感想を、お聞かせください。</h1>
+    <p>いただいたご感想は、製品の改良と、これから使う方への案内に使わせていただきます。2分ほどで終わります。お名前の記入は必要ありません。</p>
+    <div class="at" id="at"></div>
+  </div>
+
+  <section>
+    <h2>Usage</h2>
+    <div class="h">使われた状況</div>
+    <label class="f">使った回数<span class="req">必須</span></label>
+    <div class="chips" data-single="useCount">
+      <span class="chip" data-v="1〜2回">1〜2回</span><span class="chip" data-v="3〜5回">3〜5回</span>
+      <span class="chip" data-v="6〜10回">6〜10回</span><span class="chip" data-v="11回以上">11回以上</span>
+    </div>
+    <label class="f">使い始めてからの期間</label>
+    <div class="chips" data-single="usePeriod">
+      <span class="chip" data-v="1週間以内">1週間以内</span><span class="chip" data-v="2〜4週間">2〜4週間</span>
+      <span class="chip" data-v="1〜3ヶ月">1〜3ヶ月</span><span class="chip" data-v="3ヶ月以上">3ヶ月以上</span>
+    </div>
+    <label class="f">お手元に届いた経路</label>
+    <div class="chips" data-single="channel">
+      <span class="chip" data-v="CAMPFIRE">クラウドファンディング</span>
+      <span class="chip" data-v="サロンで購入">サロンで購入</span>
+      <span class="chip" data-v="サンプル">サンプルをもらった</span>
+      <span class="chip" data-v="その他">その他</span>
+    </div>
+  </section>
+
+  <section>
+    <h2>Satisfaction</h2>
+    <div class="h">全体の満足度<span class="req">必須</span></div>
+    <div class="stars" data-k="satisfaction">
+      <span class="st" data-v="1">★</span><span class="st" data-v="2">★</span><span class="st" data-v="3">★</span>
+      <span class="st" data-v="4">★</span><span class="st" data-v="5">★</span>
+    </div>
+    <div class="stars-lb" data-lb="satisfaction">タップして選んでください</div>
+
+    <label class="f" style="text-align:center">使いやすさ（伸び・すすぎ・扱いやすさ）</label>
+    <div class="stars" data-k="usability">
+      <span class="st" data-v="1">★</span><span class="st" data-v="2">★</span><span class="st" data-v="3">★</span>
+      <span class="st" data-v="4">★</span><span class="st" data-v="5">★</span>
+    </div>
+    <div class="stars-lb" data-lb="usability">未選択</div>
+
+    <label class="f" style="text-align:center">香り</label>
+    <div class="stars" data-k="scentScore">
+      <span class="st" data-v="1">★</span><span class="st" data-v="2">★</span><span class="st" data-v="3">★</span>
+      <span class="st" data-v="4">★</span><span class="st" data-v="5">★</span>
+    </div>
+    <div class="stars-lb" data-lb="scentScore">未選択</div>
+
+    <label class="f" style="text-align:center">続けて使いたいか</label>
+    <div class="stars" data-k="continueScore">
+      <span class="st" data-v="1">★</span><span class="st" data-v="2">★</span><span class="st" data-v="3">★</span>
+      <span class="st" data-v="4">★</span><span class="st" data-v="5">★</span>
+    </div>
+    <div class="stars-lb" data-lb="continueScore">未選択</div>
+  </section>
+
+  <section>
+    <h2>Impression</h2>
+    <div class="h">感じられたこと</div>
+    <label class="f">当てはまるものをお選びください（いくつでも）</label>
+    <div class="chips" data-multi="impressions">
+      <span class="chip" data-v="指通りが良くなった">指通りが良くなった</span>
+      <span class="chip" data-v="ツヤが出た">ツヤが出た</span>
+      <span class="chip" data-v="まとまりが出た">まとまりが出た</span>
+      <span class="chip" data-v="はり・こしを感じた">はり・こしを感じた</span>
+      <span class="chip" data-v="やわらかくなった">やわらかくなった</span>
+      <span class="chip" data-v="広がりが落ち着いた">広がりが落ち着いた</span>
+      <span class="chip" data-v="軽い仕上がりだった">軽い仕上がりだった</span>
+      <span class="chip" data-v="朝のセットが楽になった">朝のセットが楽になった</span>
+      <span class="chip" data-v="変化を感じにくかった">変化を感じにくかった</span>
+    </div>
+    <label class="f">人に勧めたいと思いますか</label>
+    <div class="chips" data-single="recommend">
+      <span class="chip" data-v="ぜひ勧めたい">ぜひ勧めたい</span>
+      <span class="chip" data-v="勧めたい">勧めたい</span>
+      <span class="chip" data-v="どちらとも言えない">どちらとも</span>
+      <span class="chip" data-v="勧めないと思う">勧めないと思う</span>
+    </div>
+    <div class="note">※効果・実感には個人差があります。</div>
+  </section>
+
+  <section>
+    <h2>Comment</h2>
+    <div class="h">ひとこと</div>
+    <label class="f">ご自由にお書きください（任意）</label>
+    <textarea id="comment" placeholder="例：乾かしたあとのまとまりが、いつもと違いました"></textarea>
+
+    <div class="consent">
+      <p>いただいたご感想は、当社サイト・SNS・販促資料に掲載させていただく場合があります。掲載の可否をお選びください。実名での掲載は行いません。</p>
+      <label class="f">掲載の可否<span class="req">必須</span></label>
+      <div class="chips" data-single="snsOk">
+        <span class="chip" data-v="掲載可">掲載してよい</span>
+        <span class="chip" data-v="コメントのみ可（写真不可）">コメントのみ可</span>
+        <span class="chip" data-v="掲載不可">掲載しないでほしい</span>
+      </div>
+      <label class="f">掲載するときの呼び方（任意）</label>
+      <input type="text" id="displayName" placeholder="例：40代・女性／A様">
+    </div>
+  </section>
+
+  <section>
+    <h2>About You</h2>
+    <div class="h">よろしければ（任意）</div>
+    <label class="f">年代</label>
+    <div class="chips" data-single="ageGroup">
+      <span class="chip" data-v="10代">10代</span><span class="chip" data-v="20代">20代</span>
+      <span class="chip" data-v="30代">30代</span><span class="chip" data-v="40代">40代</span>
+      <span class="chip" data-v="50代">50代</span><span class="chip" data-v="60代以上">60代以上</span>
+    </div>
+    <label class="f">髪の長さ</label>
+    <div class="chips" data-single="hairLength">
+      <span class="chip" data-v="ショート">ショート</span><span class="chip" data-v="ボブ">ボブ</span>
+      <span class="chip" data-v="ミディアム">ミディアム</span><span class="chip" data-v="セミロング">セミロング</span>
+      <span class="chip" data-v="ロング">ロング</span>
+    </div>
+    <label class="f">髪質</label>
+    <div class="chips" data-multi="hairType">
+      <span class="chip" data-v="細い">細い</span><span class="chip" data-v="普通">普通</span>
+      <span class="chip" data-v="太い">太い</span><span class="chip" data-v="くせ毛">くせ毛</span>
+      <span class="chip" data-v="直毛">直毛</span><span class="chip" data-v="毛量多い">毛量多い</span>
+      <span class="chip" data-v="毛量少ない">毛量少ない</span>
+    </div>
+    <label class="f">髪のお悩み</label>
+    <div class="chips" data-multi="concerns">
+      <span class="chip" data-v="乾燥">乾燥</span><span class="chip" data-v="広がり">広がり</span>
+      <span class="chip" data-v="パサつき">パサつき</span><span class="chip" data-v="うねり">うねり</span>
+      <span class="chip" data-v="ごわつき">ごわつき</span><span class="chip" data-v="からまり">からまり</span>
+      <span class="chip" data-v="毛先の傷み">毛先の傷み</span><span class="chip" data-v="ツヤ不足">ツヤ不足</span>
+      <span class="chip" data-v="カラー履歴あり">カラー履歴あり</span><span class="chip" data-v="パーマ履歴あり">パーマ履歴あり</span>
+    </div>
+    <div class="note">お答えいただいた内容は統計としてのみ使用します。個人を特定する情報はいただきません。</div>
+  </section>
+</div>
+
+<div class="done" id="done">
+  <div class="mk">THANK YOU</div>
+  <h1>ありがとうございました。</h1>
+  <p>ご感想をお預かりしました。<br>いただいた声は製品づくりに役立てます。</p>
+  <a href="../index.html">INFINI WORLD について見る</a>
+</div>
+
+<div class="bar" id="bar">
+  <div class="in">
+    <div class="st-msg" id="status"></div>
+    <button class="go" id="send">この内容で送る</button>
+  </div>
+</div>
+
+<script>
+var API = 'https://zgrp36rmn0.execute-api.ap-northeast-1.amazonaws.com/prod/records';
+var LB = {1:'1　物足りなかった', 2:'2　あまり', 3:'3　ふつう', 4:'4　良かった', 5:'5　とても良かった'};
+var state = {};
+var qs = new URLSearchParams(location.search);
+var channelHint = qs.get('ch') || '';
+
+function pad(n,l){ n = String(n); while(n.length < l) n = '0' + n; return n; }
+function today(){ var d = new Date(); return d.getFullYear() + '-' + pad(d.getMonth()+1,2) + '-' + pad(d.getDate(),2); }
+function newNo(){
+  var d = new Date();
+  var s = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789', r = '';
+  for(var i = 0; i < 5; i++) r += s[Math.floor(Math.random() * s.length)];
+  return 'HOM-' + d.getFullYear() + pad(d.getMonth()+1,2) + pad(d.getDate(),2) + '-' + r;
+}
+
+document.getElementById('at').innerHTML = today().replace(/-/g, '/') + '　ご記入';
+
+document.querySelectorAll('.stars').forEach(function(box){
+  var k = box.getAttribute('data-k');
+  var lb = document.querySelector('[data-lb="' + k + '"]');
+  var base = lb ? lb.textContent : '';
+  box.querySelectorAll('.st').forEach(function(s){
+    s.addEventListener('click', function(){
+      var v = Number(s.getAttribute('data-v'));
+      if(state[k] === v) v = 0;
+      state[k] = v;
+      box.querySelectorAll('.st').forEach(function(o){
+        o.classList.toggle('on', Number(o.getAttribute('data-v')) <= v);
+      });
+      if(lb) lb.textContent = v ? LB[v] : base;
+    });
+  });
+});
+
+document.querySelectorAll('.chips').forEach(function(box){
+  var single = box.getAttribute('data-single'), multi = box.getAttribute('data-multi');
+  box.querySelectorAll('.chip').forEach(function(c){
+    c.addEventListener('click', function(){
+      if(single){
+        var was = c.classList.contains('on');
+        box.querySelectorAll('.chip').forEach(function(o){ o.classList.remove('on'); });
+        if(!was){ c.classList.add('on'); state[single] = c.getAttribute('data-v'); }
+        else state[single] = '';
+      }else{
+        c.classList.toggle('on');
+        state[multi] = Array.prototype.filter.call(box.querySelectorAll('.chip'), function(o){
+          return o.classList.contains('on'); }).map(function(o){ return o.getAttribute('data-v'); });
+      }
+    });
+  });
+});
+
+if(channelHint){
+  var box = document.querySelector('[data-single="channel"]');
+  if(box) box.querySelectorAll('.chip').forEach(function(c){
+    if(c.getAttribute('data-v') === channelHint){ c.classList.add('on'); state.channel = channelHint; }
+  });
+}
+
+function setStatus(t, cls){
+  var s = document.getElementById('status');
+  s.textContent = t || ''; s.className = 'st-msg' + (cls ? ' ' + cls : '');
+}
+
+async function send(){
+  if(!state.useCount){ setStatus('使った回数をお選びください。', 'err'); window.scrollTo({top:0, behavior:'smooth'}); return; }
+  if(!state.satisfaction){ setStatus('満足度を選んでください。', 'err'); return; }
+  if(!state.snsOk){ setStatus('掲載の可否をお選びください。', 'err'); return; }
+  var btn = document.getElementById('send');
+  btn.disabled = true; setStatus('送信しています');
+  var rec = {
+    recNo: newNo(), type: 'home_customer', date: today(),
+    useCount: state.useCount || '', usePeriod: state.usePeriod || '', channel: state.channel || '',
+    satisfaction: state.satisfaction || 0, usability: state.usability || 0,
+    scentScore: state.scentScore || 0, continueScore: state.continueScore || 0,
+    impressions: state.impressions || [], recommend: state.recommend || '',
+    comment: document.getElementById('comment').value,
+    snsOk: state.snsOk || '', displayName: document.getElementById('displayName').value,
+    ageGroup: state.ageGroup || '', hairLength: state.hairLength || '',
+    hairType: state.hairType || [], concerns: state.concerns || [],
+    approved: false, product: 'INFINI WORLD 1000mL',
+    clientAt: new Date().toISOString()
+  };
+  try{
+    var r = await fetch(API, {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(rec)});
+    if(!r.ok){ var t = ''; try{ t = await r.text(); }catch(e){} throw new Error('HTTP ' + r.status + ' ' + t.slice(0,200)); }
+    document.getElementById('form').style.display = 'none';
+    document.getElementById('bar').style.display = 'none';
+    document.getElementById('done').style.display = 'block';
+    window.scrollTo(0, 0);
+  }catch(e){
+    btn.disabled = false;
+    setStatus('送信できませんでした（' + e.message + '）。電波の良い場所でもう一度お試しください。', 'err');
+  }
+}
+document.getElementById('send').addEventListener('click', send);
+</script>
+</body>
+</html>

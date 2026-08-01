@@ -322,6 +322,31 @@
   }
   @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}
     .hero h1 .line span,.hero-eyebrow,.hero-lead,.hero-cta,.hero-foot{opacity:1;transform:none}.reveal{opacity:1;transform:none}}
+
+  /* ---- Voices (お客様評価) ---- */
+  .vo-wrap{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start;margin-top:44px}
+  @media(max-width:860px){.vo-wrap{grid-template-columns:1fr;gap:34px}}
+  .vo-score{display:flex;align-items:flex-end;gap:16px}
+  .vo-stars{position:relative;font-size:34px;line-height:1;letter-spacing:3px}
+  .vo-stars .bg{color:var(--blush)}
+  .vo-stars .fg{color:#c9963f;position:absolute;left:0;top:0;overflow:hidden;white-space:nowrap}
+  .vo-num{font-family:var(--serif);font-size:46px;line-height:.9;color:var(--rose)}
+  .vo-meta{font-size:12px;color:var(--muted);letter-spacing:.06em;margin-top:14px}
+  .vo-dist{margin-top:22px;max-width:380px}
+  .vo-dist .r{display:flex;align-items:center;gap:12px;font-size:11.5px;color:var(--muted);margin-bottom:6px}
+  .vo-dist .lb{width:24px;letter-spacing:.04em}
+  .vo-dist .ba{flex:1;height:6px;background:var(--blush);border-radius:3px;overflow:hidden}
+  .vo-dist .ba i{display:block;height:100%;background:#c9963f}
+  .vo-dist .pc{width:38px;text-align:right}
+  .vo-imp{margin-top:30px;display:flex;flex-wrap:wrap;gap:8px}
+  .vo-imp span{font-size:11.5px;color:var(--ink-soft);border:1px solid var(--line);border-radius:20px;padding:6px 14px;background:var(--white)}
+  .vo-imp span b{color:var(--rose);font-weight:600;margin-left:6px}
+  .vo-cards{display:flex;flex-direction:column;gap:14px}
+  .vo-card{background:var(--white);border:1px solid var(--line);border-radius:3px;padding:20px 22px}
+  .vo-card .cs{font-size:14px;color:#c9963f;letter-spacing:2px;margin-bottom:8px}
+  .vo-card p{font-family:var(--jp-serif);font-size:14.5px;line-height:1.95;color:var(--ink)}
+  .vo-card .wh{margin-top:12px;font-size:11.5px;color:var(--muted);letter-spacing:.06em}
+  .vo-note{margin-top:32px;font-size:11px;color:var(--muted);line-height:1.9}
 </style>
 </head>
 <body>
@@ -330,6 +355,7 @@
   <a href="#top" class="brand"><span class="brand-mark">Next <em>Innovation</em></span><span class="brand-sub">Inc.</span></a>
   <nav class="main" id="navmenu">
     <a href="#product">Products</a>
+    <a href="#voices">Voices</a>
     <a href="#salon">For Salon</a>
     <a href="#referral">Referral</a>
     <a href="#business">Business</a>
@@ -574,6 +600,34 @@
       </div>
       <div class="cospa-note">※使用量・髪の長さ・回数により異なります。</div>
     </div>
+  </div>
+</section>
+
+
+<!-- VOICES -->
+<section class="block alt" id="voices" style="max-width:none;display:none">
+  <div class="inner">
+    <div class="sec-head reveal"><span class="sec-num">V</span><span class="sec-label">Voices</span><span class="sec-line"></span></div>
+    <div class="salon-top reveal">
+      <div class="eyebrow">Customer Reviews</div>
+      <h2>お使いいただいた方の声<em>。</em></h2>
+      <p>サロンで施術を受けられた方、ご自宅でお使いいただいた方からお寄せいただいたアンケートの集計です。掲載の同意をいただいたものだけを掲載しています。</p>
+    </div>
+
+    <div class="vo-wrap reveal">
+      <div>
+        <div class="vo-score">
+          <span class="vo-stars"><span class="bg">★★★★★</span><span class="fg" id="voFg">★★★★★</span></span>
+          <span class="vo-num" id="voAvg">—</span>
+        </div>
+        <div class="vo-meta" id="voMeta"></div>
+        <div class="vo-dist" id="voDist"></div>
+        <div class="vo-imp" id="voImp"></div>
+      </div>
+      <div class="vo-cards" id="voCards"></div>
+    </div>
+
+    <div class="vo-note" id="voNote"></div>
   </div>
 </section>
 
@@ -832,6 +886,37 @@
       show('お問い合わせを受け付けました。確認のうえ、担当者よりご連絡いたします。',true);
     }catch(e){show('送信できませんでした。お手数ですが info@tamjump.com までご連絡ください');$('c_go').disabled=false}
   });
+})();
+</script>
+
+<script>
+(function(){
+  fetch('assets/reviews.json?t=' + Date.now()).then(function(r){ return r.ok ? r.json() : null; }).then(function(d){
+    if(!d || !d.n) return;
+    var sec = document.getElementById('voices');
+    sec.style.display = '';
+    document.getElementById('voAvg').textContent = d.avg.toFixed(2);
+    document.getElementById('voFg').parentNode.querySelector('.fg').style.width = (d.avg / 5 * 100) + '%';
+    document.getElementById('voMeta').textContent =
+      '評価 ' + d.n + '件　／　導入サロン ' + d.salonCount + '店舗　／　' + d.updatedAt + ' 時点';
+    var dist = d.dist || {};
+    document.getElementById('voDist').innerHTML = [5,4,3,2,1].map(function(k){
+      var p = d.n ? Math.round((dist[k] || 0) / d.n * 100) : 0;
+      return '<div class="r"><span class="lb">★' + k + '</span><span class="ba"><i style="width:'
+        + p + '%"></i></span><span class="pc">' + p + '%</span></div>';
+    }).join('');
+    document.getElementById('voImp').innerHTML = (d.impressions || []).map(function(o){
+      return '<span>' + o.label + '<b>' + o.pct + '%</b></span>'; }).join('');
+    document.getElementById('voCards').innerHTML = (d.comments || []).slice(0, 4).map(function(c){
+      var f = '★★★★★'.slice(0, c.score) + '☆☆☆☆☆'.slice(0, 5 - c.score);
+      return '<div class="vo-card"><div class="cs">' + f + '</div><p>' + c.text
+        + '</p><div class="wh">' + c.who + '　—　' + c.from + '</div></div>';
+    }).join('');
+    document.getElementById('voNote').innerHTML =
+      '※サロン施術後および自宅使用のアンケートに基づく集計です（n=' + d.n + '）。<br>'
+      + '※効果・実感には個人差があります。<br>'
+      + '※掲載についてご同意いただいた方のご感想のみを掲載しています。';
+  }).catch(function(){});
 })();
 </script>
 </body>
