@@ -47,7 +47,7 @@
       <div class="row2">
         <div class="field">
           <label>郵便番号</label>
-          <input type="text" id="postal" placeholder="362-0000">
+          <input type="text" id="postal" inputmode="numeric" autocomplete="postal-code" placeholder="362-0000">
         </div>
         <div class="field">
           <label>所在地 <span class="req">*</span></label>
@@ -80,6 +80,41 @@
 
 <script src="config.js"></script>
 <script>
+/* 郵便番号 → 住所の自動補完（zipcloud）。ハイフンあり・なし双方に対応 */
+function nxZipAuto(postalId, addrId){
+  const zi=document.getElementById(postalId), ai=document.getElementById(addrId);
+  if(!zi||!ai) return;
+  let last='';
+  const hint=document.createElement('div');
+  hint.className='hint'; hint.style.display='none'; hint.style.marginTop='6px';
+  zi.parentNode.appendChild(hint);
+  async function lookup(){
+    const z=zi.value.replace(/[^0-9]/g,'');
+    if(z.length!==7||z===last) return;
+    last=z;
+    hint.style.display='block'; hint.textContent='住所を検索しています…';
+    try{
+      const r=await fetch('https://zipcloud.ibsnet.co.jp/api/search?zipcode='+z);
+      const d=await r.json();
+      if(d.status===200&&d.results&&d.results.length){
+        const x=d.results[0];
+        const a=x.address1+x.address2+x.address3;
+        if(!ai.value.trim()||confirm('住所を「'+a+'」に置き換えますか？')){
+          ai.value=a; ai.focus();
+          const n=ai.value.length; ai.setSelectionRange(n,n);
+        }
+        zi.value=z.slice(0,3)+'-'+z.slice(3);
+        hint.textContent='番地・建物名を続けてご入力ください';
+      }else{
+        hint.textContent='該当する住所が見つかりませんでした。手入力してください';
+      }
+    }catch(e){ hint.textContent='住所の自動入力ができませんでした。手入力してください'; }
+  }
+  zi.addEventListener('input',lookup);
+  zi.addEventListener('blur',lookup);
+}
+</script>
+<script>
 const $=s=>document.querySelector(s);
 const REF=(new URLSearchParams(location.search).get('ref')||'').trim().toUpperCase();
 if(REF){
@@ -108,6 +143,7 @@ async function apply(){
   }catch(e){show('サーバーに接続できません');$('#go').disabled=false}
 }
 $('#go').addEventListener('click',apply);
+nxZipAuto('postal','address');
 </script>
 </body>
 </html>
