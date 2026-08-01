@@ -7,7 +7,10 @@
  *   DB              : D1 Database
  * 必要 secret (vars):
  *   SESSION_SECRET  : トークン署名鍵
- *   RESEND_API_KEY  : メール送信（任意。未設定ならメールはスキップ）
+ *   DOC_AWS_ACCESS_KEY_ID / DOC_AWS_SECRET_ACCESS_KEY : S3（本人確認書類）と SES（メール）で共用
+ *   DOC_S3_BUCKET / DOC_S3_REGION : 既定 nextinnovation-docs / ap-northeast-1
+ *   SES_AWS_ACCESS_KEY_ID / SES_AWS_SECRET_ACCESS_KEY : メール用の鍵を分ける場合のみ
+ *   SES_REGION / MAIL_FROM / MAIL_REPLY_TO / ADMIN_EMAIL
  *   MAIL_FROM       : 送信元（任意。例 "Next Innovation <noreply@nextinnovation.tamjump.com>"）
  */
 
@@ -183,19 +186,32 @@ async function s3fetch(env, method, key, body, contentType) {
   return fetch(`https://${host}${path}`, { method, headers, body: body || undefined });
 }
 
-/* ---------- email (Resend, optional) ---------- */
+/* ---------- email (AWS SES v2) ---------- */
 async function sendMail(env, to, subject, text) {
-  if (!env.RESEND_API_KEY || !to) return;
+  const key = env.SES_AWS_ACCESS_KEY_ID || env.DOC_AWS_ACCESS_KEY_ID;
+  const sec = env.SES_AWS_SECRET_ACCESS_KEY || env.DOC_AWS_SECRET_ACCESS_KEY;
+  if (!key || !sec || !to) return;
+  const region = env.SES_REGION || "ap-northeast-1";
+  const from = env.MAIL_FROM || "Next Innovation <info@tamjump.com>";
+  const reply = env.MAIL_REPLY_TO || "info@tamjump.com";
   try {
-    await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: { "Authorization": "Bearer " + env.RESEND_API_KEY, "Content-Type": "application/json" },
-      body: JSON.stringify({
-        from: env.MAIL_FROM || "Next Innovation <onboarding@resend.dev>",
-        to: [to], subject, text,
-      }),
+    const payload = JSON.stringify({
+      FromEmailAddress: from,
+      Destination: { ToAddresses: [to] },
+      ReplyToAddresses: [reply],
+      Content: { Simple: {
+        Subject: { Data: subject, Charset: "UTF-8" },
+        Body: { Text: { Data: text, Charset: "UTF-8" } },
+      }},
     });
-  } catch (e) { /* メール失敗は本処理を止めない */ }
+    const r = await awsFetch({
+      accessKey: key, secret: sec, region, service: "ses",
+      host: `email.${region}.amazonaws.com`,
+      path: "/v2/email/outbound-emails",
+      method: "POST", body: payload, contentType: "application/json",
+    });
+    if (!r.ok) console.log("SES error", r.status, (await r.text()).slice(0, 300));
+  } catch (e) { console.log("SES exception", String(e && e.message || e)); }
 }
 
 /* ====================================================== */

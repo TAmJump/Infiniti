@@ -57,7 +57,8 @@ openssl rand -hex 32
 メール通知を使う場合のみ追加（任意）。
 
 ```
-npx wrangler secret put RESEND_API_KEY
+npx wrangler secret put DOC_AWS_ACCESS_KEY_ID
+npx wrangler secret put DOC_AWS_SECRET_ACCESS_KEY
 npx wrangler secret put MAIL_FROM
 ```
 

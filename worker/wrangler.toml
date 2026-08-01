@@ -12,7 +12,8 @@ crons = ["0 18 * * *"]   # 毎日 03:00 JST に休眠パートナーを自動解
 
 # vars は secret で投入（下記 SETUP.md 参照）:
 #   SESSION_SECRET   必須
-#   RESEND_API_KEY   メール通知に必須
+#   （メールは AWS SES v2。鍵は DOC_AWS_* を共用。別鍵にするなら SES_AWS_*）
+#   SES_REGION       既定 ap-northeast-1
 #   MAIL_FROM        例: Next Innovation <info@tamjump.com>
 #   MAIL_REPLY_TO    例: info@tamjump.com
 #   ADMIN_EMAIL      例: info@tamjump.com
