@@ -946,7 +946,9 @@
     document.getElementById('voAvg').textContent = d.avg.toFixed(2);
     document.getElementById('voFg').parentNode.querySelector('.fg').style.width = (d.avg / 5 * 100) + '%';
     document.getElementById('voMeta').textContent =
-      '評価 ' + d.n + '件　／　導入サロン ' + d.salonCount + '店舗　／　' + d.updatedAt + ' 時点';
+      '評価 ' + d.n.toLocaleString() + '件'
+      + (d.salonCount ? '　／　導入サロン ' + d.salonCount + '店舗' : '')
+      + '　／　' + d.updatedAt + ' 時点';
     var dist = d.dist || {};
     document.getElementById('voDist').innerHTML = [5,4,3,2,1].map(function(k){
       var p = d.n ? Math.round((dist[k] || 0) / d.n * 100) : 0;
@@ -955,13 +957,14 @@
     }).join('');
     document.getElementById('voImp').innerHTML = (d.impressions || []).map(function(o){
       return '<span>' + o.label + '<b>' + o.pct + '%</b></span>'; }).join('');
+    if(!(d.comments || []).length) document.getElementById('voStats').style.gridTemplateColumns = '1fr';
     document.getElementById('voCards').innerHTML = (d.comments || []).slice(0, 4).map(function(c){
       var f = '★★★★★'.slice(0, c.score) + '☆☆☆☆☆'.slice(0, 5 - c.score);
       return '<div class="vo-card"><div class="cs">' + f + '</div><p>' + c.text
         + '</p><div class="wh">' + c.who + '　—　' + c.from + '</div></div>';
     }).join('');
     document.getElementById('voNote').innerHTML =
-      '※サロン施術後および自宅使用のアンケートに基づく集計です（n=' + d.n + '）。<br>'
+      '※サロン施術後および自宅使用のアンケートに基づく集計です（n=' + d.n.toLocaleString() + '）。<br>'
       + '※効果・実感には個人差があります。<br>'
       + '※掲載についてご同意いただいた方のご感想のみを掲載しています。';
   }).catch(function(){});
