@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>紙アンケートの集計入力｜INFINI WORLD</title>
+<style>
+:root{--cream:#FAF6F0;--card:#FFF;--ink:#2B2622;--sub:#6E645C;--line:#E3D9CE;
+ --rose:#C4506B;--rose-soft:#F6E7EB;--gold:#B9924A;--ok:#2E7D5B;--warn:#B4552E}
+*{box-sizing:border-box}
+body{margin:0;background:var(--cream);color:var(--ink);font-size:15px;line-height:1.7;
+ font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP","Yu Gothic",sans-serif;padding-bottom:40px}
+header{background:var(--card);border-bottom:2px solid var(--rose);padding:14px 20px}
+header .t{font-size:15px;font-weight:700;letter-spacing:.06em}
+header .s{font-size:12px;color:var(--sub)}
+header .nav{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
+header .nav a{font-size:12px;color:var(--sub);text-decoration:none;border:1px solid var(--line);
+ border-radius:16px;padding:5px 12px;background:var(--cream)}
+.wrap{max-width:820px;margin:0 auto;padding:20px}
+section{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px;margin-bottom:16px}
+h2{font-size:14px;margin:0 0 6px;padding-left:10px;border-left:4px solid var(--rose);letter-spacing:.04em}
+.hint{font-size:12px;color:var(--sub);margin:0 0 16px;line-height:1.9}
+label{font-size:12px;color:var(--sub);display:block;margin-bottom:4px}
+input[type=text],input[type=number],input[type=date],textarea{width:100%;padding:10px 12px;font-size:16px;
+ font-family:inherit;background:var(--cream);border:1px solid var(--line);border-radius:8px;color:var(--ink)}
+textarea{min-height:90px;resize:vertical}
+button{padding:10px 18px;font-size:14px;font-family:inherit;border-radius:8px;cursor:pointer;
+ border:1px solid var(--line);background:var(--cream);color:var(--sub)}
+button.go{background:var(--rose);color:#fff;border-color:var(--rose);font-weight:700}
+.tally{display:flex;flex-direction:column;gap:10px}
+.trow{display:flex;align-items:center;gap:12px}
+.tbtn{flex:1;padding:18px;font-size:20px;font-weight:700;color:var(--gold);background:var(--cream);
+ border:1px solid var(--line);border-radius:10px;letter-spacing:2px;cursor:pointer;user-select:none;text-align:center}
+.tbtn:active{background:var(--rose-soft);border-color:var(--rose)}
+.tnum{width:110px}
+.minus{padding:14px 14px;font-size:15px}
+.sum{display:flex;gap:16px;flex-wrap:wrap;align-items:baseline;margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
+.sum .n{font-size:30px;font-weight:700;color:var(--rose)}
+.sum .l{font-size:12px;color:var(--sub)}
+.stars{display:inline-block;position:relative;font-size:24px;line-height:1;letter-spacing:2px}
+.stars .bg{color:#E0D6CB}
+.stars .fg{color:var(--gold);position:absolute;left:0;top:0;overflow:hidden;white-space:nowrap}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:640px){.grid{grid-template-columns:1fr}}
+.cmt{border:1px solid var(--line);border-radius:8px;padding:12px;margin-bottom:10px;background:var(--cream)}
+.cmt .r{display:flex;gap:10px;margin-top:8px}
+.cmt .r input{flex:1}
+.msg{font-size:13px;color:var(--sub);padding:8px 0}
+.msg.ok{color:var(--ok);font-weight:700}
+.msg.err{color:var(--warn);font-weight:700}
+pre{background:var(--cream);border:1px solid var(--line);border-radius:8px;padding:14px;font-size:11px;
+ overflow:auto;max-height:280px;white-space:pre-wrap;word-break:break-all}
+.gate{position:fixed;inset:0;background:var(--cream);z-index:100;display:flex;align-items:center;justify-content:center;padding:20px}
+.gate .box{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:30px 26px;max-width:340px;width:100%;text-align:center}
+.gate input{text-align:center;letter-spacing:.3em;font-size:18px;margin-bottom:12px}
+.gate .er{font-size:12px;color:var(--warn);min-height:20px;font-weight:700}
+</style>
+</head>
+<body>
+
+<div class="gate" id="gate">
+  <div class="box">
+    <h2 style="border:none;padding:0;margin-bottom:6px">INFINI WORLD 管理画面</h2>
+    <p class="hint">合言葉を入力してください。</p>
+    <input type="password" id="pw" autocomplete="off" placeholder="••••••••">
+    <button class="go" id="pwGo" style="width:100%">開く</button>
+    <div class="er" id="pwEr"></div>
+  </div>
+</div>
+
+<header>
+  <div class="t">INFINI WORLD ／ 紙アンケートの集計入力</div>
+  <div class="s">紙で回収した内容をここで数え、公開用データを書き出します。</div>
+  <div class="nav">
+    <a href="records.html">記録・評価</a>
+    <a href="admin.html">管理コンソール</a>
+    <a href="../index.html">サイトトップ</a>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <section>
+    <h2>満足度の集計</h2>
+    <p class="hint">紙をめくりながら、書かれていた星のボタンを押してください。押すたびに1件ずつ増えます。数え間違えたら「−」で戻せます。数がすでに分かっている場合は、右の欄に直接入力しても構いません。</p>
+    <div class="tally" id="tally"></div>
+    <div class="sum">
+      <span class="stars" id="stAvg"><span class="bg">★★★★★</span><span class="fg" style="width:0%">★★★★★</span></span>
+      <span class="n" id="avgN">0.00</span>
+      <span class="l">平均</span>
+      <span class="n" id="totN">0</span>
+      <span class="l">回答数</span>
+    </div>
+  </section>
+
+  <section>
+    <h2>実感の集計（任意）</h2>
+    <p class="hint">「当てはまるものすべて」の欄がある場合、項目ごとに件数を入れてください。空欄の項目は表示されません。</p>
+    <div class="grid" id="imps"></div>
+  </section>
+
+  <section>
+    <h2>掲載するコメント（任意）</h2>
+    <p class="hint">掲載の同意をいただいたものだけを入れてください。トップには上から4件が出ます。</p>
+    <div id="cmts"></div>
+    <button id="addCmt">コメントを追加</button>
+  </section>
+
+  <section>
+    <h2>そのほか</h2>
+    <div class="grid">
+      <div><label>導入サロン数</label><input type="number" id="salonCount" min="0" value="0"></div>
+      <div><label>集計した日付</label><input type="date" id="updatedAt"></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>書き出し</h2>
+    <p class="hint">reviews.json を書き出して、GitHubの assets/ に上書きアップロードするとトップページに反映されます。</p>
+    <button class="go" id="make">reviews.json を書き出す</button>
+    <button id="copy">内容をコピー</button>
+    <div class="msg" id="msg"></div>
+    <pre id="out" style="display:none"></pre>
+  </section>
+
+</div>
+
+<script>
+var PASSCODE = 'INFINI2026';
+(function(){
+  var gate = document.getElementById('gate');
+  function open_(){ gate.style.display = 'none'; }
+  try{ if(sessionStorage.getItem('infini_gate') === PASSCODE) open_(); }catch(e){}
+  function check(){
+    if(document.getElementById('pw').value === PASSCODE){
+      try{ sessionStorage.setItem('infini_gate', PASSCODE); }catch(e){}
+      open_();
+    }else{
+      document.getElementById('pwEr').textContent = '合言葉が違います。';
+      document.getElementById('pw').value = '';
+    }
+  }
+  document.getElementById('pwGo').addEventListener('click', check);
+  document.getElementById('pw').addEventListener('keydown', function(e){ if(e.key === 'Enter') check(); });
+})();
+
+var IMPS = ['指通りが良くなった','ツヤが出た','まとまりが出た','はり・こしを感じた',
+            'やわらかくなった','広がりが落ち着いた','軽い仕上がりだった','朝のセットが楽になった'];
+
+document.getElementById('tally').innerHTML = [5,4,3,2,1].map(function(k){
+  return '<div class="trow">'
+    + '<div class="tbtn" data-k="' + k + '">' + '★'.repeat(k) + '☆'.repeat(5-k) + '</div>'
+    + '<button class="minus" data-m="' + k + '">−</button>'
+    + '<input class="tnum" type="number" min="0" value="0" id="c' + k + '">'
+    + '</div>';
+}).join('');
+
+document.getElementById('imps').innerHTML = IMPS.map(function(v, i){
+  return '<div><label>' + v + '</label><input type="number" min="0" id="imp' + i + '" placeholder="件数"></div>';
+}).join('');
+
+function recalc(){
+  var tot = 0, sum = 0;
+  [5,4,3,2,1].forEach(function(k){
+    var v = Math.max(0, Number(document.getElementById('c' + k).value) || 0);
+    tot += v; sum += v * k;
+  });
+  var a = tot ? sum / tot : 0;
+  document.getElementById('avgN').textContent = (Math.round(a * 100) / 100).toFixed(2);
+  document.getElementById('totN').textContent = tot.toLocaleString();
+  document.querySelector('#stAvg .fg').style.width = (a / 5 * 100) + '%';
+}
+document.querySelectorAll('.tbtn').forEach(function(b){
+  b.addEventListener('click', function(){
+    var el = document.getElementById('c' + b.getAttribute('data-k'));
+    el.value = (Number(el.value) || 0) + 1; recalc();
+  });
+});
+document.querySelectorAll('.minus').forEach(function(b){
+  b.addEventListener('click', function(){
+    var el = document.getElementById('c' + b.getAttribute('data-m'));
+    el.value = Math.max(0, (Number(el.value) || 0) - 1); recalc();
+  });
+});
+[5,4,3,2,1].forEach(function(k){ document.getElementById('c' + k).addEventListener('input', recalc); });
+
+function addCmt(){
+  var d = document.createElement('div');
+  d.className = 'cmt';
+  d.innerHTML = '<textarea placeholder="紙に書かれていた感想をそのまま入力"></textarea>'
+    + '<div class="r"><input type="text" placeholder="呼称（例：40代・女性）">'
+    + '<input type="number" min="1" max="5" placeholder="★">'
+    + '<input type="text" placeholder="サロン施術／自宅使用" style="max-width:150px"></div>';
+  document.getElementById('cmts').appendChild(d);
+}
+document.getElementById('addCmt').addEventListener('click', addCmt);
+addCmt(); addCmt();
+
+function build(){
+  var c = {}, tot = 0, sum = 0;
+  [5,4,3,2,1].forEach(function(k){
+    c[k] = Math.max(0, Number(document.getElementById('c' + k).value) || 0);
+    tot += c[k]; sum += c[k] * k;
+  });
+  if(!tot) return null;
+  var imps = [];
+  IMPS.forEach(function(v, i){
+    var n = Number(document.getElementById('imp' + i).value);
+    if(n > 0) imps.push({label: v, pct: Math.round(n / tot * 100)});
+  });
+  imps.sort(function(a, b){ return b.pct - a.pct; });
+  var comments = [];
+  document.querySelectorAll('#cmts .cmt').forEach(function(box){
+    var t = box.querySelector('textarea').value.trim();
+    if(!t) return;
+    var f = box.querySelectorAll('input');
+    comments.push({text: t.slice(0, 120), who: f[0].value || 'お客様',
+                   score: Math.min(5, Math.max(1, Number(f[1].value) || 5)),
+                   from: f[2].value || 'サロン施術'});
+  });
+  return {
+    updatedAt: document.getElementById('updatedAt').value || new Date().toISOString().slice(0,10),
+    n: tot, avg: Math.round(sum / tot * 100) / 100,
+    dist: {5:c[5], 4:c[4], 3:c[3], 2:c[2], 1:c[1]},
+    salonCount: Number(document.getElementById('salonCount').value) || 0,
+    impressions: imps.slice(0, 6), comments: comments.slice(0, 12)
+  };
+}
+function setMsg(t, cls){ var m = document.getElementById('msg'); m.textContent = t; m.className = 'msg' + (cls ? ' ' + cls : ''); }
+
+document.getElementById('make').addEventListener('click', function(){
+  var d = build();
+  if(!d){ setMsg('先に星の件数を入力してください。', 'err'); return; }
+  var j = JSON.stringify(d, null, 2);
+  document.getElementById('out').style.display = 'block';
+  document.getElementById('out').textContent = j;
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([j], {type:'application/json'}));
+  a.download = 'reviews.json'; a.click();
+  setMsg('書き出しました。GitHubの assets/reviews.json に上書きしてください。', 'ok');
+});
+document.getElementById('copy').addEventListener('click', function(){
+  var d = build();
+  if(!d){ setMsg('先に星の件数を入力してください。', 'err'); return; }
+  var j = JSON.stringify(d, null, 2);
+  document.getElementById('out').style.display = 'block';
+  document.getElementById('out').textContent = j;
+  navigator.clipboard.writeText(j).then(function(){ setMsg('コピーしました。', 'ok'); },
+    function(){ setMsg('コピーできませんでした。下の内容を選択してコピーしてください。', 'err'); });
+});
+document.getElementById('updatedAt').value = new Date().toISOString().slice(0,10);
+recalc();
+</script>
+</body>
+</html>
