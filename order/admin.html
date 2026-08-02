@@ -40,7 +40,7 @@
     <button class="tab" data-p="products">商品</button>
     <button class="tab" data-p="prod">製造発注</button>
     <button class="tab" data-p="agents">紹介パートナー <span id="agBadge" class="pill pending" style="margin-left:6px;display:none"></span></button>
-    <button class="tab" data-p="rewards">紹介報酬</button>
+    <button class="tab" data-p="rewards">紹介・進呈</button>
     <button class="tab" data-p="contacts">お問い合わせ <span id="ctBadge" class="pill pending" style="margin-left:6px;display:none"></span></button>
   </div>
 
@@ -239,7 +239,7 @@ async function loadContacts(){
 window.ctDone=async id=>{
   const r=await api('/api/admin/contacts/'+id+'/status',{method:'POST',body:JSON.stringify({status:'done'})});
   if(r.ok)loadContacts()};
-window.agRate=async (id,cur)=>{const v=prompt('1本あたりの紹介報酬（円）',cur);
+window.agRate=async (id,cur)=>{const v=prompt('ご紹介1件あたりの進呈本数',cur);
   if(v===null)return; const n=parseInt(v); if(isNaN(n)||n<0){alert('数値を入力してください');return}
   const r=await api('/api/admin/agents/'+id+'/rate',{method:'POST',body:JSON.stringify({reward_per_unit:n})});
   if(r.ok)loadAgents()};

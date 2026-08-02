@@ -82,7 +82,7 @@ async function loadMe(){
   const r=await api('/api/agent/me'); if(!r.ok){localStorage.removeItem('nx_agent_token');location.href='agent-login.html';return}
   ME=await r.json();
   $('#who').textContent=ME.name||'';
-  $('#codeHead').textContent='紹介報酬 '+yen(ME.reward_per_unit)+'円 / 本';
+  $('#codeHead').textContent='ご紹介1件につき 1本を無料進呈';
   if(ME.agent_code){
     $('#refBox').style.display='flex';
     $('#agCode').textContent=ME.agent_code;

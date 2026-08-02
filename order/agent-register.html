@@ -1,271 +1,34 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>紹介パートナー登録｜株式会社Next Innovation</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@400;500;600&family=Noto+Serif+JP:wght@300;400;500&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>紹介パートナー登録の受付終了｜Next Innovation</title>
 <link rel="stylesheet" href="portal.css">
+<style>
+.closed{max-width:560px;margin:0 auto;padding:60px 20px;text-align:center}
+.closed h1{font-size:20px;font-weight:500;margin-bottom:18px;line-height:1.8}
+.closed p{font-size:14px;color:#5e4d53;line-height:2;margin-bottom:16px}
+.closed .btns{margin-top:30px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.closed a{display:inline-block;padding:12px 22px;font-size:14px;text-decoration:none;border-radius:2px}
+.closed a.p{background:#d56b82;color:#fff}
+.closed a.s{border:1px solid #f1dbe0;color:#5e4d53}
+</style>
 </head>
 <body>
-<div class="p-head">
+<header class="p-head">
   <a href="../index.html" class="p-brand">Next <em>Innovation</em><span class="tag">Partner Portal</span></a>
-  <div class="right"><a href="agent-login.html">紹介パートナー ログイン →</a></div>
-</div>
+</header>
 
-<div class="auth-wrap">
-  <div class="auth-card wide">
-    <div class="auth-eyebrow">Referral Partner Application</div>
-    <h1>紹介パートナー登録</h1>
-    <p class="sub">ご紹介いただいた取引先のご発注に対して、1本あたりの紹介報酬をお支払いします。登録は無料で、商品のご購入や登録料は一切不要です。</p>
-
-    <div class="note-box">
-      <b>お申し込みの流れ</b><br>
-      1. このフォームからご登録（無料）<br>
-      2. 当社にて確認後、<b>あなた専用の紹介コード</b>と紹介用リンクをメールでお送りします<br>
-      3. ご紹介先がそのリンクから取引申請・ご発注されると、本数に応じて報酬が計上されます<br>
-      4. マイページで本数と報酬をいつでも確認できます
-    </div>
-
-    <div id="msg" class="msg hidden"></div>
-
-    <div id="form">
-      <div class="row2">
-        <div class="field">
-          <label>お名前・屋号・会社名 <span class="req">*</span></label>
-          <input type="text" id="name" placeholder="山田 太郎 / ◯◯サロン">
-        </div>
-        <div class="field">
-          <label>区分 <span class="req">*</span></label>
-          <select id="kind">
-            <option value="individual">個人</option>
-            <option value="salon">サロン・美容室</option>
-            <option value="corp">法人</option>
-          </select>
-        </div>
-      </div>
-      <div class="row2">
-        <div class="field">
-          <label>ご担当者名</label>
-          <input type="text" id="contact" placeholder="法人・サロンの場合">
-        </div>
-        <div class="field">
-          <label>電話番号 <span class="req">*</span></label>
-          <input type="tel" id="phone" placeholder="090-0000-0000">
-        </div>
-      </div>
-      <div class="field">
-        <label>メールアドレス <span class="req">*</span></label>
-        <input type="email" id="email" placeholder="you@example.jp">
-        <div class="hint">ログインIDとして使用します</div>
-      </div>
-      <div class="field">
-        <label>生年月日 <span class="req" id="bdReq">*</span></label>
-        <input type="date" id="birthday" autocomplete="bday" max="2010-12-31">
-        <div class="hint">本人確認書類の記載と一致している必要があります</div>
-      </div>
-      <div class="field hidden" id="corpNoField">
-        <label>法人番号</label>
-        <input type="text" id="corp_no" inputmode="numeric" placeholder="13桁（任意）">
-      </div>
-
-      <div class="field" style="margin-top:26px"><label style="font-weight:600">ご住所</label></div>
-      <div class="row2">
-        <div class="field">
-          <label>郵便番号 <span class="req">*</span></label>
-          <input type="text" id="postal" inputmode="numeric" autocomplete="postal-code" placeholder="362-0000">
-        </div>
-        <div class="field">
-          <label>都道府県 <span class="req">*</span></label>
-          <select id="pref" autocomplete="address-level1"><option value="">選択してください</option><option>北海道</option><option>青森県</option><option>岩手県</option><option>宮城県</option><option>秋田県</option><option>山形県</option><option>福島県</option><option>茨城県</option><option>栃木県</option><option>群馬県</option><option>埼玉県</option><option>千葉県</option><option>東京都</option><option>神奈川県</option><option>新潟県</option><option>富山県</option><option>石川県</option><option>福井県</option><option>山梨県</option><option>長野県</option><option>岐阜県</option><option>静岡県</option><option>愛知県</option><option>三重県</option><option>滋賀県</option><option>京都府</option><option>大阪府</option><option>兵庫県</option><option>奈良県</option><option>和歌山県</option><option>鳥取県</option><option>島根県</option><option>岡山県</option><option>広島県</option><option>山口県</option><option>徳島県</option><option>香川県</option><option>愛媛県</option><option>高知県</option><option>福岡県</option><option>佐賀県</option><option>長崎県</option><option>熊本県</option><option>大分県</option><option>宮崎県</option><option>鹿児島県</option><option>沖縄県</option></select>
-        </div>
-      </div>
-      <div class="field">
-        <label>市区町村 <span class="req">*</span></label>
-        <input type="text" id="city" autocomplete="address-level2" placeholder="上尾市">
-      </div>
-      <div class="field">
-        <label>町名・番地 <span class="req">*</span></label>
-        <input type="text" id="addr1" autocomplete="address-line1" placeholder="仲町1-7-8">
-      </div>
-      <div class="field">
-        <label>建物名・部屋番号</label>
-        <input type="text" id="addr2" autocomplete="address-line2" placeholder="◯◯ビル 301（任意）">
-      </div>
-
-      <div class="field" style="margin-top:26px">
-        <label style="font-weight:600">本人確認書類 <span class="req">*</span></label>
-        <div class="hint">報酬のお支払いと不正防止のため、ご本人（法人の場合はご担当者）の確認をさせていただきます。書類は<b>いずれか1点</b>で結構です。ご提出いただいた画像は本人確認以外の目的では使用しません。</div>
-      </div>
-      <div class="field">
-        <label>書類の種類 <span class="req">*</span></label>
-        <select id="doctype">
-          <option value="">選択してください</option>
-          <option value="運転免許証">運転免許証</option>
-          <option value="マイナンバーカード">マイナンバーカード（表面）</option>
-          <option value="パスポート">パスポート</option>
-          <option value="健康保険証">健康保険証</option>
-          <option value="在留カード">在留カード</option>
-          <option value="住民票">住民票</option>
-          <option value="その他の証明書">その他の公的証明書</option>
-        </select>
-        <div class="hint">お手元にあるもの<b>1点</b>で結構です。マイナンバーカードの場合、個人番号が記載された<b>裏面はアップロードしないでください</b>。</div>
-      </div>
-      <div class="row2">
-        <div class="field">
-          <label>書類の画像 <span class="req">*</span></label>
-          <input type="file" id="doc1" accept="image/jpeg,image/png,image/webp,application/pdf">
-          <div class="hint" id="doc1hint">JPEG・PNG・PDF／6MBまで</div>
-        </div>
-        <div class="field">
-          <label>裏面・2枚目（任意）</label>
-          <input type="file" id="doc2" accept="image/jpeg,image/png,image/webp,application/pdf">
-          <div class="hint" id="doc2hint">現住所が裏面に記載されている場合などにご利用ください</div>
-        </div>
-      </div>
-      <div class="note-box" style="font-size:12px">
-        <b>撮影のお願い</b><br>
-        四隅が写り、氏名・住所・生年月日がはっきり読み取れる状態でご提出ください。反射やぼやけがある場合、確認できず再提出をお願いすることがあります。
-      </div>
-
-      <div class="field" style="margin-top:26px">
-        <label style="font-weight:600">報酬のお振込先</label>
-        <div class="hint">後からマイページで登録・変更もできます</div>
-      </div>
-      <div class="row2">
-        <div class="field"><label>金融機関名</label><input type="text" id="bank" placeholder="◯◯銀行"></div>
-        <div class="field"><label>支店名</label><input type="text" id="branch" placeholder="◯◯支店"></div>
-      </div>
-      <div class="row2">
-        <div class="field"><label>口座種別</label>
-          <select id="btype"><option value="">選択してください</option><option value="普通">普通</option><option value="当座">当座</option></select>
-        </div>
-        <div class="field"><label>口座番号</label><input type="text" id="bnum" placeholder="1234567"></div>
-      </div>
-      <div class="field"><label>口座名義（カナ）</label><input type="text" id="bholder" placeholder="ヤマダ タロウ"></div>
-
-      <div class="row2" style="margin-top:26px">
-        <div class="field">
-          <label>パスワード <span class="req">*</span></label>
-          <input type="password" id="pw" autocomplete="new-password" placeholder="8文字以上">
-        </div>
-        <div class="field">
-          <label>パスワード（確認） <span class="req">*</span></label>
-          <input type="password" id="pw2" autocomplete="new-password" placeholder="再入力">
-        </div>
-      </div>
-      <div class="field">
-        <label>ご紹介の予定・ご質問など</label>
-        <textarea id="note" placeholder="任意"></textarea>
-      </div>
-
-      <div class="field" style="margin-top:10px">
-        <label><input type="checkbox" id="agree" style="width:auto;margin-right:8px"><a href="agent-terms.html" target="_blank" style="color:var(--coral);text-decoration:underline">紹介パートナー規約</a>に同意します <span class="req">*</span></label>
-      </div>
-
-      <button class="btn" id="go">この内容で登録する</button>
-    </div>
-
-    <div id="done" class="hidden center" style="padding:30px 0">
-      <h2 style="font-family:var(--serif);font-size:24px;margin-bottom:14px">ご登録ありがとうございます</h2>
-      <p style="color:var(--ink-soft);line-height:2">内容を確認のうえ、紹介コードと紹介用リンクをメールでお送りします。<br>承認後は <a href="agent-login.html" style="color:var(--coral)">紹介パートナー ログイン</a> からご確認いただけます。</p>
-    </div>
+<div class="closed">
+  <h1>紹介パートナーの新規登録は<br>受付を終了しました。</h1>
+  <p>1本あたりの紹介報酬をお支払いする制度は終了し、お取引中のサロン様を対象とした<b>サロン紹介制度</b>に変更しました。ご紹介により新たにお取引が始まった場合、INFINI WORLD を1本無料で進呈します。</p>
+  <p>紹介コードは、取引先マイページに表示されます。当社商品のお取り扱いは、サロン様のみとさせていただいております。</p>
+  <div class="btns">
+    <a href="../index.html#referral" class="p">サロン紹介制度を見る</a>
+    <a href="register.html" class="s">新規取引を申請する</a>
+    <a href="login.html" class="s">取引先ログイン</a>
   </div>
 </div>
-
-<script src="config.js"></script>
-<script>
-/* 郵便番号 → 住所の自動補完（zipcloud）。分割入力に対応 */
-function nxZipAuto(postalId, cityId, prefId, addr1Id){
-  const zi=document.getElementById(postalId);
-  const ci=document.getElementById(cityId), pi=prefId?document.getElementById(prefId):null;
-  const a1=addr1Id?document.getElementById(addr1Id):null;
-  if(!zi||!ci) return;
-  let last='';
-  const hint=document.createElement('div');
-  hint.className='hint'; hint.style.display='none'; hint.style.marginTop='6px';
-  zi.parentNode.appendChild(hint);
-  async function lookup(){
-    const z=zi.value.replace(/[^0-9]/g,'');
-    if(z.length!==7||z===last) return;
-    last=z;
-    hint.style.display='block'; hint.textContent='住所を検索しています…';
-    try{
-      const r=await fetch('https://zipcloud.ibsnet.co.jp/api/search?zipcode='+z);
-      const d=await r.json();
-      if(d.status===200&&d.results&&d.results.length){
-        const x=d.results[0];
-        if(pi) pi.value=x.address1;
-        ci.value=x.address2+x.address3;
-        zi.value=z.slice(0,3)+'-'+z.slice(3);
-        hint.textContent='番地・建物名を続けてご入力ください';
-        if(a1) a1.focus();
-      }else{
-        hint.textContent='該当する住所が見つかりませんでした。手入力してください';
-      }
-    }catch(e){ hint.textContent='住所の自動入力ができませんでした。手入力してください'; }
-  }
-  zi.addEventListener('input',lookup);
-  zi.addEventListener('blur',lookup);
-}
-</script>
-<script>
-const $=s=>document.querySelector(s);
-const msg=$('#msg');
-const MAXB=6*1024*1024;
-function show(t,ok){msg.textContent=t;msg.className='msg '+(ok?'ok':'err');msg.scrollIntoView({block:'nearest'})}
-async function upload(file){
-  if(file.size>MAXB) throw new Error(file.name+' は6MBを超えています。画質を下げてお試しください');
-  const r=await fetch(NX_API+'/api/upload/id-doc',{method:'POST',headers:{'Content-Type':file.type},body:file});
-  const d=await r.json();
-  if(!r.ok) throw new Error(d.error||'アップロードに失敗しました');
-  return d.key;
-}
-$('#kind').addEventListener('change',()=>{
-  const c=$('#kind').value==='corp'||$('#kind').value==='salon';
-  $('#corpNoField').classList.toggle('hidden',!c);
-  $('#bdReq').style.display=c?'none':'inline';
-});
-['doc1','doc2'].forEach(id=>$('#'+id).addEventListener('change',()=>{
-  const f=$('#'+id).files[0]; if(!f) return;
-  $('#'+id+'hint').textContent=f.size>MAXB
-    ? f.name+'（'+(f.size/1048576).toFixed(1)+'MB）はサイズ超過です'
-    : f.name+'（'+(f.size/1048576).toFixed(1)+'MB）を選択しました';
-}));
-async function submit(){
-  const v=id=>$('#'+id).value.trim();
-  const b={name:v('name'),kind:v('kind'),contact_name:v('contact'),phone:v('phone'),email:v('email'),
-    birthday:v('birthday'),corp_no:v('corp_no'),
-    postal:v('postal'),pref:v('pref'),city:v('city'),addr1:v('addr1'),addr2:v('addr2'),
-    id_doc_type:v('doctype'),
-    bank_name:v('bank'),bank_branch:v('branch'),bank_type:v('btype'),bank_number:v('bnum'),bank_holder:v('bholder'),
-    pw:$('#pw').value,note:v('note'),agree:$('#agree').checked};
-  const isCorp=b.kind==='corp'||b.kind==='salon';
-  if(!b.name||!b.phone||!b.email||!b.pw){show('必須項目をご入力ください');return}
-  if(!b.postal||!b.pref||!b.city||!b.addr1){show('ご住所を最後までご入力ください');return}
-  if(!isCorp&&!b.birthday){show('生年月日をご入力ください');return}
-  if(b.pw.length<8){show('パスワードは8文字以上でご設定ください');return}
-  if(b.pw!==$('#pw2').value){show('パスワードが一致しません');return}
-  if(!b.id_doc_type){show('本人確認書類の種類をお選びください');return}
-  if(!$('#doc1').files[0]){show('本人確認書類の画像をアップロードしてください');return}
-  if(!b.agree){show('紹介パートナー規約へのご同意が必要です');return}
-  $('#go').disabled=true;
-  try{
-    show('本人確認書類をアップロードしています…',true);
-    b.id_doc_front=await upload($('#doc1').files[0]);
-    if($('#doc2').files[0]) b.id_doc_back=await upload($('#doc2').files[0]);
-    show('ご登録内容を送信しています…',true);
-    const r=await fetch(NX_API+'/api/agent/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});
-    const d=await r.json();
-    if(!r.ok){show(d.error||'登録に失敗しました');$('#go').disabled=false;return}
-    $('#form').classList.add('hidden'); msg.className='msg hidden'; $('#done').classList.remove('hidden');
-    window.scrollTo(0,0);
-  }catch(e){show(e.message||'サーバーに接続できません');$('#go').disabled=false}
-}
-$('#go').addEventListener('click',submit);
-nxZipAuto('postal','city','pref','addr1');
-</script>
 </body>
 </html>
