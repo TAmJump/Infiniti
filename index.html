@@ -369,6 +369,47 @@
   .vo-track .as{width:100%;font-size:11px;color:var(--muted);letter-spacing:.05em;margin-top:6px}
   .vo-soon{margin-top:26px;padding:20px 24px;border:1px dashed var(--line);border-radius:3px;
     font-size:12.5px;color:var(--muted);line-height:1.9;background:var(--white)}
+
+  /* ---- 30mL ミニパウチ ---- */
+  #pouch{position:relative}
+  .pc-badge{display:inline-block;font-size:11px;letter-spacing:.18em;color:var(--rose);
+    border:1px solid var(--rose);border-radius:20px;padding:5px 16px;margin-bottom:18px}
+  .pc-hero{position:relative;margin-top:38px}
+  .pc-hero .band{position:absolute;left:0;right:34%;top:16%;bottom:16%;background:#F7CED2;z-index:0}
+  @media(max-width:820px){.pc-hero .band{right:0;top:auto;bottom:-18px;height:56%}}
+  .pc-hero .ph{position:relative;z-index:1;margin-left:7%;background:var(--white);padding:14px;
+    border:1px solid var(--line)}
+  .pc-hero .ph img{width:100%;height:auto;display:block}
+  @media(max-width:820px){.pc-hero .ph{margin-left:0}}
+  .pc-cap{margin-top:12px;font-size:11px;color:var(--muted);letter-spacing:.06em;margin-left:7%}
+  @media(max-width:820px){.pc-cap{margin-left:0}}
+
+  .pc-two{display:grid;grid-template-columns:0.95fr 1.05fr;gap:52px;align-items:center;margin-top:64px}
+  @media(max-width:820px){.pc-two{grid-template-columns:1fr;gap:30px}}
+  .pc-two.rev{direction:rtl}
+  .pc-two.rev>*{direction:ltr}
+  .pc-fig{position:relative;padding:22px}
+  .pc-fig::before{content:"";position:absolute;inset:0 34% 40% 0;background:var(--panel);z-index:0}
+  .pc-fig.g::before{background:#F7CED2;inset:38% 0 0 30%}
+  .pc-fig img{position:relative;z-index:1;width:100%;height:auto;display:block;border:1px solid var(--line);background:var(--white)}
+  .pc-txt .k{font-family:var(--serif);font-size:11px;letter-spacing:.2em;color:var(--rose);text-transform:uppercase;margin-bottom:10px}
+  .pc-txt h3{font-family:var(--jp-serif);font-size:23px;font-weight:400;line-height:1.7;margin-bottom:14px}
+  .pc-txt p{font-size:14px;color:var(--ink-soft);line-height:2}
+  .pc-spec{margin-top:22px;border-top:1px solid var(--line)}
+  .pc-spec div{display:flex;gap:16px;padding:9px 0;border-bottom:1px solid var(--line);font-size:13px}
+  .pc-spec div b{min-width:88px;color:var(--muted);font-weight:400;font-size:12px;letter-spacing:.06em}
+
+  .pc-wide{margin-top:66px;background:var(--white);border:1px solid var(--line);padding:20px}
+  .pc-wide img{width:100%;height:auto;display:block}
+  .pc-lead{text-align:center;margin-bottom:22px}
+  .pc-lead .k{font-family:var(--serif);font-size:11px;letter-spacing:.2em;color:var(--rose);margin-bottom:6px}
+  .pc-lead h3{font-family:var(--jp-serif);font-size:20px;font-weight:400}
+
+  .pc-guide{display:grid;grid-template-columns:1fr 1.15fr;gap:44px;align-items:center;margin-top:60px}
+  @media(max-width:820px){.pc-guide{grid-template-columns:1fr;gap:26px}}
+  .pc-guide .sheet{background:var(--white);border:1px solid var(--line);padding:16px}
+  .pc-guide .sheet img{width:100%;height:auto;display:block}
+  .pc-note{margin-top:40px;font-size:11.5px;color:var(--muted);line-height:1.95}
 </style>
 </head>
 <body>
@@ -377,6 +418,7 @@
   <a href="#top" class="brand"><span class="brand-mark">Next <em>Innovation</em></span><span class="brand-sub">Inc.</span></a>
   <nav class="main" id="navmenu">
     <a href="#product">Products</a>
+    <a href="#pouch">Mini Pouch</a>
     <a href="#voices">Voices</a>
     <a href="#salon">For Salon</a>
     <a href="#referral">Referral</a>
@@ -414,6 +456,7 @@
   <div class="inner">
     <span class="lab">News</span>
     <ul>
+      <li><span class="d">2026.08</span><span class="t">30mL ミニパウチを近日販売予定です</span></li>
       <li><span class="d">2026.07</span><span class="t">フラッグシップ「INFINI WORLD」ヘアトリートメント（1,000mL）を公開しました</span></li>
       <li><span class="d">2026.06</span><span class="t">取引先様向けオンライン発注ポータルを開設しました</span></li>
       <li><span class="d">2026.06</span><span class="t">コーポレートサイトを公開しました</span></li>
@@ -625,6 +668,75 @@
   </div>
 </section>
 
+
+<!-- MINI POUCH -->
+<section class="block" id="pouch" style="max-width:none">
+  <div class="inner">
+    <div class="sec-head reveal"><span class="sec-num">03</span><span class="sec-label">Mini Pouch</span><span class="sec-line"></span></div>
+    <div class="salon-top reveal">
+      <div class="pc-badge">近日販売予定</div>
+      <h2>30mL、ひと目で伝わる一回分<em>。</em></h2>
+      <p>1,000mLのINFINI WORLDと同じ中身を、30mLのミニパウチにしました。持ち運びやすく、旅行や出張、サロンでのお試しにお使いいただけます。販売の開始時期は、決まりしだいお知らせします。</p>
+    </div>
+
+    <div class="pc-hero reveal">
+      <div class="band"></div>
+      <div class="ph"><img src="assets/pouch-30-main.jpg" alt="INFINI WORLD 30mL ミニパウチ"></div>
+      <div class="pc-cap">INFINI WORLD ヘアトリートメント ／ 30mL ミニパウチ</div>
+    </div>
+
+    <div class="pc-two reveal">
+      <div class="pc-fig"><img src="assets/pouch-30-model.jpg" alt="ミニパウチを手に持つイメージ"></div>
+      <div class="pc-txt">
+        <div class="k">Portable</div>
+        <h3>洗面台にも、旅先にも。</h3>
+        <p>片手におさまる大きさで、キャップを閉めて立てて置けます。ボトルを持ち歩かずに、いつものケアをそのまま続けられます。</p>
+        <div class="pc-spec">
+          <div><b>内容量</b><span>30mL</span></div>
+          <div><b>種類</b><span>ヘアトリートメント（化粧品）</span></div>
+          <div><b>中身</b><span>1,000mL品と同一</span></div>
+          <div><b>原産国</b><span>日本</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pc-two rev reveal">
+      <div class="pc-fig g"><img src="assets/pouch-30-box24.jpg" alt="30mL ミニパウチ 24本セット"></div>
+      <div class="pc-txt">
+        <div class="k">Sample Set</div>
+        <h3>24本セット。</h3>
+        <p>サロン様でのお試し配布や、店頭でのご案内に使いやすい24本のセットです。1本ずつ仕切られた箱に収めています。お取り扱いについては、取引先ポータルからお問い合わせください。</p>
+        <div class="pc-spec">
+          <div><b>構成</b><span>30mL × 24本</span></div>
+          <div><b>対象</b><span>お取引中のサロン様</span></div>
+          <div><b>販売時期</b><span>近日販売予定</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pc-wide reveal">
+      <div class="pc-lead"><div class="k">How to use</div><h3>ご使用方法</h3></div>
+      <img src="assets/pouch-30-howto.jpg" alt="INFINI WORLD ヘアトリートメント ご使用方法 6ステップ">
+    </div>
+
+    <div class="pc-guide reveal">
+      <div class="sheet"><img src="assets/pouch-30-guide.jpg" alt="INFINI WORLD ご使用ガイド"></div>
+      <div class="pc-txt">
+        <div class="k">Product Guide</div>
+        <h3>同梱のご使用ガイド。</h3>
+        <p>使用方法、使用上の注意、全成分、製造販売元をまとめた案内を同梱します。記載のQRコードから、商品の詳細と最新情報をご覧いただけます。</p>
+        <div class="pc-spec">
+          <div><b>製造販売元</b><span>メディカ・ウェーブ株式会社</span></div>
+          <div><b>発売元</b><span>株式会社Next Innovation</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pc-note">※効果・実感には個人差があります。<br>
+    ※30mL ミニパウチは近日販売予定です。仕様・パッケージは変更になる場合があります。<br>
+    ※画像は実際の商品と見え方が異なる場合があります。</div>
+  </div>
+</section>
 
 <!-- VOICES -->
 <section class="block alt" id="voices" style="max-width:none">
