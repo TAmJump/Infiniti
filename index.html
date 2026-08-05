@@ -221,8 +221,10 @@
 
   /* ---- photos ---- */
   .hero .hero-photo{position:absolute;right:0;top:0;bottom:0;width:46%;z-index:0;overflow:hidden}
-  .hero-photo img{width:100%;height:100%;object-fit:cover}
-  .hero-photo::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--white),rgba(255,255,255,.15) 52%,rgba(255,255,255,0))}
+  .hero-photo img{width:100%;height:100%;object-fit:contain;object-position:center;
+    padding:clamp(24px,5vw,72px)}
+  .hero .hero-photo{background:var(--white)}
+  .hero-photo::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--white),rgba(255,255,255,.35) 34%,rgba(255,255,255,0) 62%)}
   .hero>*{position:relative;z-index:2}
   .hero h1,.hero-lead{max-width:min(620px,54vw)}
 
@@ -433,7 +435,7 @@
 
 <!-- HERO -->
 <section class="hero" id="top">
-  <div class="hero-photo"><img src="assets/hero.jpg" alt="Infinite Repair Serum"></div>
+  <div class="hero-photo"><img src="assets/iw-logo-circle.jpg" alt="INFINI WORLD"></div>
   <div class="hero-eyebrow"><span class="dash"></span>美容と健康の総合事業会社</div>
   <h1>
     <span class="line l1"><span>Beauty, refined</span></span>
