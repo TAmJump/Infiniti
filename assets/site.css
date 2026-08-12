@@ -216,7 +216,7 @@
   .hero .hero-photo{background:transparent}
   .hero-photo::after{content:none}
   .hero>*{position:relative;z-index:2}
-  .hero h1,.hero-lead{max-width:min(620px,54vw)}
+  .hero h1,.hero-lead{max-width:min(860px,76vw)}
 
   .prod-visual{padding:0}
   .prod-visual img{width:100%;height:100%;object-fit:cover;display:block}
