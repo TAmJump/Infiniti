@@ -8,426 +8,15 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=Noto+Serif+JP:wght@300;400;500;600&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --white:#ffffff;
-    --cream:#fff7f5;        /* クリームピンクの薄いウォッシュ */
-    --panel:#fdeef0;        /* クリームピンクのパネル */
-    --blush:#f9e3e7;
-    --line:#f1dbe0;
-    --line-soft:#f7e7ea;
-    --rose:#d56b82;         /* アクセント：ローズピンク */
-    --rose-deep:#bb5570;
-    --ink:#33272b;          /* 文字：深いプラムチャコール（ベージュ系不使用） */
-    --ink-soft:#5e4d53;
-    --muted:#9b8990;
-    --serif:'Fraunces',serif;
-    --jp-serif:'Noto Serif JP',serif;
-    --jp-sans:'Zen Kaku Gothic New',sans-serif;
-    --sans:'Inter','Zen Kaku Gothic New',sans-serif;
-  }
-  *{margin:0;padding:0;box-sizing:border-box}
-  html{scroll-behavior:smooth}
-  body{background:var(--white);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.85;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-  ::selection{background:var(--rose);color:#fff}
-  a{color:inherit;text-decoration:none}
-
-  /* header */
-  header{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;
-    padding:0 clamp(18px,4vw,52px);height:72px;background:rgba(255,255,255,.86);backdrop-filter:blur(14px);
-    border-bottom:1px solid transparent;transition:border-color .3s,background .3s}
-  header.scrolled{border-bottom-color:var(--line);background:rgba(255,255,255,.96)}
-  .brand{display:flex;align-items:baseline;gap:11px}
-  .brand-mark{font-family:var(--serif);font-weight:500;font-size:21px;letter-spacing:-.01em;color:var(--ink);line-height:1}
-  .brand-mark em{font-style:italic;color:var(--rose)}
-  .brand-sub{font-family:var(--sans);font-size:9.5px;font-weight:500;letter-spacing:.28em;color:var(--muted);text-transform:uppercase}
-  nav.main{display:flex;align-items:center;gap:clamp(12px,2.2vw,30px)}
-  nav.main a{font-size:11.5px;font-weight:500;letter-spacing:.13em;color:var(--ink-soft);text-transform:uppercase;position:relative;padding:4px 0;transition:color .2s}
-  nav.main a::after{content:"";position:absolute;left:0;bottom:-1px;width:0;height:1px;background:var(--rose);transition:width .25s}
-  nav.main a:hover{color:var(--ink)}
-  nav.main a:hover::after{width:100%}
-  nav.main a.nav-cta{background:var(--rose);color:#fff;padding:9px 17px;border-radius:2px;letter-spacing:.08em;transition:background .25s}
-  nav.main a.nav-cta:hover{background:var(--rose-deep)}
-  nav.main a.nav-cta::after{display:none}
-  .nav-toggle{display:none;background:none;border:none;cursor:pointer;padding:8px}
-  .nav-toggle span{display:block;width:22px;height:1.5px;background:var(--ink);margin:5px 0;transition:.3s}
-
-  /* hero */
-  .hero{position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:center;
-    padding:120px clamp(20px,5vw,80px) 70px;max-width:1320px;margin:0 auto;
-    background:radial-gradient(120% 90% at 85% 10%, var(--panel) 0%, var(--cream) 38%, var(--white) 72%)}
-  .hero-eyebrow{display:flex;align-items:center;gap:14px;margin-bottom:32px;font-size:11px;font-weight:500;letter-spacing:.2em;color:var(--rose);text-transform:uppercase;opacity:0;transform:translateY(14px);animation:rise .9s .15s forwards}
-  .hero-eyebrow .dash{width:42px;height:1px;background:var(--rose)}
-  .hero h1{font-family:var(--serif);font-weight:300;font-size:clamp(42px,8vw,120px);line-height:.98;letter-spacing:-.025em;color:var(--ink)}
-  .hero h1 .line{display:block;overflow:hidden}
-  .hero h1 .line span{display:block;opacity:0;transform:translateY(110%)}
-  .hero h1 .l1 span{animation:rise 1s .25s forwards}
-  .hero h1 .l2 span{animation:rise 1s .38s forwards}
-  .hero h1 em{font-style:italic;color:var(--rose);font-weight:400}
-  .hero-lead{max-width:560px;margin-top:40px;font-family:var(--jp-serif);font-weight:300;font-size:clamp(15px,1.7vw,18px);line-height:2.15;color:var(--ink-soft);opacity:0;transform:translateY(14px);animation:rise 1s .65s forwards}
-  .hero-cta{margin-top:40px;display:flex;flex-wrap:wrap;gap:14px;opacity:0;transform:translateY(14px);animation:rise 1s .8s forwards}
-  .btn-rose{display:inline-flex;align-items:center;gap:12px;background:var(--rose);color:#fff;padding:15px 30px;font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;border-radius:2px;transition:background .25s,gap .25s}
-  .btn-rose:hover{background:var(--rose-deep);gap:18px}
-  .btn-line{display:inline-flex;align-items:center;gap:12px;border:1px solid var(--rose);color:var(--rose);padding:15px 30px;font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;border-radius:2px;transition:background .25s,color .25s}
-  .btn-line:hover{background:var(--rose);color:#fff}
-  .hero-foot{margin-top:clamp(44px,6vw,76px);display:flex;flex-wrap:wrap;gap:42px;opacity:0;transform:translateY(14px);animation:rise 1s .95s forwards}
-  .hero-stat .k{font-family:var(--serif);font-size:clamp(22px,3vw,32px);font-weight:400;color:var(--ink);line-height:1}
-  .hero-stat .k em{font-style:italic;color:var(--rose)}
-  .hero-stat .l{margin-top:8px;font-size:11px;letter-spacing:.12em;color:var(--muted);text-transform:uppercase}
-  @keyframes rise{to{opacity:1;transform:none}}
-
-  /* news ticker */
-  .news{background:var(--ink);color:#fff}
-  .news .inner{max-width:1320px;margin:0 auto;display:flex;align-items:center;gap:24px;padding:14px clamp(20px,5vw,80px)}
-  .news .lab{font-family:var(--serif);font-style:italic;font-size:14px;color:#fff;flex:0 0 auto;opacity:.9}
-  .news ul{list-style:none;display:flex;gap:34px;overflow:hidden;flex:1}
-  .news li{display:flex;gap:14px;align-items:baseline;white-space:nowrap;font-size:12.5px}
-  .news li .d{color:var(--rose);font-family:var(--serif);font-style:italic}
-  .news li .t{color:#f0e4e7}
-
-  /* section frame */
-  section.block{padding:clamp(78px,10vw,140px) clamp(20px,5vw,80px);max-width:1320px;margin:0 auto}
-  .alt{background:var(--cream)}
-  .alt .inner{max-width:1320px;margin:0 auto}
-  .sec-head{display:flex;align-items:baseline;gap:18px;margin-bottom:clamp(38px,5vw,64px)}
-  .sec-num{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--rose);font-weight:400}
-  .sec-label{font-size:11px;font-weight:600;letter-spacing:.26em;color:var(--muted);text-transform:uppercase}
-  .sec-line{flex:1;height:1px;background:var(--line)}
-  .reveal{opacity:0;transform:translateY(26px);transition:opacity .8s cubic-bezier(.2,.7,.3,1),transform .8s cubic-bezier(.2,.7,.3,1)}
-  .reveal.in{opacity:1;transform:none}
-
-  /* message */
-  .message-grid{display:grid;grid-template-columns:1fr 1.15fr;gap:clamp(40px,7vw,96px);align-items:start}
-  .message-grid .side{font-family:var(--serif);font-style:italic;font-size:clamp(15px,1.6vw,18px);color:var(--rose);line-height:1.7}
-  .message h2{font-family:var(--jp-serif);font-weight:400;font-size:clamp(24px,3.4vw,40px);line-height:1.55;color:var(--ink);margin-bottom:34px}
-  .message h2 em{font-style:normal;color:var(--rose);font-family:var(--serif);font-weight:400}
-  .message p{font-family:var(--jp-serif);font-weight:300;color:var(--ink-soft);line-height:2.2;margin-bottom:22px;max-width:60ch}
-  .message p:last-child{margin-bottom:0}
-
-  /* products */
-  .cat-row{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:40px}
-  .chip{font-size:12px;font-weight:600;letter-spacing:.04em;color:var(--ink-soft);border:1px solid var(--line);padding:8px 18px;border-radius:40px;background:var(--white)}
-  .chip.on{background:var(--rose);color:#fff;border-color:var(--rose)}
-  .prod-feature{display:grid;grid-template-columns:1fr 1fr;gap:clamp(36px,5vw,72px);align-items:center}
-  .prod-visual{aspect-ratio:4/5;background:radial-gradient(120% 120% at 30% 20%, var(--panel), var(--white));border:1px solid var(--line);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;border-radius:3px}
-  .prod-visual .ring{position:absolute;border:1px solid var(--blush);border-radius:50%}
-  .prod-visual .r1{width:78%;height:78%}
-  .prod-visual .r2{width:54%;height:54%}
-  .prod-visual .r3{width:30%;height:30%;border-color:var(--rose);opacity:.5}
-  .prod-visual .word{position:relative;z-index:2;text-align:center}
-  .prod-visual .word .inf{font-family:var(--serif);font-style:italic;font-weight:300;font-size:clamp(30px,4vw,48px);color:var(--ink);line-height:1}
-  .prod-visual .word .ser{font-size:11px;letter-spacing:.4em;color:var(--rose);text-transform:uppercase;margin-top:12px;font-weight:600}
-  .prod-info .tag{font-size:11px;font-weight:600;letter-spacing:.22em;color:var(--rose);text-transform:uppercase;margin-bottom:18px}
-  .prod-info h2{font-family:var(--serif);font-weight:300;font-size:clamp(30px,4.4vw,52px);line-height:1.05;letter-spacing:-.02em;color:var(--ink);margin-bottom:6px}
-  .prod-info h2 em{font-style:italic;color:var(--rose);font-weight:400}
-  .prod-info .jp-title{font-family:var(--jp-sans);font-weight:500;font-size:15px;color:var(--ink-soft);margin-bottom:26px}
-  .prod-info p{font-family:var(--jp-serif);font-weight:300;color:var(--ink-soft);line-height:2.1;margin-bottom:30px;max-width:48ch}
-  .prod-specs{display:flex;flex-direction:column;border-top:1px solid var(--line)}
-  .prod-specs .row{display:flex;gap:20px;padding:14px 0;border-bottom:1px solid var(--line)}
-  .prod-specs .row dt{flex:0 0 130px;font-size:11px;font-weight:600;letter-spacing:.12em;color:var(--muted);text-transform:uppercase;padding-top:3px}
-  .prod-specs .row dd{font-family:var(--jp-serif);font-weight:300;font-size:14px;color:var(--ink-soft)}
-  .prod-info .more{margin-top:28px;display:inline-flex;align-items:center;gap:10px;font-size:12px;font-weight:600;letter-spacing:.1em;color:var(--rose);text-transform:uppercase}
-  .prod-info .more:hover{gap:16px;transition:gap .2s}
-
-  /* for salon */
-  #salon{background:var(--panel)}
-  #salon .inner{max-width:1320px;margin:0 auto}
-  .salon-top{text-align:center;max-width:680px;margin:0 auto clamp(44px,6vw,72px)}
-  .salon-top .eyebrow{font-size:11px;font-weight:600;letter-spacing:.24em;color:var(--rose);text-transform:uppercase;margin-bottom:18px}
-  .salon-top h2{font-family:var(--serif);font-weight:300;font-size:clamp(30px,5vw,58px);line-height:1.05;letter-spacing:-.02em;color:var(--ink);margin-bottom:20px}
-  .salon-top h2 em{font-style:italic;color:var(--rose)}
-  .salon-top p{font-family:var(--jp-serif);font-weight:300;color:var(--ink-soft);line-height:2.1}
-  .salon-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-bottom:40px}
-  .step{background:var(--white);padding:clamp(28px,3vw,40px) clamp(22px,2.4vw,34px);min-height:210px;display:flex;flex-direction:column}
-  .step .n{font-family:var(--serif);font-style:italic;font-size:30px;color:var(--rose);font-weight:300;margin-bottom:auto}
-  .step h3{font-family:var(--jp-sans);font-weight:700;font-size:17px;color:var(--ink);margin:24px 0 8px}
-  .step p{font-family:var(--jp-serif);font-weight:300;font-size:13.5px;line-height:1.95;color:var(--ink-soft)}
-  .salon-feat{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:46px}
-  .feat{background:var(--white);border:1px solid var(--line);padding:26px 28px;border-radius:3px}
-  .feat h4{font-family:var(--jp-sans);font-weight:700;font-size:15px;color:var(--ink);margin-bottom:8px;display:flex;align-items:center;gap:10px}
-  .feat h4::before{content:"";width:7px;height:7px;background:var(--rose);border-radius:50%;flex:0 0 auto}
-  .feat p{font-family:var(--jp-serif);font-weight:300;font-size:13px;line-height:1.9;color:var(--ink-soft)}
-  .rev-share{border:1px solid var(--line);background:var(--white);border-radius:3px;padding:clamp(26px,3.2vw,42px);margin-bottom:46px}
-  .rs-eyebrow{font-family:var(--sans);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--rose);margin-bottom:8px}
-  .rs-head h3{font-family:var(--jp-sans);font-weight:700;font-size:17px;color:var(--ink);margin-bottom:18px}
-  .rs-body p{font-family:var(--jp-serif);font-weight:300;font-size:13.5px;line-height:2;color:var(--ink-soft)}
-  .rs-body p b{font-weight:500;color:var(--ink)}
-  .rs-tbl{width:100%;border-collapse:collapse;margin:20px 0 16px}
-  .rs-tbl th,.rs-tbl td{border-top:1px solid var(--line);padding:13px 4px;text-align:left;vertical-align:top;font-size:13px;line-height:1.85}
-  .rs-tbl th{width:210px;font-family:var(--jp-sans);font-weight:500;color:var(--ink);white-space:nowrap}
-  .rs-tbl td{font-family:var(--jp-serif);font-weight:300;color:var(--ink-soft)}
-  .rs-tbl tr:last-child th,.rs-tbl tr:last-child td{border-bottom:1px solid var(--line)}
-  .rs-note{font-size:12px !important;color:var(--muted) !important;line-height:1.95 !important}
-  .salon-cta{text-align:center}
-  .salon-cta .btns{display:flex;flex-wrap:wrap;gap:14px;justify-content:center}
-  .salon-cta .note{margin-top:18px;font-size:12px;color:var(--muted);font-family:var(--jp-serif)}
-
-  /* business */
-  .biz-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
-  .biz-card{background:var(--white);padding:clamp(26px,3vw,42px) clamp(22px,2.6vw,36px);min-height:266px;display:flex;flex-direction:column;transition:background .4s;position:relative}
-  .biz-card:hover{background:var(--cream)}
-  .biz-card .idx{font-family:var(--serif);font-style:italic;font-size:13px;color:var(--rose);font-weight:400;margin-bottom:auto}
-  .biz-card h3{font-family:var(--jp-sans);font-weight:700;font-size:19px;color:var(--ink);margin:28px 0 6px}
-  .biz-card .en{font-family:var(--serif);font-style:italic;font-weight:400;font-size:13px;color:var(--muted);margin-bottom:16px}
-  .biz-card p{font-family:var(--jp-serif);font-weight:300;font-size:13.5px;line-height:1.95;color:var(--ink-soft)}
-  .biz-card::before{content:"";position:absolute;left:0;top:0;width:2px;height:0;background:var(--rose);transition:height .4s}
-  .biz-card:hover::before{height:100%}
-
-  /* company */
-  .profile-grid{display:grid;grid-template-columns:.85fr 1.4fr;gap:clamp(40px,7vw,90px);align-items:start}
-  .profile-lead{font-family:var(--serif);font-weight:300;font-size:clamp(26px,3.2vw,40px);line-height:1.25;color:var(--ink)}
-  .profile-lead em{font-style:italic;color:var(--rose)}
-  .profile-note{margin-top:24px;font-family:var(--jp-serif);font-weight:300;font-size:13.5px;line-height:2;color:var(--ink-soft)}
-  .profile-table{display:flex;flex-direction:column}
-  .profile-table .row{display:grid;grid-template-columns:170px 1fr;gap:20px;padding:18px 0;border-bottom:1px solid var(--line)}
-  .profile-table .row:first-child{border-top:1px solid var(--line)}
-  .profile-table dt{font-size:11px;font-weight:600;letter-spacing:.16em;color:var(--muted);text-transform:uppercase;padding-top:3px}
-  .profile-table dd{font-family:var(--jp-sans);font-weight:400;font-size:14.5px;color:var(--ink);line-height:1.7}
-  .profile-table dd .sm{font-size:12px;color:var(--muted)}
-  .profile-table ul{list-style:none}
-  .profile-table ul li{position:relative;padding-left:16px;font-size:13.5px;color:var(--ink-soft);line-height:1.95}
-  .profile-table ul li::before{content:"—";position:absolute;left:0;color:var(--rose)}
-
-  .cform{max-width:660px;margin:0 auto 26px;text-align:left}
-  .crow{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-  .cfield{margin-bottom:16px}
-  .cfield label{display:block;font-family:var(--jp-sans);font-size:12px;font-weight:500;color:var(--ink);margin-bottom:7px;letter-spacing:.04em}
-  .cfield label span{color:var(--rose);margin-left:3px}
-  .cfield input,.cfield select,.cfield textarea{width:100%;background:var(--white);border:1px solid var(--line);padding:12px 13px;font-family:var(--jp-sans);font-size:14px;color:var(--ink);border-radius:2px;transition:border-color .2s}
-  .cfield input:focus,.cfield select:focus,.cfield textarea:focus{outline:none;border-color:var(--rose)}
-  .cfield textarea{resize:vertical;line-height:1.8}
-  .cpot{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
-  .cmsg{display:none;padding:13px 15px;border-radius:2px;font-size:13px;line-height:1.8;margin-bottom:18px;font-family:var(--jp-sans)}
-  .cmsg.err{display:block;background:#fdf0f2;border:1px solid var(--rose);color:var(--rose-deep)}
-  .cmsg.ok{display:block;background:#f2f7f3;border:1px solid #7ba07f;color:#4a6b4e}
-  .cmail{font-size:12px;color:var(--muted);font-family:var(--jp-serif)}
-  .cmail a{color:var(--rose);border-bottom:1px solid var(--rose)}
-  @media(max-width:640px){.crow{grid-template-columns:1fr;gap:0}}
-  /* contact */
-  .contact{padding:clamp(78px,10vw,130px) clamp(20px,5vw,80px);max-width:1320px;margin:0 auto;text-align:center}
-  .contact .eyebrow{font-size:11px;font-weight:600;letter-spacing:.24em;color:var(--rose);text-transform:uppercase;margin-bottom:26px}
-  .contact h2{font-family:var(--serif);font-weight:300;font-size:clamp(34px,6vw,76px);line-height:1.02;letter-spacing:-.02em;color:var(--ink);margin-bottom:14px}
-  .contact h2 em{font-style:italic;color:var(--rose)}
-  .contact p{font-family:var(--jp-serif);font-weight:300;color:var(--ink-soft);max-width:46ch;margin:0 auto 38px;line-height:2.05}
-
-  footer{background:var(--cream);border-top:1px solid var(--line);padding:48px clamp(20px,5vw,80px)}
-  footer .inner-f{max-width:1320px;margin:0 auto;width:100%;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:24px}
-  footer .f-brand{font-family:var(--serif);font-weight:400;font-size:22px;color:var(--ink)}
-  footer .f-brand em{font-style:italic;color:var(--rose)}
-  footer .f-meta{font-size:11px;letter-spacing:.06em;color:var(--ink-soft);line-height:1.9;margin-top:8px}
-  footer .f-links{display:flex;gap:20px;font-size:11px;letter-spacing:.08em;color:var(--ink-soft);text-transform:uppercase}
-  footer .f-links a:hover{color:var(--rose)}
-  footer .f-copy{font-size:11px;letter-spacing:.08em;color:var(--muted);max-width:1320px;margin:24px auto 0;text-align:right}
-
-  /* ---- photos ---- */
-  .hero .hero-photo{position:absolute;right:0;top:0;bottom:0;width:50%;z-index:0;overflow:hidden;display:block}
-  .hero-photo img{width:100%;height:100%;object-fit:contain;object-position:center;
-    padding:clamp(10px,2vw,34px)}
-  .hero .hero-photo{background:transparent}
-  .hero-photo::after{content:none}
-  .hero>*{position:relative;z-index:2}
-  .hero h1,.hero-lead{max-width:min(620px,54vw)}
-
-  .prod-visual{padding:0}
-  .prod-visual img{width:100%;height:100%;object-fit:cover;display:block}
-  .prod-visual.product-shot{background:var(--white);padding:clamp(10px,1.6vw,22px);overflow:visible}
-  .prod-visual.product-shot::before{content:"";position:absolute;left:-18px;bottom:-18px;width:56%;height:40%;background:var(--blush);z-index:0}
-  .prod-visual.product-shot img{position:relative;z-index:2;width:100%;height:100%;object-fit:contain}
-  .prod-inset{position:absolute;left:-20px;bottom:-20px;width:138px;height:172px;border:6px solid var(--white);box-shadow:0 18px 40px rgba(120,60,70,.16);z-index:3;overflow:hidden;border-radius:2px}
-  .prod-inset img{width:100%;height:100%;object-fit:cover}
-
-  .salon-photos{display:grid;grid-template-columns:1.45fr 1fr;gap:18px;margin-bottom:clamp(40px,6vw,64px)}
-  .salon-photos .ph{overflow:hidden;border-radius:3px;aspect-ratio:16/11}
-  .salon-photos img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s}
-  .salon-photos .ph:hover img{transform:scale(1.05)}
-
-  .biz-card{padding:0;overflow:hidden}
-  .biz-photo{height:172px;overflow:hidden}
-  .biz-photo img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s}
-  .biz-card:hover .biz-photo img{transform:scale(1.06)}
-  .biz-body{padding:clamp(22px,2.5vw,32px) clamp(22px,2.6vw,34px) clamp(28px,3vw,38px);display:flex;flex-direction:column;min-height:184px}
-  .biz-body .idx{margin-bottom:14px}
-
-  /* ---- business: editorial / portfolio rows ---- */
-  .biz-rows{display:flex;flex-direction:column;gap:clamp(64px,9vw,132px)}
-  .biz-row{display:grid;grid-template-columns:1.04fr 1fr;gap:clamp(40px,6vw,96px);align-items:center}
-  .biz-row:nth-child(even) .biz-visual{order:2}
-  .biz-visual{position:relative}
-  .biz-visual .pic{position:relative;z-index:2;overflow:hidden;border-radius:3px}
-  .biz-visual .pic img{width:100%;height:auto;display:block;transition:transform .9s cubic-bezier(.2,.7,.3,1)}
-  .biz-visual:hover .pic img{transform:scale(1.045)}
-  .biz-visual::before{content:"";position:absolute;z-index:1;background:var(--panel);transition:transform .6s}
-  .biz-row:nth-child(odd) .biz-visual::before{left:-24px;top:-24px;width:56%;height:64%}
-  .biz-row:nth-child(even) .biz-visual::before{right:-24px;bottom:-24px;width:56%;height:64%}
-  .biz-visual:hover::before{transform:translate(6px,6px)}
-  .biz-text .no{font-family:var(--serif);font-style:italic;font-weight:300;font-size:clamp(52px,7vw,104px);color:var(--blush);line-height:.82;letter-spacing:-.02em}
-  .biz-text h3{font-family:var(--jp-sans);font-weight:700;font-size:clamp(22px,2.8vw,32px);color:var(--ink);margin:14px 0 4px;letter-spacing:.01em}
-  .biz-text .en{display:inline-flex;align-items:center;gap:12px;font-family:var(--serif);font-style:italic;font-size:14px;color:var(--rose);margin-bottom:22px}
-  .biz-text .en::before{content:"";width:30px;height:1px;background:var(--rose)}
-  .biz-text p{font-family:var(--jp-serif);font-weight:300;font-size:clamp(13.5px,1.5vw,15px);line-height:2.1;color:var(--ink-soft);max-width:42ch}
-
-  /* ---- leadership ---- */
-  #leader{background:var(--cream)}
-  #leader .inner{max-width:1320px;margin:0 auto}
-  .leader-grid{display:grid;grid-template-columns:.92fr 1.2fr;gap:clamp(40px,6vw,84px);align-items:center}
-  .leader-portrait{position:relative}
-  .leader-portrait .frame{position:relative;z-index:2;overflow:hidden;border-radius:3px}
-  .leader-portrait .frame img{width:100%;display:block}
-  .leader-portrait::before{content:"";position:absolute;left:-18px;top:-18px;right:36px;bottom:36px;background:var(--panel);z-index:1}
-  .leader-portrait .cap{position:absolute;right:-6px;bottom:-16px;z-index:3;background:var(--rose);color:#fff;padding:13px 20px;font-family:var(--serif);font-style:italic;font-size:15px;box-shadow:0 12px 30px rgba(120,60,70,.18)}
-  .leader-info .eyebrow{font-size:11px;font-weight:600;letter-spacing:.24em;color:var(--rose);text-transform:uppercase;margin-bottom:16px}
-  .leader-info .name{font-family:var(--jp-serif);font-weight:500;font-size:clamp(30px,4vw,46px);color:var(--ink);line-height:1.1}
-  .leader-info .romaji{font-family:var(--serif);font-style:italic;font-size:14px;color:var(--muted);letter-spacing:.12em;margin:6px 0 24px}
-  .leader-info .lead{font-family:var(--jp-serif);font-weight:300;color:var(--ink-soft);line-height:2.15;margin-bottom:14px;max-width:56ch}
-  .leader-info .lead b{color:var(--ink);font-weight:500}
-  .tl{margin-top:30px;border-top:1px solid var(--line)}
-  .tl .it{display:grid;grid-template-columns:80px 1fr;gap:20px;padding:13px 0;border-bottom:1px solid var(--line)}
-  .tl .yr{font-family:var(--serif);font-style:italic;font-size:17px;color:var(--rose)}
-  .tl .ev{font-family:var(--jp-sans);font-size:13.5px;color:var(--ink-soft);line-height:1.7}
-  .tl .ev b{color:var(--ink);font-weight:700}
-  .tl .it.now .ev b{color:var(--rose)}
-
-  .leader-band{margin-top:clamp(44px,6vw,80px);display:grid;grid-template-columns:1fr 1.1fr;border:1px solid var(--line);background:var(--white);overflow:hidden;border-radius:3px}
-  .leader-band.quote-only{grid-template-columns:1fr;text-align:center;background:var(--cream)}
-  .leader-band .ph{overflow:hidden;min-height:320px}
-  .leader-band .ph img{width:100%;height:100%;object-fit:cover;display:block}
-  .leader-band .quote{display:flex;flex-direction:column;justify-content:center;padding:clamp(34px,5vw,66px)}
-  .leader-band .quote .q{font-family:var(--serif);font-weight:300;font-size:clamp(25px,3.2vw,40px);line-height:1.32;color:var(--ink);letter-spacing:-.01em}
-  .leader-band .quote .q em{font-style:italic;color:var(--rose)}
-  .leader-band .quote .by{margin-top:22px;font-size:12px;letter-spacing:.1em;color:var(--muted)}
-
-  @media(max-width:900px){
-    nav.main{position:fixed;inset:72px 0 auto 0;flex-direction:column;align-items:flex-start;gap:0;background:var(--white);border-bottom:1px solid var(--line);padding:8px 0;transform:translateY(-130%);transition:transform .35s;pointer-events:none}
-    nav.main.open{transform:none;pointer-events:auto}
-    nav.main a{width:100%;padding:14px clamp(20px,5vw,52px);font-size:13px;border-bottom:1px solid var(--line-soft)}
-    nav.main a::after{display:none}
-    nav.main a.nav-cta{border-radius:0;margin:6px clamp(20px,5vw,52px);width:auto;justify-content:center}
-    .nav-toggle{display:block}
-    .message-grid,.prod-feature,.profile-grid{grid-template-columns:1fr}
-    .biz-grid,.salon-steps,.salon-feat{grid-template-columns:1fr}
-    .rs-tbl th{width:auto;display:block;white-space:normal;border-bottom:none;padding-bottom:2px}
-    .rs-tbl td{display:block;border-top:none;padding-top:0}
-    .rs-tbl tr:last-child td{border-bottom:none}
-    .biz-row{grid-template-columns:1fr;gap:22px}
-    .biz-row:nth-child(even) .biz-visual{order:0}
-    .biz-visual::before{display:none}
-    .leader-grid,.leader-band,.salon-photos{grid-template-columns:1fr}
-    .leader-portrait::before{display:none}
-    .leader-band .ph{min-height:240px}
-    .biz-body{min-height:auto}
-    .hero-photo{display:none}
-    .hero h1,.hero-lead{max-width:none}
-    .message-grid .side{order:-1}
-    .prod-visual{max-width:330px}
-    .profile-table .row{grid-template-columns:120px 1fr;gap:12px}
-    .news ul{display:none}
-  }
-  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}
-    .hero h1 .line span,.hero-eyebrow,.hero-lead,.hero-cta,.hero-foot{opacity:1;transform:none}.reveal{opacity:1;transform:none}}
-
-  /* ---- Voices (お客様評価) ---- */
-  .vo-wrap{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start;margin-top:44px}
-  @media(max-width:860px){.vo-wrap{grid-template-columns:1fr;gap:34px}}
-  .vo-score{display:flex;align-items:flex-end;gap:16px}
-  .vo-stars{position:relative;font-size:34px;line-height:1;letter-spacing:3px}
-  .vo-stars .bg{color:var(--blush)}
-  .vo-stars .fg{color:#c9963f;position:absolute;left:0;top:0;overflow:hidden;white-space:nowrap}
-  .vo-num{font-family:var(--serif);font-size:46px;line-height:.9;color:var(--rose)}
-  .vo-meta{font-size:12px;color:var(--muted);letter-spacing:.06em;margin-top:14px}
-  .vo-dist{margin-top:22px;max-width:380px}
-  .vo-dist .r{display:flex;align-items:center;gap:12px;font-size:11.5px;color:var(--muted);margin-bottom:6px}
-  .vo-dist .lb{width:24px;letter-spacing:.04em}
-  .vo-dist .ba{flex:1;height:6px;background:var(--blush);border-radius:3px;overflow:hidden}
-  .vo-dist .ba i{display:block;height:100%;background:#c9963f}
-  .vo-dist .pc{width:38px;text-align:right}
-  .vo-imp{margin-top:30px;display:flex;flex-wrap:wrap;gap:8px}
-  .vo-imp span{font-size:11.5px;color:var(--ink-soft);border:1px solid var(--line);border-radius:20px;padding:6px 14px;background:var(--white)}
-  .vo-imp span b{color:var(--rose);font-weight:600;margin-left:6px}
-  .vo-cards{display:flex;flex-direction:column;gap:14px}
-  .vo-card{background:var(--white);border:1px solid var(--line);border-radius:3px;padding:20px 22px}
-  .vo-card .cs{font-size:14px;color:#c9963f;letter-spacing:2px;margin-bottom:8px}
-  .vo-card p{font-family:var(--jp-serif);font-size:14.5px;line-height:1.95;color:var(--ink)}
-  .vo-card .wh{margin-top:12px;font-size:11.5px;color:var(--muted);letter-spacing:.06em}
-  .vo-note{margin-top:32px;font-size:11px;color:var(--muted);line-height:1.9}
-
-  .vo-cta{margin-top:44px;display:grid;grid-template-columns:1fr auto;gap:34px;align-items:center;
-    background:var(--white);border:1px solid var(--line);border-radius:3px;padding:30px 32px}
-  @media(max-width:700px){.vo-cta{grid-template-columns:1fr;gap:24px;text-align:center}}
-  .vo-cta h3{font-family:var(--jp-serif);font-size:18px;font-weight:400;margin-bottom:8px}
-  .vo-cta p{font-size:13px;color:var(--ink-soft);line-height:1.9}
-  .vo-cta .btns{margin-top:18px;display:flex;gap:12px;flex-wrap:wrap}
-  @media(max-width:700px){.vo-cta .btns{justify-content:center}}
-  .vo-qr{text-align:center}
-  .vo-qr img{width:132px;height:132px;border:1px solid var(--line);border-radius:3px;display:block}
-  .vo-qr span{display:block;margin-top:8px;font-size:10.5px;color:var(--muted);letter-spacing:.06em}
-  .ig{display:inline-flex;align-items:center;gap:8px}
-  .ig svg{width:15px;height:15px}
-
-  .vo-track{display:flex;align-items:baseline;gap:18px;flex-wrap:wrap;margin-top:38px;
-    padding:26px 30px;background:var(--white);border:1px solid var(--line);border-radius:3px}
-  .vo-track .big{font-family:var(--serif);font-size:52px;line-height:.9;color:var(--rose)}
-  .vo-track .unit{font-size:15px;color:var(--ink-soft);margin-left:-8px}
-  .vo-track .lb{font-size:12.5px;color:var(--ink-soft);letter-spacing:.06em;line-height:1.9}
-  .vo-track .as{width:100%;font-size:11px;color:var(--muted);letter-spacing:.05em;margin-top:6px}
-  .vo-soon{margin-top:26px;padding:20px 24px;border:1px dashed var(--line);border-radius:3px;
-    font-size:12.5px;color:var(--muted);line-height:1.9;background:var(--white)}
-
-  /* ---- ミニパウチ ---- */
-  #pouch{position:relative}
-  .pc-badge{display:inline-block;font-size:11px;letter-spacing:.18em;color:var(--rose);
-    border:1px solid var(--rose);border-radius:20px;padding:5px 16px;margin-bottom:18px}
-  .pc-hero{position:relative;margin-top:38px}
-  .pc-hero .band{position:absolute;left:0;right:34%;top:16%;bottom:16%;background:#F7CED2;z-index:0}
-  @media(max-width:820px){.pc-hero .band{right:0;top:auto;bottom:-18px;height:56%}}
-  .pc-hero .ph{position:relative;z-index:1;margin-left:7%;background:var(--white);padding:14px;
-    border:1px solid var(--line)}
-  .pc-hero .ph img{width:100%;height:auto;display:block}
-  @media(max-width:820px){.pc-hero .ph{margin-left:0}}
-  .pc-cap{margin-top:12px;font-size:11px;color:var(--muted);letter-spacing:.06em;margin-left:7%}
-  @media(max-width:820px){.pc-cap{margin-left:0}}
-
-  .pc-two{display:grid;grid-template-columns:0.95fr 1.05fr;gap:52px;align-items:center;margin-top:64px}
-  @media(max-width:820px){.pc-two{grid-template-columns:1fr;gap:30px}}
-  .pc-two.rev{direction:rtl}
-  .pc-two.rev>*{direction:ltr}
-  .pc-fig{position:relative;padding:22px}
-  .pc-fig::before{content:"";position:absolute;inset:0 34% 40% 0;background:var(--panel);z-index:0}
-  .pc-fig.g::before{background:#F7CED2;inset:38% 0 0 30%}
-  .pc-fig img{position:relative;z-index:1;width:100%;height:auto;display:block;border:1px solid var(--line);background:var(--white)}
-  .pc-txt .k{font-family:var(--serif);font-size:11px;letter-spacing:.2em;color:var(--rose);text-transform:uppercase;margin-bottom:10px}
-  .pc-txt h3{font-family:var(--jp-serif);font-size:23px;font-weight:400;line-height:1.7;margin-bottom:14px}
-  .pc-txt p{font-size:14px;color:var(--ink-soft);line-height:2}
-  .pc-spec{margin-top:22px;border-top:1px solid var(--line)}
-  .pc-spec div{display:flex;gap:16px;padding:9px 0;border-bottom:1px solid var(--line);font-size:13px}
-  .pc-spec div b{min-width:88px;color:var(--muted);font-weight:400;font-size:12px;letter-spacing:.06em}
-
-  .pc-wide{margin-top:66px;background:var(--white);border:1px solid var(--line);padding:20px}
-  .pc-wide img{width:100%;height:auto;display:block}
-  .pc-lead{text-align:center;margin-bottom:22px}
-  .pc-lead .k{font-family:var(--serif);font-size:11px;letter-spacing:.2em;color:var(--rose);margin-bottom:6px}
-  .pc-lead h3{font-family:var(--jp-serif);font-size:20px;font-weight:400}
-
-  .pc-guide{display:grid;grid-template-columns:1fr 1.15fr;gap:44px;align-items:center;margin-top:60px}
-  @media(max-width:820px){.pc-guide{grid-template-columns:1fr;gap:26px}}
-  .pc-guide .sheet{background:var(--white);border:1px solid var(--line);padding:16px}
-  .pc-guide .sheet img{width:100%;height:auto;display:block}
-  .pc-note{margin-top:40px;font-size:11.5px;color:var(--muted);line-height:1.95}
-
-  #pouch .salon-top{max-width:none}
-  #pouch .salon-top h2{white-space:nowrap;font-size:clamp(22px,4.4vw,56px)}
-  #pouch .salon-top p{max-width:760px;margin-left:auto;margin-right:auto}
-</style>
+<link rel="stylesheet" href="assets/site.css">
 </head>
 <body>
 
 <header id="hdr">
   <a href="#top" class="brand"><span class="brand-mark">Next <em>Innovation</em></span><span class="brand-sub">Inc.</span></a>
   <nav class="main" id="navmenu">
-    <a href="#product">Products</a>
-    <a href="#pouch">Mini Pouch</a>
+    <a href="#brands">Brands</a>
     <a href="#voices">Voices</a>
-    <a href="#salon">For Salon</a>
-    <a href="#referral">Referral</a>
     <a href="#business">Business</a>
     <a href="#leader">Leadership</a>
     <a href="#company">Company</a>
@@ -440,20 +29,20 @@
 <!-- HERO -->
 <section class="hero" id="top">
   <div class="hero-photo"><img src="assets/iw-logo-flat-v2.png" alt="INFINI WORLD"></div>
-  <div class="hero-eyebrow"><span class="dash"></span>美容と健康の総合事業会社</div>
+  <div class="hero-eyebrow"><span class="dash"></span>商品開発・製造の会社</div>
   <h1>
     <span class="line l1"><span>Beauty, refined</span></span>
     <span class="line l2"><span>by <em>science</em>.</span></span>
   </h1>
-  <p class="hero-lead">化粧品、医薬部外品、医療機器、サロン、アニマルケア。<br>領域を横断して人の「美しさ」と「健やかさ」を支える事業を、ひとつの会社で育てていきます。</p>
+  <p class="hero-lead">化粧品、医薬部外品、医療機器、サロン、アニマルケア。<br>商品の開発と製造を担い、2つのブランドがそれぞれの市場でお客様に届けます。</p>
   <div class="hero-cta">
-    <a href="#product" class="btn-rose">製品を見る <span>→</span></a>
+    <a href="#brands" class="btn-rose">ブランドを見る <span>→</span></a>
     <a href="order/login.html" class="btn-line">取引先の方はこちら</a>
   </div>
   <div class="hero-foot">
     <div class="hero-stat"><div class="k">06</div><div class="l">事業領域 / Domains</div></div>
     <div class="hero-stat"><div class="k">2026</div><div class="l">設立 / Founded</div></div>
-    <div class="hero-stat"><div class="k"><em>∞</em></div><div class="l">Infinite Repair Serum</div></div>
+    <div class="hero-stat"><div class="k"><em>2</em></div><div class="l">ブランド / Brands</div></div>
   </div>
 </section>
 
@@ -462,7 +51,7 @@
   <div class="inner">
     <span class="lab">News</span>
     <ul>
-      <li><span class="d">2026.08</span><span class="t">ミニパウチを近日販売予定です</span></li>
+      <li><span class="d">2026.08</span><span class="t">ブランドを INFINI WORLD（サロン専売）と evol（ホームケア）の2つに分けました</span></li>
       <li><span class="d">2026.07</span><span class="t">フラッグシップ「INFINI WORLD」ヘアトリートメント（1,000mL）を公開しました</span></li>
       <li><span class="d">2026.06</span><span class="t">取引先様向けオンライン発注ポータルを開設しました</span></li>
       <li><span class="d">2026.06</span><span class="t">コーポレートサイトを公開しました</span></li>
@@ -485,262 +74,68 @@
   </div>
 </section>
 
-<!-- PRODUCT -->
-<section class="block alt" id="product" style="max-width:none">
+
+<style>
+.brand-cards{display:grid;grid-template-columns:1fr 1fr;gap:clamp(20px,3vw,34px);margin-top:clamp(36px,5vw,56px)}
+@media(max-width:820px){.brand-cards{grid-template-columns:1fr}}
+.bcard{display:block;text-decoration:none;color:inherit;background:var(--white);
+  border:1px solid var(--line);border-radius:4px;padding:clamp(34px,4vw,54px) clamp(24px,3vw,40px);
+  text-align:center;transition:border-color .3s, transform .3s}
+.bcard:hover{border-color:var(--rose);transform:translateY(-3px)}
+.bmark{width:clamp(190px,22vw,250px);height:clamp(190px,22vw,250px);margin:0 auto;border-radius:50%;
+  background:#F7CED2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}
+.bmark .n1{font-family:var(--jp-serif,'Noto Serif JP',serif);font-size:clamp(24px,2.6vw,31px);
+  letter-spacing:.04em;line-height:1.25;color:#2B2226;font-weight:400}
+.bmark .n2{font-family:var(--serif);font-size:clamp(46px,5.4vw,64px);line-height:1;color:#6F4F57;font-weight:400}
+.bmark .tl{font-size:clamp(8px,.85vw,10px);letter-spacing:.24em;color:#6F4F57;margin-top:2px}
+.bmark .rule{width:52px;height:1px;background:#6F4F57;opacity:.55;margin-top:4px}
+.bcard .cap{margin-top:26px;font-size:11px;letter-spacing:.2em;color:var(--rose);text-transform:uppercase}
+.bcard h3{font-family:var(--jp-serif,'Noto Serif JP',serif);font-size:clamp(17px,1.9vw,21px);
+  font-weight:400;margin:10px 0 12px}
+.bcard p{font-size:13.5px;color:var(--ink-soft);line-height:1.95;max-width:420px;margin:0 auto}
+.bcard .more{margin-top:22px;display:inline-block;font-size:12.5px;color:var(--rose);
+  border-bottom:1px solid var(--rose);padding-bottom:2px}
+.dev-note{margin-top:clamp(34px,5vw,52px);border:1px solid var(--line);border-radius:4px;
+  background:var(--cream);padding:clamp(22px,3vw,32px);font-size:13px;color:var(--ink-soft);line-height:2}
+</style>
+<!-- BRANDS -->
+<section class="block alt" id="brands" style="max-width:none">
   <div class="inner">
-    <div class="sec-head reveal"><span class="sec-num">02</span><span class="sec-label">Products</span><span class="sec-line"></span></div>
-
-    <style>
-    .add-h{font-family:var(--serif);font-style:italic;font-size:clamp(22px,2.6vw,30px);color:var(--ink);margin-bottom:6px}
-    .add-sub{font-size:11px;letter-spacing:.18em;color:var(--muted);margin-bottom:26px;text-transform:uppercase}
-    .worry-band{margin:0 0 clamp(40px,6vw,60px)}
-    .worry-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
-    .worry-item{display:flex;align-items:center;gap:13px;padding:16px 18px;border:1px solid var(--line);border-radius:4px;background:var(--white);font-size:14px;color:var(--ink-soft)}
-    .worry-item .ck{flex:0 0 22px;width:22px;height:22px;border-radius:50%;background:var(--panel);color:var(--rose);display:flex;align-items:center;justify-content:center}
-    .worry-item .ck svg{width:12px;height:12px}
-    .worry-close{margin-top:22px;font-family:var(--serif);font-style:italic;font-size:clamp(16px,2vw,21px);color:var(--ink)}
-    .trust-band{margin-top:clamp(44px,6vw,72px)}
-    .trust-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-    .trust-cell{padding:24px 22px;border:1px solid var(--line);border-radius:4px;background:var(--white)}
-    .trust-cell .lb{font-size:10px;letter-spacing:.18em;color:var(--muted);margin-bottom:10px}
-    .trust-cell .vl{font-size:15px;color:var(--ink);line-height:1.5;font-weight:600}
-    .trust-cell .vl small{display:block;font-weight:400;font-size:12px;color:var(--ink-soft);margin-top:5px}
-    @media(max-width:760px){.trust-grid{grid-template-columns:1fr}}
-    .cospa-band{margin-top:clamp(44px,6vw,72px);background:var(--cream);border:1px solid var(--line);border-radius:4px;padding:clamp(30px,5vw,46px)}
-    .cospa-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;text-align:center}
-    .cospa-num{font-family:var(--serif);font-size:clamp(30px,5vw,46px);color:var(--rose);line-height:1}
-    .cospa-lb{margin-top:12px;font-size:12.5px;color:var(--ink-soft)}
-    .cospa-note{margin-top:22px;text-align:center;font-size:11px;color:var(--muted)}
-    @media(max-width:600px){.cospa-grid{grid-template-columns:1fr;gap:20px}}
-    </style>
-    <div class="worry-band reveal">
-      <div class="add-h">こんな髪の悩み、ありませんか？</div>
-      <div class="add-sub">Hair Concerns</div>
-      <div class="worry-grid">
-        <div class="worry-item"><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l5 5L20 6"/></svg></span>乾燥によるパサつき・広がり</div>
-        <div class="worry-item"><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l5 5L20 6"/></svg></span>まとまらない・扱いにくい</div>
-        <div class="worry-item"><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l5 5L20 6"/></svg></span>ハリ・コシが足りない</div>
-        <div class="worry-item"><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l5 5L20 6"/></svg></span>ツヤ・指通りが欲しい</div>
-        <div class="worry-item"><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l5 5L20 6"/></svg></span>年齢とともに変わる髪質</div>
-      </div>
-      <div class="worry-close">ひとつでも当てはまるなら——サロン品質の手触りを、毎日に。</div>
-    </div>
-
-    <div class="cat-row reveal">
-      <span class="chip on">ヘアケア</span>
-      <span class="chip">スタイリング</span>
-      <span class="chip">スキンケア</span>
-      <span class="chip">医薬部外品</span>
-      <span class="chip">アニマルケア</span>
-    </div>
-    <div class="prod-feature">
-      <div class="prod-visual product-shot reveal">
-        <img src="assets/product-pouch-pink.jpg" alt="INFINI WORLD ヘアトリートメント 1000mL">
-      </div>
-      <div class="prod-info reveal">
-        <div class="tag">Hair Care — Flagship</div>
-        <h2><em>INFINI</em> WORLD</h2>
-        <div class="jp-title">サロン品質 大容量ヘアトリートメント（1,000mL）</div>
-        <p>本来はサロンにのみ卸すプロ仕様のヘアトリートメント。ハリ・コシとまとまり、ツヤと指通りのある手触りへ導きます。乾燥による広がりを抑え、日々の仕上がりを整える、Next Innovation のフラッグシップです。（※感じ方には個人差があります）</p>
-        <dl class="prod-specs">
-          <div class="row"><dt>Type</dt><dd>ヘアトリートメント（化粧品）</dd></div>
-          <div class="row"><dt>Volume</dt><dd>1,000mL ／ MADE IN JAPAN</dd></div>
-          <div class="row"><dt>Benefit</dt><dd>ハリ・コシ ／ まとまり ／ ツヤ・指通り</dd></div>
-          <div class="row"><dt>Channel</dt><dd>サロン専売 ／ 取引先オンライン発注</dd></div>
-        </dl>
-        <a href="order/login.html" class="more">取引先ログインして発注 →</a>
-      </div>
-    </div>
-
-    <div class="trust-band reveal">
-      <div class="add-h">選ばれる理由</div>
-      <div class="add-sub">Why INFINI WORLD</div>
-      <div class="trust-grid">
-        <div class="trust-cell"><div class="lb">CRAFTSMAN</div><div class="vl">美容ひと筋 40年<small>代表 桶本 光司</small></div></div>
-        <div class="trust-cell"><div class="lb">TRACK RECORD</div><div class="vl">歴任してきたブランド<small>パイモア／ハホニコ ほか</small></div></div>
-        <div class="trust-cell"><div class="lb">PROFESSIONAL</div><div class="vl">本来はサロン専売<small>プロ仕様のヘアトリートメント</small></div></div>
-        <div class="trust-cell"><div class="lb">MADE IN JAPAN</div><div class="vl">日本製<small>大容量 1,000mL</small></div></div>
-        <div class="trust-cell"><div class="lb">MANUFACTURING</div><div class="vl">製造販売元<small>メディカ・ウェーブ株式会社</small></div></div>
-        <div class="trust-cell"><div class="lb">LIMITED</div><div class="vl">今回だけ特別開放<small>数量限定で先行お届け</small></div></div>
-      </div>
-    </div>
-
-    <style>
-    .ba-band{margin-top:clamp(44px,6vw,72px)}
-    .ba-head{display:flex;align-items:baseline;gap:18px;flex-wrap:wrap;margin-bottom:26px}
-    .ba-ey{font-family:var(--serif);font-style:italic;font-size:clamp(22px,2.6vw,30px);color:var(--ink)}
-    .ba-note{font-size:11px;letter-spacing:.04em;color:var(--muted)}
-    .ba-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
-    .ba-grid figure{margin:0;background:var(--cream);border:1px solid var(--line);border-radius:4px;overflow:hidden}
-    .ba-im{position:relative;line-height:0}
-    .ba-im img{width:100%;height:auto;display:block}
-    .ba-im .lbl{position:absolute;top:12px;font-size:10px;letter-spacing:.22em;font-weight:600;color:var(--ink);background:rgba(255,255,255,.85);padding:5px 10px;border-radius:2px}
-    .ba-im .lbl.b{left:12px}
-    .ba-im .lbl.a{right:12px}
-    .ba-im::after{content:"";position:absolute;top:0;bottom:0;left:50%;width:1px;background:rgba(255,255,255,.92);transform:translateX(-.5px)}
-    .ba-grid figcaption{padding:14px 16px;font-size:12.5px;letter-spacing:.02em;color:var(--ink-soft);border-top:1px solid var(--line);background:var(--white)}
-    @media(max-width:760px){.ba-grid{grid-template-columns:1fr;gap:16px}}
-    </style>
-    <div class="ba-band reveal">
-      <div class="ba-head"><span class="ba-ey">Before / After</span><span class="ba-note">写真は使用イメージです。効果や感じ方には個人差があります。</span></div>
-      <div class="ba-grid">
-        <figure><div class="ba-im"><img src="assets/ba-1.jpg" alt="使用イメージ ブリーチによる傷み"><span class="lbl b">BEFORE</span><span class="lbl a">AFTER</span></div><figcaption>ブリーチによる傷み</figcaption></figure>
-        <figure><div class="ba-im"><img src="assets/ba-2.jpg" alt="使用イメージ 年齢によるパサつき"><span class="lbl b">BEFORE</span><span class="lbl a">AFTER</span></div><figcaption>年齢によるパサつき</figcaption></figure>
-        <figure><div class="ba-im"><img src="assets/ba-3.jpg" alt="使用イメージ 細くペタつく髪"><span class="lbl b">BEFORE</span><span class="lbl a">AFTER</span></div><figcaption>細くペタつく髪</figcaption></figure>
-      </div>
-    </div>
-
-    <style>
-    .spec-band{margin-top:clamp(40px,6vw,64px)}
-    .spec-h{font-family:var(--serif);font-style:italic;font-size:clamp(20px,2.4vw,28px);color:var(--ink);margin-bottom:18px}
-    .spec-tbl{width:100%;border-top:1px solid var(--line)}
-    .spec-tbl .r{display:grid;grid-template-columns:180px 1fr;border-bottom:1px solid var(--line)}
-    .spec-tbl dt{padding:14px 14px;font-size:13px;color:var(--muted);background:var(--cream)}
-    .spec-tbl dd{padding:14px 16px;margin:0;font-size:14px;color:var(--ink-soft);line-height:1.9}
-    @media(max-width:640px){.spec-tbl .r{grid-template-columns:1fr}.spec-tbl dt{background:transparent;padding-bottom:0}}
-    </style>
-    <div class="spec-band reveal">
-      <div class="spec-h">Product Details ／ 製品仕様</div>
-      <dl class="spec-tbl">
-        <div class="r"><dt>商品名</dt><dd>INFINI WORLD（ヘアトリートメント）／販売名：アンフィニ ワールド</dd></div>
-        <div class="r"><dt>内容量</dt><dd>1,000mL</dd></div>
-        <div class="r"><dt>原産国</dt><dd>日本（MADE IN JAPAN）</dd></div>
-        <div class="r"><dt>使用方法</dt><dd>シャンプー後、タオルドライした髪に適量を塗布し、手ぐしやブラシで整えてからよく乾かしてください。乾いた髪にもお使いいただけます。</dd></div>
-        <div class="r"><dt>全成分</dt><dd>水、ジメチコン、ベタイン、エタノール、BG、加水分解コラーゲン、セトリモニウムクロリド、メチルパラベン、プロピルパラベン</dd></div>
-        <div class="r"><dt>使用上の注意</dt><dd>お肌に異常が生じていないかよく注意して使用してください。化粧品がお肌に合わない時、即ち次のような場合には、使用を中止してください。そのまま化粧品類の使用を続けますと、症状を悪化させることがありますので、皮膚科専門医等にご相談されることをおすすめします。（1）使用中、赤味、はれ、かゆみ、刺激、色抜け（白斑等）や黒ずみ等の異常が現れた場合（2）使用したお肌に、直射日光が当たって上記のような異常が現れた場合。傷やはれもの、しっしん等、異常のある部位にはお使いにならないでください。目に入った時は、すぐに洗い流してください。幼小児の手の届かない所に保管してください。極端に低温または高温となる所、直射日光の当たる所に保管しないでください。使用後は必ずキャップを閉めて、立てて保管してください。</dd></div>
-        <div class="r"><dt>製造販売元</dt><dd>メディカ・ウェーブ株式会社（埼玉県入間郡三芳町大字上富字中西1180-2）</dd></div>
-        <div class="r"><dt>発売元</dt><dd>株式会社Next Innovation（埼玉県上尾市仲町1-7-8）</dd></div>
-      </dl>
-    </div>
-
-    <style>
-    .sci-band{margin-top:clamp(44px,6vw,72px)}
-    .sci-hero{overflow:hidden;border-radius:4px;border:1px solid var(--line);margin-bottom:26px}
-    .sci-hero img{width:100%;display:block}
-    .sci-illust{margin:0 0 28px;overflow:hidden;border-radius:4px;border:1px solid var(--line);background:var(--cream)}
-    .sci-illust img{width:100%;display:block}
-    .sci-illust figcaption{padding:12px 16px;font-size:12px;letter-spacing:.06em;color:var(--muted);border-top:1px solid var(--line);text-align:center;background:var(--white)}
-    .sci-h{font-family:var(--serif);font-style:italic;font-size:clamp(22px,2.6vw,30px);color:var(--ink)}
-    .sci-lead{margin:14px 0 32px;font-size:14px;line-height:2;color:var(--ink-soft);max-width:780px}
-    .sci-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
-    .sci-card{border:1px solid var(--line);border-radius:4px;background:var(--white);padding:30px 26px;position:relative}
-    .sci-ic{width:38px;height:38px;color:var(--rose);margin-bottom:18px}
-    .sci-step{font-size:11px;letter-spacing:.22em;color:var(--muted);margin-bottom:10px}
-    .sci-card h4{font-size:16px;color:var(--ink);margin:0 0 6px;font-weight:600}
-    .sci-meta{font-size:11px;letter-spacing:.02em;color:var(--muted);margin-bottom:14px}
-    .sci-card p{font-size:13px;line-height:1.95;color:var(--ink-soft);margin:0}
-    .sci-close{margin-top:30px;padding:26px;text-align:center;background:var(--cream);border:1px solid var(--line);border-radius:4px;font-family:var(--serif);font-style:italic;font-size:clamp(18px,2.2vw,24px);color:var(--ink);line-height:1.7}
-    .sci-note{margin-top:14px;font-size:11px;color:var(--muted)}
-    @media(max-width:760px){.sci-grid{grid-template-columns:1fr}}
-    </style>
-    <div class="sci-band reveal">
-      <div class="sci-hero"><img src="assets/science-hero.jpg" alt="毛髪表面をコーティングし、ツヤを与えるイメージ"></div>
-      <div class="sci-h">Science ／ なぜ、手触りが変わるのか</div>
-      <p class="sci-lead">髪は、爪と同じ「角化した組織」。だから私たちがすることは、生やすことでも治すことでもなく、<b>一本一本の表面と内部をととのえる</b>こと。三つの成分が、それぞれの役割で手触りを変えていきます。</p>
-      <figure class="sci-illust"><img src="assets/science-3step.jpg" alt="コーティング・うるおい・まとまりの3ステップ作用イメージ"><figcaption>① コーティング　—　② うるおい　—　③ まとまり</figcaption></figure>
-      <div class="sci-grid">
-        <div class="sci-card">
-          <div class="sci-step">STEP 01 ／ ジメチコン</div>
-          <h4>透明のレインコートをまとう</h4>
-          <div class="sci-meta">コーティング・平滑化</div>
-          <p>一本一本を薄い皮膜で包み、表面をなめらかに。指通りとツヤ、そしてハリ・コシの手応えへ導きます。</p>
-        </div>
-        <div class="sci-card">
-          <div class="sci-step">STEP 02 ／ 加水分解コラーゲン</div>
-          <h4>すき間を、うるおいで満たす</h4>
-          <div class="sci-meta">吸着・保湿</div>
-          <p>乾燥で粗くなった表面にうるおいの保護ヴェールを。しっとり、しなやかな質感へととのえます。</p>
-        </div>
-        <div class="sci-card">
-          <div class="sci-step">STEP 03 ／ セトリモニウムクロリド</div>
-          <h4>静電気を、なだめる</h4>
-          <div class="sci-meta">帯電防止・まとまり</div>
-          <p>冬のセーターの静電気をなだめるように帯電を抑え、広がりを落ち着かせて、まとまりのある髪へ。</p>
-        </div>
-      </div>
-      <div class="sci-close">本数が増えるのではなく、<br>一本一本の“存在感”が増していく。</div>
-      <p class="sci-note">※効果・実感には個人差があります。／用法：シャンプー後、タオルドライした髪に適量をなじませ、手ぐし・ブラシで整えてから乾かします（乾いた髪にも可）。</p>
-    </div>
-
-    <div class="cospa-band reveal">
-      <div class="add-h" style="text-align:center">サロン品質を、毎日の家で。</div>
-      <div class="cospa-grid">
-        <div><div class="cospa-num">1,000</div><div class="cospa-lb">mL ／ たっぷり大容量</div></div>
-        <div><div class="cospa-num">50–100</div><div class="cospa-lb">回分 ／ 1本の使用目安</div></div>
-        <div><div class="cospa-num">約2–3</div><div class="cospa-lb">ヶ月 ／ 毎日のケアでも</div></div>
-      </div>
-      <div class="cospa-note">※使用量・髪の長さ・回数により異なります。</div>
-    </div>
-  </div>
-</section>
-
-
-<!-- MINI POUCH -->
-<section class="block" id="pouch" style="max-width:none">
-  <div class="inner">
-    <div class="sec-head reveal"><span class="sec-num">03</span><span class="sec-label">Mini Pouch</span><span class="sec-line"></span></div>
+    <div class="sec-head reveal"><span class="sec-num">02</span><span class="sec-label">Brands</span><span class="sec-line"></span></div>
     <div class="salon-top reveal">
-      <div class="pc-badge">近日販売予定</div>
-      <h2>持ち歩ける、ミニパウチ<em>。</em></h2>
-      <p>ボトルと同じ中身を、持ち運べるミニパウチにしました。旅行や出張、サロンでのお試しにお使いいただけます。容量・セット内容・販売の開始時期は調整中です。決まりしだいお知らせします。</p>
+      <h2>2つのブランド<em>。</em></h2>
+      <p>当社は商品の開発と製造を担い、販売は2つのブランドがそれぞれの市場で行います。上下関係はなく、並列のブランドとして扱います。</p>
     </div>
 
-    <div class="pc-hero reveal">
-      <div class="band"></div>
-      <div class="ph"><img src="assets/pouch-30-main.jpg" alt="INFINI WORLD ミニパウチ"></div>
-      <div class="pc-cap">INFINI WORLD ヘアトリートメント ／ ミニパウチ</div>
-    </div>
-
-    <div class="pc-two reveal">
-      <div class="pc-fig"><img src="assets/pouch-30-model.jpg" alt="ミニパウチを手に持つイメージ"></div>
-      <div class="pc-txt">
-        <div class="k">Portable</div>
-        <h3>洗面台にも、旅先にも。</h3>
-        <p>片手におさまる大きさで、キャップを閉めて立てて置けます。ボトルを持ち歩かずに、いつものケアをそのまま続けられます。</p>
-        <div class="pc-spec">
-          <div><b>内容量</b><span>詳細未定</span></div>
-          <div><b>種類</b><span>ヘアトリートメント（化粧品）</span></div>
-          <div><b>中身</b><span>ボトル品と同一</span></div>
-          <div><b>原産国</b><span>日本</span></div>
+    <div class="brand-cards reveal">
+      <a class="bcard" href="products/infini-world.html">
+        <div class="bmark">
+          <div class="n1">INFINI<br>WORLD</div>
+          <div class="tl">BEYOND THE BEAUTY</div>
+          <div class="rule"></div>
         </div>
-      </div>
-    </div>
+        <div class="cap">Professional</div>
+        <h3>サロン専売</h3>
+        <p>美容室・理容室でのみお取り扱いいただくプロフェッショナル向けのブランドです。指定ディーラーを通じて、サロン様にお届けします。</p>
+        <span class="more">製品を見る　&rarr;</span>
+      </a>
 
-    <div class="pc-two rev reveal">
-      <div class="pc-fig g"><img src="assets/pouch-30-box24.jpg" alt="ミニパウチのサンプルセット"></div>
-      <div class="pc-txt">
-        <div class="k">Sample Set</div>
-        <h3>サンプルセット。</h3>
-        <p>サロン様でのお試し配布や、店頭でのご案内に使いやすいセットです。1本ずつ仕切られた箱に収めています。入り数・仕様は調整中です。お取り扱いについては、取引先ポータルからお問い合わせください。</p>
-        <div class="pc-spec">
-          <div><b>入り数</b><span>詳細未定</span></div>
-          <div><b>対象</b><span>お取引中のサロン様</span></div>
-          <div><b>販売時期</b><span>近日販売予定</span></div>
+      <a class="bcard" href="products/evol.html">
+        <div class="bmark">
+          <div class="n2">evol</div>
+          <div class="tl">BEYOND THE BEAUTY</div>
+          <div class="rule"></div>
         </div>
-      </div>
+        <div class="cap">Home Care</div>
+        <h3>ホームケア・店販</h3>
+        <p>店販、EC、サロン直販など、さまざまな販売チャネルでお求めいただけるブランドです。サロン用の1,000mLもご用意しています。</p>
+        <span class="more">製品を見る　&rarr;</span>
+      </a>
     </div>
 
-    <div class="pc-wide reveal">
-      <div class="pc-lead"><div class="k">How to use</div><h3>ご使用方法</h3></div>
-      <img src="assets/pouch-30-howto.jpg" alt="INFINI WORLD ヘアトリートメント ご使用方法 6ステップ">
+    <div class="dev-note reveal">
+      株式会社Next Innovation は、商品の企画・開発・製造管理と、それを支えるグループ基盤を担います。販売は各ブランドを運営する会社がそれぞれ独立して行い、売上・利益・顧客情報は会社ごとに分けて管理します。
     </div>
-
-    <div class="pc-guide reveal">
-      <div class="sheet"><img src="assets/pouch-30-guide.jpg" alt="INFINI WORLD ご使用ガイド"></div>
-      <div class="pc-txt">
-        <div class="k">Product Guide</div>
-        <h3>同梱のご使用ガイド。</h3>
-        <p>使用方法、使用上の注意、全成分、製造販売元をまとめた案内を同梱します。記載のQRコードから、商品の詳細と最新情報をご覧いただけます。</p>
-        <div class="pc-spec">
-          <div><b>製造販売元</b><span>メディカ・ウェーブ株式会社</span></div>
-          <div><b>発売元</b><span>株式会社Next Innovation</span></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="pc-note">※効果・実感には個人差があります。<br>
-    ※ミニパウチは近日販売予定です。容量・入り数・仕様・パッケージは調整中で、変更になる場合があります。<br>
-    ※画像は実際の商品と見え方が異なる場合があります。</div>
   </div>
 </section>
 
@@ -794,98 +189,6 @@
     </div>
 
     <div class="vo-note" id="voNote"></div>
-  </div>
-</section>
-
-<!-- FOR SALON -->
-<section class="block" id="salon" style="max-width:none">
-  <div class="inner">
-    <div class="salon-top reveal">
-      <div class="eyebrow">For Salon — Online Order</div>
-      <h2>サロンの皆様へ<em>。</em></h2>
-      <p>承認された取引先サロン様は、専用のID・パスワードでログインし、サロン専売プロダクトをオンラインでいつでもご発注いただけます。発注履歴の確認・かんたん再注文にも対応しています。</p>
-    </div>
-
-    <div class="salon-photos reveal">
-      <div class="ph"><img src="assets/salon-interior.jpg" alt="サロン内観"></div>
-      <div class="ph"><img src="assets/salon-hands.jpg" alt="施術の様子"></div>
-    </div>
-
-    <div class="salon-steps reveal">
-      <div class="step"><div class="n">01</div><h3>取引申請</h3><p>サロン名・ご担当者・所在地をご登録のうえ、取引をお申し込みください。</p></div>
-      <div class="step"><div class="n">02</div><h3>承認・コード発行</h3><p>当社にて内容を確認し、承認後に取引先コードとログイン情報をご案内します。</p></div>
-      <div class="step"><div class="n">03</div><h3>オンライン発注</h3><p>マイページからいつでもご発注。履歴の確認や再注文もスムーズです。</p></div>
-    </div>
-
-    <div class="salon-feat reveal">
-      <div class="feat"><h4>いつでも発注</h4><p>24時間オンラインでご発注。希望納品日・備考もあわせてお送りいただけます。</p></div>
-      <div class="feat"><h4>発注履歴とかんたん再注文</h4><p>過去のご注文を一覧で確認。前回と同じ内容をワンタップで再注文できます。</p></div>
-      <div class="feat"><h4>取引先ごとの管理</h4><p>サロンごとのID・パスワードで管理。月締めのご請求にも対応しています。</p></div>
-    </div>
-
-    <div class="salon-cta reveal">
-      <div class="btns">
-        <a href="order/login.html" class="btn-rose">取引先ログイン <span>→</span></a>
-        <a href="order/register.html" class="btn-line">新規取引を申請する</a>
-      </div>
-      <div class="note">アスクル・たのめーるのように、サロン専売品をオンラインでご発注いただけます。<br>
-      お知り合いのサロン様をご紹介いただくと1本を無料で進呈する <a href="#referral" style="color:var(--rose);border-bottom:1px solid var(--rose)">サロン紹介制度</a> もご用意しています。</div>
-    </div>
-  </div>
-</section>
-
-<!-- REFERRAL -->
-<section class="block alt" id="referral" style="max-width:none">
-  <div class="inner">
-    <div class="salon-top reveal">
-      <div class="eyebrow">Salon Referral — サロン紹介制度</div>
-      <h2>いいと思ったら、伝えてほしい<em>。</em></h2>
-      <p>お取引いただいているサロン様からのご紹介で、新たにサロン様とのお取引が始まった際に、INFINI WORLD を1本無料で進呈する制度です。対象はお取引中のサロン様に限ります。ご登録や費用は必要ありません。</p>
-    </div>
-
-    <div class="salon-steps reveal">
-      <div class="step"><div class="n">01</div><h3>紹介コードをお伝えする</h3><p>マイページに表示される紹介コード・紹介用リンクを、お知り合いのサロン様にお渡しください。</p></div>
-      <div class="step"><div class="n">02</div><h3>ご紹介先が取引を開始</h3><p>紹介コードを使って取引を申請いただき、当社の審査を経てお取引が始まります。</p></div>
-      <div class="step"><div class="n">03</div><h3>1本を無料で進呈</h3><p>ご紹介先の初回ご発注を確認した後、次回の納品にあわせて1本をお送りします。</p></div>
-    </div>
-
-    <div class="salon-feat reveal">
-      <div class="feat"><h4>1サロンのご紹介につき1本</h4><p>ご紹介いただいたサロン様の数だけ進呈します。ご紹介の件数に上限はありません。</p></div>
-      <div class="feat"><h4>マイページで確認</h4><p>ご紹介の状況と、進呈済み・進呈予定の本数をマイページで確認できます。</p></div>
-      <div class="feat"><h4>費用はかかりません</h4><p>登録料・保証金・追加のご購入は不要です。お取引中であれば、そのままご利用いただけます。</p></div>
-    </div>
-
-    <div class="rev-share reveal">
-      <div class="rs-head">
-        <div class="rs-eyebrow">How it works</div>
-        <h3>制度の内容</h3>
-      </div>
-      <div class="rs-body">
-        <p>金銭のお支払いを伴う制度ではありません。ご紹介先とのお取引が始まった場合に、対象商品を<b>1本</b>無料で進呈します。現金・値引き・ポイント等への交換はできません。</p>
-        <table class="rs-tbl">
-          <tbody>
-            <tr><th>対象となる方</th><td>当社とお取引中のサロン様</td></tr>
-            <tr><th>進呈の単位</th><td>ご紹介により新たにお取引が始まったサロン様 1件につき 1本</td></tr>
-            <tr><th>対象商品</th><td>INFINI WORLD（1,000mL）</td></tr>
-            <tr><th>ご紹介先の判定</th><td>取引申請時に使用された紹介コード・紹介用リンク。申請後の変更や遡っての登録はできません</td></tr>
-            <tr><th>進呈が確定する時点</th><td>ご紹介先の初回ご発注について、出荷および代金の入金を当社が確認した時点</td></tr>
-            <tr><th>お届け</th><td>確定後、次回の納品にあわせて同梱します</td></tr>
-            <tr><th>対象とならない場合</th><td>すでに当社と取引のあるサロン様のご紹介、返品・注文の取消し・代金の不払いにより売買が成立しなかったとき</td></tr>
-          </tbody>
-        </table>
-        <p class="rs-note">進呈は、ご紹介先とのお取引開始時の1回に限ります。ご紹介先が継続してご発注された場合も、追加の進呈はありません。<br>
-        ご紹介いただくサロン様は当社の従業員・代理人・販売代理店ではなく、当社を代理して契約を結ぶ権限は有しません。</p>
-      </div>
-    </div>
-
-    <div class="salon-cta reveal">
-      <div class="btns">
-        <a href="order/login.html" class="btn-rose">取引先ログイン <span>&rarr;</span></a>
-        <a href="order/agent-terms.html" class="btn-line">紹介制度の規約</a>
-      </div>
-      <div class="note">紹介コードは、ログイン後のマイページに表示されます。<br>
-      制度の内容は変更する場合があります。変更後は、通知後に発生するお取引から適用されます。</div>
-    </div>
   </div>
 </section>
 
@@ -1017,7 +320,7 @@
       <div class="f-meta">株式会社Next Innovation<br>埼玉県上尾市仲町1-7-8</div>
     </div>
     <div class="f-links">
-      <a href="#product">Products</a><a href="#salon">For Salon</a><a href="#company">Company</a><a href="order/login.html">取引先ログイン</a><a href="#referral">サロン紹介制度</a><a href="https://www.instagram.com/infiniworld_crowdfunding?igsh=c2xrdGkwZHJhc3Jz&amp;utm_source=qr" target="_blank" rel="noopener">Instagram</a>
+      <a href="products/infini-world.html">INFINI WORLD</a><a href="products/evol.html">evol</a><a href="#company">Company</a><a href="order/login.html">取引先ログイン</a><a href="https://www.instagram.com/infiniworld_crowdfunding?igsh=c2xrdGkwZHJhc3Jz&amp;utm_source=qr" target="_blank" rel="noopener">Instagram</a>
     </div>
   </div>
   <div class="f-copy">© 2026 Next Innovation Inc. All rights reserved.</div>
