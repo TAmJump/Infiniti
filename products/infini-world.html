@@ -25,14 +25,25 @@
   <button class="nav-toggle" id="navtoggle" aria-label="メニュー"><span></span><span></span></button>
 </header>
 
+<style>
+.iw-oval{position:relative;background:#FAF5EE;border:1px solid var(--line);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.iw-oval::before,.iw-oval::after{content:"";position:absolute;border:1.6px solid #E4B7B0;border-radius:50%;pointer-events:none}
+.iw-oval::before{inset:9% 16%}
+.iw-oval::after{inset:12% 19%;border-width:1px}
+.iw-oval .t1{font-family:var(--jp-serif,'Noto Serif JP',serif);font-weight:400;color:#4A342B;
+  line-height:1.24;letter-spacing:.06em}
+.iw-oval .t2{font-family:var(--sans,'Zen Kaku Gothic New',sans-serif);color:#5B4438;letter-spacing:.26em;margin-top:10px}
+.iw-oval .rule{height:1px;background:#D9A79F;margin-top:9px}
+</style>
 <!-- BRAND HERO -->
 <section class="block" id="top" style="max-width:none;padding-top:clamp(120px,14vw,180px)">
   <div class="inner">
     <div class="salon-top reveal" style="max-width:760px">
-      <div style="width:clamp(150px,16vw,190px);height:clamp(150px,16vw,190px);margin:0 auto 30px;border-radius:50%;background:#F7CED2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px">
-        <div style="font-family:var(--jp-serif,'Noto Serif JP',serif);font-size:clamp(19px,2vw,24px);letter-spacing:.04em;line-height:1.25;color:#2B2226">INFINI<br>WORLD</div>
-        <div style="font-size:8px;letter-spacing:.24em;color:#6F4F57">BEYOND THE BEAUTY</div>
-        <div style="width:44px;height:1px;background:#6F4F57;opacity:.55"></div>
+      <div class="iw-oval" style="width:clamp(168px,17vw,206px);height:clamp(206px,21vw,252px);margin:0 auto 30px">
+        <div class="t1" style="font-size:clamp(20px,2.1vw,25px)">INFINI<br>WORLD</div>
+        <div class="t2" style="font-size:8.5px">BEYOND THE BEAUTY</div>
+        <div class="rule" style="width:40px"></div>
       </div>
       <div class="eyebrow">Professional — サロン専売</div>
       <h2>サロンだけの、仕上がり<em>。</em></h2>
@@ -91,7 +102,7 @@
     </div>
     <div class="prod-feature">
       <div class="prod-visual product-shot reveal">
-        <img src="../assets/product-pouch-pink.jpg" alt="INFINI WORLD ヘアトリートメント 1000mL">
+        <img src="../assets/iw-1000.jpg" alt="INFINI WORLD ヘアトリートメント 1000mL">
       </div>
       <div class="prod-info reveal">
         <div class="tag">Hair Care — Flagship</div>

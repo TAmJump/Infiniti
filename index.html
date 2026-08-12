@@ -94,6 +94,16 @@
 .bcard p{font-size:13.5px;color:var(--ink-soft);line-height:1.95;max-width:420px;margin:0 auto}
 .bcard .more{margin-top:22px;display:inline-block;font-size:12.5px;color:var(--rose);
   border-bottom:1px solid var(--rose);padding-bottom:2px}
+
+.iw-oval{position:relative;background:#FAF5EE;border:1px solid var(--line);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.iw-oval::before,.iw-oval::after{content:"";position:absolute;border:1.6px solid #E4B7B0;border-radius:50%;pointer-events:none}
+.iw-oval::before{inset:9% 16%}
+.iw-oval::after{inset:12% 19%;border-width:1px}
+.iw-oval .t1{font-family:var(--jp-serif,'Noto Serif JP',serif);font-weight:400;color:#4A342B;
+  line-height:1.24;letter-spacing:.06em}
+.iw-oval .t2{font-family:var(--sans,'Zen Kaku Gothic New',sans-serif);color:#5B4438;letter-spacing:.26em;margin-top:10px}
+.iw-oval .rule{height:1px;background:#D9A79F;margin-top:9px}
 .dev-note{margin-top:clamp(34px,5vw,52px);border:1px solid var(--line);border-radius:4px;
   background:var(--cream);padding:clamp(22px,3vw,32px);font-size:13px;color:var(--ink-soft);line-height:2}
 </style>
@@ -108,10 +118,10 @@
 
     <div class="brand-cards reveal">
       <a class="bcard" href="products/infini-world.html">
-        <div class="bmark">
-          <div class="n1">INFINI<br>WORLD</div>
-          <div class="tl">BEYOND THE BEAUTY</div>
-          <div class="rule"></div>
+        <div class="bmark iw-oval" style="border-radius:0;background:#FAF5EE;width:clamp(190px,22vw,250px);height:clamp(232px,27vw,306px)">
+          <div class="t1" style="font-size:clamp(23px,2.5vw,30px)">INFINI<br>WORLD</div>
+          <div class="t2" style="font-size:clamp(8px,.85vw,10px)">BEYOND THE BEAUTY</div>
+          <div class="rule" style="width:46px"></div>
         </div>
         <div class="cap">Professional</div>
         <h3>サロン専売</h3>
