@@ -444,7 +444,15 @@
       var rows=[].concat.apply([],chunks);
       if(!rows.length) return;
       var salons={}, imp={}, cn=0, treated=shown.treated, cmts=[];
+      var skip={}; (base.exclude||[]).forEach(function(k){ skip[k]=1; });
+      function isTest(x){
+        if(x.test===true) return true;
+        if(skip[x.recNo]) return true;
+        var s=(x.place||'')+' '+(x.operator||'')+' '+(x.displayName||'');
+        return /テスト|test|TEST/.test(s);
+      }
       rows.forEach(function(x){
+        if(isTest(x)) return;
         var t=kind(x);
         if(t==='staff'){ treated++; return; }
         if(x.snsOk==='掲載不可') return;
