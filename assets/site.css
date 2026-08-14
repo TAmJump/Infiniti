@@ -355,8 +355,9 @@
 
   .vo-track{display:flex;align-items:baseline;gap:18px;flex-wrap:wrap;margin-top:38px;
     padding:26px 30px;background:var(--white);border:1px solid var(--line);border-radius:3px}
-  .vo-track .big{font-family:var(--serif);font-size:52px;line-height:.9;color:var(--rose)}
-  .vo-track .unit{font-size:15px;color:var(--ink-soft);margin-left:-8px}
+  .vo-track .big{font-family:var(--serif);font-size:52px;line-height:1;color:var(--rose);letter-spacing:.01em}
+  .vo-track>div:first-child{display:flex;align-items:baseline;white-space:nowrap}
+  .vo-track .unit{font-size:15px;color:var(--ink-soft);margin-left:4px}
   .vo-track .lb{font-size:12.5px;color:var(--ink-soft);letter-spacing:.06em;line-height:1.9}
   .vo-track .as{width:100%;font-size:11px;color:var(--muted);letter-spacing:.05em;margin-top:6px}
   .vo-soon{margin-top:26px;padding:20px 24px;border:1px dashed var(--line);border-radius:3px;
