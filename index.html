@@ -158,7 +158,7 @@
       <div><span class="big" id="voTreated">2,831</span><span class="unit">人</span></div>
       <div class="lb">これまでにサロンで施術を受けられた方の人数です。<br>
       サロン専売として、多くの現場でお使いいただいてきました。</div>
-      <div class="as">※2026年7月末時点の累計施術人数。</div>
+      <div class="as" id="voAsOf">※累計施術人数。</div>
     </div>
 
 
@@ -392,8 +392,18 @@
     return out;
   }
 
+  function jpDate(s){
+    var m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(s||'');
+    return m ? m[1]+'年'+Number(m[2])+'月'+Number(m[3])+'日' : '';
+  }
+
   function render(d){
     if(d.treated) document.getElementById('voTreated').textContent = d.treated.toLocaleString();
+    var asOf=document.getElementById('voAsOf');
+    if(asOf){
+      var lb=jpDate(d.updatedAt);
+      asOf.textContent = lb ? '※'+lb+'時点の累計施術人数。' : '※累計施術人数。';
+    }
     if(!d.n) return;
     document.getElementById('voStats').style.display='';
     var soon=document.getElementById('voSoon'); if(soon) soon.style.display='none';
