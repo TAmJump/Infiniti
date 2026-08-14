@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=Noto+Serif+JP:wght@300;400;500;600&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/site.css?v=20260814">
+<link rel="stylesheet" href="assets/site.css?v=20260814b">
 </head>
 <body>
 
@@ -172,7 +172,10 @@
         <div class="vo-dist" id="voDist"></div>
         <div class="vo-imp" id="voImp"></div>
       </div>
-      <div class="vo-cards" id="voCards"></div>
+      <div class="vo-cbox" id="voCardsWrap" style="display:none">
+        <div class="vo-chd" id="voCardsHd">お寄せいただいたご感想</div>
+        <div class="vo-cards" id="voCards"></div>
+      </div>
     </div>
 
 
@@ -422,7 +425,13 @@
     document.getElementById('voImp').innerHTML=(d.impressions||[]).map(function(o){
       return '<span>'+esc(o.label)+'<b>'+o.pct+'%</b></span>'; }).join('');
     if(!(d.comments||[]).length) document.getElementById('voStats').style.gridTemplateColumns='1fr';
-    document.getElementById('voCards').innerHTML=(d.comments||[]).slice(0,4).map(function(c){
+    var cw=document.getElementById('voCardsWrap');
+    if(cw){
+      cw.style.display=(d.comments||[]).length?'':'none';
+      var h=document.getElementById('voCardsHd');
+      if(h) h.textContent='お寄せいただいたご感想　'+(d.comments||[]).length+'件';
+    }
+    document.getElementById('voCards').innerHTML=(d.comments||[]).map(function(c){
       var sc=Math.max(1,Math.min(5,c.score||5));
       var f='★★★★★'.slice(0,sc)+'☆☆☆☆☆'.slice(0,5-sc);
       return '<div class="vo-card"><div class="cs">'+f+'</div><p>'+esc(c.text)
@@ -462,9 +471,11 @@
         return /テスト|test|TEST/.test(s);
       }
       var counted={};
+      var homeAsSalon = base.treatHomeAsSalon === true;
       rows.forEach(function(x){
         if(isTest(x)) return;
         var t=kind(x);
+        if(homeAsSalon && t==='home_customer') t='salon_customer';
         if(t==='staff'){
           if(!counted[x.recNo]){ counted[x.recNo]=1; treated++; }
           return;
@@ -492,7 +503,7 @@
       if(cn) shown.impressions=Object.keys(imp).map(function(k){
         return {label:k, pct:Math.round(imp[k]/cn*100)}; })
         .sort(function(a,b){ return b.pct-a.pct; }).slice(0,6);
-      shown.comments=cmts.concat(shown.comments).slice(0,12);
+      shown.comments=cmts.concat(shown.comments).slice(0,200);
       render(totals(shown));
     });
   }).catch(function(){});

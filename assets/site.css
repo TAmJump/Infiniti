@@ -338,6 +338,17 @@
   .vo-card .cs{font-size:14px;color:#c9963f;letter-spacing:2px;margin-bottom:8px}
   .vo-card p{font-family:var(--jp-serif);font-size:14.5px;line-height:1.95;color:var(--ink)}
   .vo-card .wh{margin-top:12px;font-size:11.5px;color:var(--muted);letter-spacing:.06em}
+
+  .vo-cbox{background:var(--white);border:1px solid var(--line);border-radius:3px;
+    display:flex;flex-direction:column;max-height:min(560px,62vh);overflow:hidden}
+  .vo-chd{flex:none;padding:14px 20px;border-bottom:1px solid var(--line);background:var(--cream);
+    font-size:11.5px;letter-spacing:.1em;color:var(--muted)}
+  .vo-cbox .vo-cards{flex:1;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;
+    padding:14px;gap:12px}
+  .vo-cbox .vo-card{border-radius:2px}
+  .vo-cbox .vo-cards::-webkit-scrollbar{width:8px}
+  .vo-cbox .vo-cards::-webkit-scrollbar-thumb{background:var(--blush);border-radius:4px}
+  .vo-cbox .vo-cards::-webkit-scrollbar-track{background:transparent}
   .vo-note{margin-top:32px;font-size:11px;color:var(--muted);line-height:1.9}
 
   .vo-cta{margin-top:44px;display:grid;grid-template-columns:1fr auto;gap:34px;align-items:center;
