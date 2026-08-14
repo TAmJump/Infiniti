@@ -461,10 +461,20 @@
         var s=(x.place||'')+' '+(x.operator||'')+' '+(x.displayName||'');
         return /テスト|test|TEST/.test(s);
       }
+      var counted={};
       rows.forEach(function(x){
         if(isTest(x)) return;
         var t=kind(x);
-        if(t==='staff'){ treated++; return; }
+        if(t==='staff'){
+          if(!counted[x.recNo]){ counted[x.recNo]=1; treated++; }
+          return;
+        }
+        // サロン施術の感想も施術1件として数える。
+        // 施術記録から発行されたQR経由（parentRecNo あり）は、その記録と二重に数えない。
+        if(t==='salon_customer'){
+          var key = x.parentRecNo || x.recNo;
+          if(!counted[key]){ counted[key]=1; treated++; }
+        }
         if(x.snsOk==='掲載不可') return;
         var v=Number(x.satisfaction)||0;
         if(v>=1&&v<=5){ shown.dist[v]++; cn++; }
