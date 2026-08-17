@@ -349,6 +349,12 @@
   .vo-cbox .vo-cards::-webkit-scrollbar{width:8px}
   .vo-cbox .vo-cards::-webkit-scrollbar-thumb{background:var(--blush);border-radius:4px}
   .vo-cbox .vo-cards::-webkit-scrollbar-track{background:transparent}
+
+  /* ---- evev ロゴ（正式仕様：#F7D6DE 地／#5A3D42 文字・装飾や枠は付けない） ---- */
+  .ev-logo{background:#F7D6DE;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:clamp(26px,3.4vw,44px) clamp(30px,4vw,54px);line-height:1}
+  .ev-logo .m{font-family:var(--serif);font-weight:300;color:#5A3D42;letter-spacing:.01em;line-height:1}
+  .ev-logo .s{font-family:var(--serif);color:#5A3D42;letter-spacing:.02em;margin-top:.42em}
   .vo-note{margin-top:32px;font-size:11px;color:var(--muted);line-height:1.9}
 
   .vo-cta{margin-top:44px;display:grid;grid-template-columns:1fr auto;gap:34px;align-items:center;
